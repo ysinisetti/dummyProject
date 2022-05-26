@@ -1,0 +1,406 @@
+<!-- <ul class="breadcrumb"> -->
+  <ul class="breadcrumb">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <li><a>Home</a></li></div>
+    </ul>
+  <!-- 
+ </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" >
+ </div>
+</div> -->
+ <!-- </ul>  -->
+ <div class="card" id="card">
+  <nz-collapse nzAccordion>
+  <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+  <form [formGroup]="searchForm" >
+ <div class="card-body">
+  <div class="row">
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Project Name</label> 
+  <input nz-input placeholder="Project Name" name="sProjectName" formControlName="sProjectName" (keyup.enter)="getAllProjects()" />
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Customer Name</label>
+  <input nz-input placeholder="Customer Name" name="sCustomerName" formControlName="sCustomerName" (keyup.enter)="getAllProjects()"/>
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Start Date</label>
+  <nz-date-picker nzPlaceHolder='Start Date' name="sStartDate" formControlName="sStartDate" (keyup.enter)="getAllProjects()"></nz-date-picker>
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>End Date</label>
+  <nz-date-picker nzPlaceHolder='End Date' name="sEndDate" formControlName="sEndDate" (keyup.enter)="getAllProjects()"></nz-date-picker>
+  </div>
+  </div>
+ </div>
+ </form>
+ 
+ <div >
+  <button class="btn" (click)="getAllProjects()" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+ </div>
+ <div>
+  <button class="btn" (click)="reset()" nz-button nzType="primary"><i nz-icon nzType="redo"></i>Reset</button>
+ </div>
+ </nz-collapse-panel>
+ </nz-collapse>
+ 
+  </div>
+  <div class="card">
+  
+  <div class="card-body">
+  <div class="row">
+  <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12"></div>
+  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12">
+  <button nz-button (click)="addRow()" nzType="primary" class="btadd"> 
+  <i nz-icon nzType="plus"></i> Add</button>
+  </div>
+  <h6 class="btadd">No. of Records : {{records}}</h6>
+ 
+  <div class="col-12">
+  <nz-table #record [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+  [nzTotal]="totalPages" [nzPageSize]="10" [nzPageIndex]="1"
+  (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+  <thead>
+  <tr>
+  <th nzWidth="5%">#</th>
+  <th nzWidth="24%">Project Name</th>
+  <th nzWidth="24%">Customer Name</th>
+  <th nzWidth="10%">Start Date</th>
+  <th nzWidth="10%">End Date</th>
+  <th nzWidth="10%">Duration <br>(Days)</th>
+  <th><i nz-icon nzType="home" nzTheme="twotone"></i></th>
+  <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of record.data; let i=index">
+  <td>{{i+1}}</td>
+  <td>{{ data.ProjectName }}</td>
+  <td>{{ data.CustomerName }}</td>
+  <td>{{ data.StartDate | date: 'MM-dd-yyyy'}}</td>
+  <td>{{ data.EndDate | date: 'MM-dd-yyyy'}}</td>
+  <td>{{ data.Duration}}</td>
+  <!-- <td><i nz-icon nzType="eye" (click)="details(data)" nzTheme="twotone"></i></td> -->
+  <td><i nz-icon nzType="dashboard" (click)="details(data)" nzTheme="twotone"></i></td>
+  <td><a> <i nz-icon nzType="edit" nzTheme="twotone" (click)="editRow(data)"> </i></a>&nbsp;&nbsp;
+  <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.Id)">
+  <i nz-icon nzTheme="twotone" nzType="delete"></i></a>&nbsp;&nbsp;
+  <a><i nz-icon nzType="copy" nzTheme="twotone" (click)="copyRow(data)"></i></a>
+ </td>
+  </tr>
+  </tbody>
+  </nz-table>
+  </div>
+  </div>
+  </div>
+  </div>
+  <!-- ADD A NEW PROJECT -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="isVisible" nzTitle="Add Projects" (nzOnCancel)="cancel()"
+  [nzFooter]="addFooter">
+  <form [formGroup]="addPojectForm">
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label >Project Name </nz-form-label>
+  <input nz-input nzLabel="Project Name" placeholder="Project Name"
+  formControlName="projectName" />
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.projectName.touched && addPojectForm.controls.projectName.invalid && addPojectForm.controls.projectName.errors.required">
+  Please enter name
+  </span>
+  </div>
+  <div
+  *ngIf="this.addPojectForm.get('projectName').errors?.maxlength && this.addPojectForm.get('projectName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div
+  *ngIf="this.addPojectForm.get('projectName').errors?.pattern && this.addPojectForm.get('projectName').invalid">
+  <span class="text-danger">Only Alphabets Are Allowed</span></div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Customer Name </nz-form-label>
+  <input nz-input nzLabel="Customer Name" placeholder="Customer Name" required
+  formControlName="customerName" />
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.customerName.touched && addPojectForm.controls.customerName.invalid && addPojectForm.controls.customerName.errors.required">
+  Please enter name
+  </span>
+  </div>
+  <div
+  *ngIf="this.addPojectForm.get('customerName').errors?.maxlength && this.addPojectForm.get('customerName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div
+  *ngIf="this.addPojectForm.get('customerName').errors?.pattern && this.addPojectForm.get('customerName').invalid">
+  <span class="text-danger">Only Alphabets Are Allowed</span></div>
+  </div>
+  </div>
+  <div class="row">
+ 
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Plan Start Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+  (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+  formControlName="startDatePlan" nzPlaceHolder="MM-dd-yyyy"></nz-date-picker>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.startDatePlan.touched && addPojectForm.controls.startDatePlan.invalid && addPojectForm.controls.startDatePlan.errors.required">
+  Please select Plan Start Date
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Plan End Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" 
+  (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)" [nzOpen]="endOpen"
+  name="endDate" nzPlaceHolder="MM-dd-yyyy" formControlName="endDatePlan"></nz-date-picker>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.endDatePlan.touched && addPojectForm.controls.endDatePlan.invalid && addPojectForm.controls.endDatePlan.errors.required">
+  Please select Plan End Date
+  </span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Actual Start Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" name="startDate"
+  (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange1($event)"
+  formControlName="startDate" nzPlaceHolder="MM-dd-yyyy"></nz-date-picker>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.startDate.touched && addPojectForm.controls.startDate.invalid && addPojectForm.controls.startDate.errors.required">
+  Please select Actual Start Date
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Actual End Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledEndDate1" nzFormat="MM-dd-yyyy" 
+  (ngModelChange)="onEndChange1($event)" (nzOnOpenChange)="handleEndOpenChange1($event)" [nzOpen]="endOpen1"
+  name="endDate" nzPlaceHolder="MM-dd-yyyy" formControlName="endDate"></nz-date-picker>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.endDate.touched && addPojectForm.controls.endDate.invalid && addPojectForm.controls.endDate.errors.required">
+  Please select Actual End Date
+  </span>
+  </div>
+  </div>
+  </div>
+ 
+  <!-- Practice and ProjectType -->
+ 
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Project Type </nz-form-label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Project Type" formControlName="projectType" >
+  <nz-option nzValue="Internal" nzLabel="Internal"></nz-option>
+  <nz-option nzValue="External" nzLabel="External"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.projectType.touched && addPojectForm.controls.projectType.invalid && addPojectForm.controls.projectType.errors.required">
+  Please Choose Project Type
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+ 
+  <nz-form-label nz-Required>Practice </nz-form-label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Practice" formControlName="practice" >
+  <nz-option nzValue="Sales" nzLabel="Sales"></nz-option>
+  <nz-option nzValue="Human Resources" nzLabel="Human Resources"></nz-option>
+  <nz-option nzValue="Marketing" nzLabel="Marketing"></nz-option>
+  <nz-option nzValue="Operations" nzLabel="Operations"></nz-option>
+  <nz-option nzValue="Pre Sales" nzLabel="Pre Sales"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.practice.touched && addPojectForm.controls.practice.invalid && addPojectForm.controls.practice.errors.required">
+  Please Choose practice
+  </span>
+  </div>
+ 
+  </div>
+  </div>
+ 
+  <!-- Description -->
+  <div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <nz-form-label nz-Required>Description </nz-form-label>
+  <textarea nz-input PlaceHolder='Write something on me ' nzLabel="Description" Required
+  formControlName="description"></textarea>
+  <div>
+  <span class="validationtest"
+  *ngIf="addPojectForm.controls.description.touched && addPojectForm.controls.description.invalid && addPojectForm.controls.description.errors.required">
+  Write something on me
+  </span>
+  </div>
+  <div
+  *ngIf="this.addPojectForm.get('description').errors?.maxlength && this.addPojectForm.get('description').invalid">
+  <span class="text-danger">Only 226 Characters are allowed</span>
+  </div>
+  </div>
+  </div>
+ 
+  <ng-template #addFooter>
+  <button type="submit" nz-button nzType="primary" (click)="handleSubmit1()">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+  <!-- POPUP FOR EDIT PROJECTS -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openEditForm" nzTitle="Edit Project" (nzOnCancel)="cancel()"
+  [nzFooter]="editFooter">
+  <form [formGroup]="editProjectForm" (ngSubmit)="updateProject()">
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Project Name </nz-form-label>
+  <input nz-input nzLabel="Project Name" placeholder="Project Name " required
+  formControlName="projectName" />
+  <div>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.projectName.touched && editProjectForm.controls.projectName.invalid && editProjectForm.controls.projectName.errors.required">
+  Please Give Project Name
+  </span>
+  </div>
+  <div
+  *ngIf="this.editProjectForm.get('projectName').errors?.maxlength && this.editProjectForm.get('projectName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div
+  *ngIf="this.editProjectForm.get('projectName').errors?.pattern && this.editProjectForm.get('projectName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Customer Name </nz-form-label>
+  <input nz-input nzLabel="Customer Name" placeholder="Customer Name " required
+  formControlName="customerName" />
+  <div>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.customerName.touched && editProjectForm.controls.customerName.invalid && editProjectForm.controls.customerName.errors.required">
+  Please Give Customer Name
+  </span>
+  </div>
+  <div
+  *ngIf="this.editProjectForm.get('customerName').errors?.maxlength && this.editProjectForm.get('customerName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div
+  *ngIf="this.editProjectForm.get('customerName').errors?.pattern && this.editProjectForm.get('customerName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+ 
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Plan Start Date </nz-form-label>
+  <nz-date-picker  nzFormat="MM-dd-yyyy" name="startDatePlan"
+  (ngModelChange)="onStartChange5($event)" (nzOnOpenChange)="handleStartOpenChange6($event)"
+  formControlName="startDatePlan" nzPlaceHolder="MM-dd-yyyy"></nz-date-picker><br>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.startDatePlan.touched && editProjectForm.controls.startDatePlan.invalid && editProjectForm.controls.startDatePlan.errors.required">
+  Please select Plan Start Date
+  </span>
+  </div>
+ 
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Plan End Date </nz-form-label>
+  <nz-date-picker  nzFormat="MM-dd-yyyy" 
+  (ngModelChange)="onEndChange5($event)" (nzOnOpenChange)="handleEndOpenChange5($event)" name="endDate"
+  nzPlaceHolder="MM-dd-yyyy" formControlName="endDatePlan"></nz-date-picker><br>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.endDatePlan.touched && editProjectForm.controls.endDatePlan.invalid && editProjectForm.controls.endDatePlan.errors.required">
+  Please select Plan End Date
+  </span>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Actual Start Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledEndDate5" nzFormat="MM-dd-yyyy" name="startDate"
+  (ngModelChange)="onStartChange5($event)" (nzOnOpenChange)="handleStartOpenChange6($event)"
+  formControlName="startDate" nzPlaceHolder="MM-dd-yyyy"></nz-date-picker><br>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.startDate.touched && editProjectForm.controls.startDate.invalid && editProjectForm.controls.startDate.errors.required">
+  Please select Actual Start Date
+  </span>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Actual End Date </nz-form-label>
+  <nz-date-picker [nzDisabledDate]="disabledEndDate6" nzFormat="MM-dd-yyyy" 
+  (ngModelChange)="onEndChange6($event)" (nzOnOpenChange)="handleEndOpenChange6($event)" name="endDate"
+  nzPlaceHolder="MM-dd-yyyy" formControlName="endDate"></nz-date-picker><br>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.endDate.touched && editProjectForm.controls.endDate.invalid && editProjectForm.controls.endDate.errors.required">
+  Please select Actual End Date
+  </span>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Project Type </nz-form-label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Project Type" formControlName="projectType" >
+  <nz-option nzValue="Internal" nzLabel="Internal"></nz-option>
+  <nz-option nzValue="External" nzLabel="External"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.projectType.touched && editProjectForm.controls.projectType.invalid && editProjectForm.controls.projectType.errors.required">
+  Please Choose Project Type
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <nz-form-label nz-Required>Practice </nz-form-label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Practice" formControlName="practice">
+  <nz-option nzValue="Sales" nzLabel="Sales"></nz-option>
+  <nz-option nzValue="Human Resources" nzLabel="Human Resources"></nz-option>
+  <nz-option nzValue="Marketing" nzLabel="Marketing"></nz-option>
+  <nz-option nzValue="Operations" nzLabel="Operations"></nz-option>
+  <nz-option nzValue="Pre Sales" nzLabel="Pre Sales"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.practice.touched && editProjectForm.controls.practice.invalid && editProjectForm.controls.practice.errors.required">
+  Please Choose practice
+  </span>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <nz-form-label nz-Required>Description </nz-form-label>
+  <textarea nz-input PlaceHolder='Write something on me ' nzLabel="Description" Required
+  formControlName="description"></textarea>
+  <div>
+  <span class="validationtest"
+  *ngIf="editProjectForm.controls.description.touched && editProjectForm.controls.description.invalid && editProjectForm.controls.description.errors.required">
+  Write something on me
+  </span>
+  </div>
+ 
+  <div
+  *ngIf="this.editProjectForm.get('description').errors?.maxlength && this.editProjectForm.get('description').invalid">
+  <span class="text-danger">Not allowed</span>
+  </div>
+  </div>
+  </div>
+  <ng-template #editFooter>
+  <button type="submit" nz-button nzType="primary" (click)="updateProject()"
+  [disabled]="!editProjectForm.valid">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+ 
+  
+ 
+ 

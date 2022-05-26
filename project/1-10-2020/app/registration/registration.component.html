@@ -1,0 +1,140 @@
+<!-- <div>
+    <img src="https://hubble.miraclesoft.com/assets/img/bg-login.jpg"
+        style="width: 70%;position:absolute;height: -webkit-fill-available;">
+</div> -->
+
+<div fxLayoutAlign="center center" class="card">
+
+
+    <mat-card fxFlex="35">
+        <mat-toolbar color="primary">{{name}}</mat-toolbar>
+        <form [formGroup]="RegisterForm" class="form" fxLayoutAlign="stretch" fxLayout="column" >
+            <div  fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-form-field class="name"  appearance="outline">
+                    <mat-label for="firstName"> First Name </mat-label>
+                    <input matInput id="firstName" autocomplete="off" type="text" placeholder="First Name "
+                        formControlName="firstName">
+                    <mat-error *ngIf="RegisterForm.get('firstName').errors?.required">First Name is Required
+                    </mat-error>
+                    <mat-error *ngIf="RegisterForm.get('firstName').errors?.minlength">First Name must have 3
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('firstName').errors?.maxlength">First Name Must have less than
+                        30 Characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('firstName').errors?.pattern">Please enter valid First Name
+                        format
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="name" appearance="outline">
+                    <mat-label for="lastName"> Last Name </mat-label>
+                    <input matInput id="lastName" autocomplete="off" type="text" placeholder="Last Name "
+                        formControlName="lastName">
+                    <mat-error *ngIf="RegisterForm.get('lastName').errors?.required">Last Name is Required
+                    </mat-error>
+                    <mat-error *ngIf="RegisterForm.get('lastName').errors?.minlength">Last Name must have 3
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('lastName').errors?.maxlength">Last Name Must have less than
+                        30 Characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('lastName').errors?.pattern">Please enter valid Last Name format
+                    </mat-error>
+                </mat-form-field>
+
+                
+
+            </div>
+            <div  fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-form-field  class="name" appearance="outline">
+                    <mat-label for="phoneNumber"> Phone Number </mat-label>
+                    <span matPrefix>+91 &nbsp;</span>
+                    <input matInput id="phoneNumber" autocomplete="off" type="text" placeholder="123-456-7890 "
+                        formControlName="phoneNumber">
+                    <mat-error *ngIf="RegisterForm.get('phoneNumber').errors?.required">Phone Number is Required
+                    </mat-error>
+                    <mat-error *ngIf="RegisterForm.get('phoneNumber').errors?.minlength">Phone Number must have 10
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('phoneNumber').errors?.pattern">Please enter valid Phone Number 
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-radio-group  class="name" formControlName="gender" aria-label="Select an option">
+                    <mat-label for="gender"><b>Gender</b></mat-label>&nbsp;
+                    <mat-radio-button name="gender" value="Male">Male</mat-radio-button>&nbsp;
+                    <mat-radio-button name="gender" value="Female">Female</mat-radio-button>
+                </mat-radio-group>
+                
+            </div>
+            <div>
+
+                <mat-form-field  class="user" appearance="outline">
+                    <mat-label for="userName"> User Name </mat-label>
+                    <input matInput id="userName" autocomplete="off" type="text" placeholder="userName@email.com"
+                        formControlName="userName">
+                    <mat-error *ngIf="RegisterForm.get('userName').errors?.required">User Name is Required
+                    </mat-error>
+                    <mat-error *ngIf="RegisterForm.get('userName').errors?.minlength">User Name must have 3
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('userName').errors?.maxlength">User Name Must have less than
+                        30 Characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('userName').errors?.pattern">Please enter valid email format
+                    </mat-error>
+                </mat-form-field>
+                
+            </div>
+            <div>
+
+                <mat-form-field class="user" appearance="outline">
+                    <mat-label>password</mat-label>
+                    <input matInput formControlName="password" autocomplete="off" placeholder="password"
+                        [type]="hide ? 'password' : 'text'">
+                    <mat-error *ngIf="RegisterForm.get('password').errors?.required">Password Is Required</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('password').errors?.minlength">Password Must have atlest 8
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('password').errors?.maxlength">Password Must have less than 15
+                        Characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('password').errors?.pattern">Password Must have one lower case
+                        letter, one Uppercase letter, one Alpha numeric symbol, one number
+                        Characters</mat-error>
+                    <button mat-icon-button matSuffix (click)="hide=!hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="user" appearance="outline">
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput formControlName="cpassword" autocomplete="off" placeholder="confirm password"
+                        [type]="hide ? 'cpassword' : 'text'">
+                    <mat-error *ngIf="RegisterForm.get('cpassword').errors?.required"> Confirm Password Is Required
+                    </mat-error>
+                    <mat-error *ngIf="RegisterForm.get('cpassword').errors?.minlength"> Confirm Password Must have
+                        atlest 8
+                        characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('cpassword').errors?.maxlength"> Confirm Password Must have less
+                        than 15
+                        Characters</mat-error>
+                    <mat-error *ngIf="RegisterForm.get('password').errors?.pattern">Confirm Password Must have one lower
+                        case letter, one Uppercase letter, one Alpha numeric symbol, one number
+                        Characters</mat-error>
+                    <button mat-icon-button matSuffix (click)="hide=!hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <!-- <div>
+                    <input type="hidden" name="fileHidden" formControlName="attachment"/>
+                    <input type="file" (change)="onFileChange($event)" />
+                  </div> -->
+
+
+                <div style="margin-top:10px">
+                    <button mat-raised-button color="primary" (click)="register()"
+                        style="margin-right:30px;float:right;width:80px;">Register</button>
+                    <button mat-raised-button color="primary" (click)="signIn()"
+                        style="margin-right:20px;float:right;">Sign
+                        In</button>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+</div>

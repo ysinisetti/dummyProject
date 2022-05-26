@@ -1,0 +1,200 @@
+<nz-breadcrumb>
+    <div>
+     <a  (click)="details()"><p class="title" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+   </div>
+</nz-breadcrumb>
+<nz-breadcrumb>
+   <div>
+    <a  (click)="details1()"><p class="title2" >Escalation Matrix  <span class="arrow"></span> </p></a>
+  </div>
+     <!-- <nz-breadcrumb-item>
+      <p class= "bread">Escalation</p>
+     </nz-breadcrumb-item> -->
+   </nz-breadcrumb>
+   <nz-breadcrumb>
+    <nz-breadcrumb-item >
+     <p style="margin-left: 310px; margin-top:-32px;">Demo</p>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+   <nz-card style="width:1200px; height: 600px;">
+    <nz-card style="width:800px; height: 550px;">
+        <nz-tree nzBlockNode [nzData]="nodes" (nzClick)="activeNode($event)" (nzDblClick)="openFolder($event)"
+            [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
+        <ng-template #nzTreeTemplate let-node let-origin="origin">
+            <span class="custom-node">
+                <div *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+
+                    <img id="image" src="assets/chandhu.png">
+                    <span  (click)="getData(data)" class="folder-desc">{{ contactid }} <p>(Project Manager)</p></span>
+                 </div>
+            </span>  
+        </ng-template>
+       
+    </nz-card>
+
+    <div *ngIf="isData">
+        <nz-card class="images">
+            &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img id="image2" src="assets/chandhu.png"><br><br>
+           <h1> {{ contactid }}</h1>
+            
+         <br>  &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <button nz-button nzType="primary" (click)="showModal()">Send Notification</button>
+        </nz-card>
+    </div>
+
+
+</nz-card>
+
+
+<nz-modal nzWidth="40%" nzHeight="40%" [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent"
+    [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+    <ng-template #modalTitle>
+        How Would You Like To Send Notification?
+    </ng-template>
+    <ng-template #modalContent>
+        <form [formGroup]="optionForm">
+            <div class="row" *ngIf="hideRadioBtns">
+                <div>
+
+                    <nz-radio-group style="margin-top: 30px;" formControlName='radioData'>
+                        <label nz-radio nzValue="Sms">SMS</label><br><br>
+                        <label nz-radio nzValue="Email">Email</label>
+                    </nz-radio-group>
+                </div>
+            </div>
+
+        </form>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button nzType="primary" (click)="handleOk()" (click)='sendData()' (click)="sendNotification()"
+        [nzLoading]="isConfirmLoading">Ok</button>
+        <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+      
+    </ng-template>
+</nz-modal>
+
+
+
+
+
+
+<nz-modal nzWidth="57%" nzHeight="40%" [nzStyle]="{ top: '20px' }" [(nzVisible)]="isVisibleTop"
+    nzTitle="Send Your Notification Through SMS" [nzContent]="topModalContent" [nzFooter]="modalFooterr"
+    (nzOnCancel)="handleCancelTop()" (nzOnOk)="handleOkTop()">
+    <ng-template #topModalContent>
+        <form [formGroup]="optionForm">
+            <div class="row">
+                <div class="col-5">
+                    <label nzRequired nzFor="Name">Name :</label>&nbsp;
+                    <input  [(ngModel)]="contactid" class="name" nz-input placeholder="Enter name" formControlName='Name' />
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="optionForm.controls.Name.touched && optionForm.controls.Name.invalid && optionForm.controls.Name.errors.required">
+                            Please Enter Name
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="col-6">
+                    <label nzRequired nzFor="Name">Phone Number :</label>&nbsp;
+                    <input class="name" nz-input placeholder="Enter phone number" formControlName='phone' />
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="optionForm.controls.phone.touched && optionForm.controls.phone.invalid && optionForm.controls.phone.errors.required">
+                            Please Enter Phone Number
+                        </span>
+                    </div>
+                </div>
+            </div><br>
+            <div class="col-10">
+                <label class="namem" nzRequired nzFor="name">Message :</label>
+                <textarea formControlName="message" class="message" nz-input rows="3" placeholder="Enter the text"></textarea>
+
+                <span class="validationtest"
+                    *ngIf="optionForm.controls.message.touched && optionForm.controls.message.invalid && optionForm.controls.message.errors.required">
+                    Enter Message
+                </span>
+
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooterr>
+        <button nz-button nzType="primary" (click)="handleOkTop()" (click)='sendData()'
+        [nzLoading]="isConfirmLoading">Send</button>
+        <button nz-button nzType="default" (click)="handleCancelTop()">Cancel</button>
+        
+    </ng-template>
+
+</nz-modal>
+
+
+
+
+<nz-modal nzWidth="55%" nzHeight="40%" nzWrapClassName="vertical-center-modal" [(nzVisible)]="isVisibleMiddle"
+    nzTitle="Send Your Notification Through Email" [nzContent]="middleModalContent" (nzOnCancel)="handleCancelMiddle()"
+    [nzFooter]="modalFooterrr">
+
+    <ng-template #middleModalContent>
+        <form [formGroup]="optionForm">
+            <div class="row">
+                <div class="col-6">
+                    <label nzRequired nzFor="Name">Name :</label>&nbsp;
+                    <input  [(ngModel)]="contactid" class="name1" nz-input placeholder="Enter name" formControlName='Name' />
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="optionForm.controls.Name.touched && optionForm.controls.Name.invalid && optionForm.controls.Name.errors.required">
+                            Please Enter Name
+                        </span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label nzRequired nzFor="email">Email :</label>&nbsp;
+                    <input  class="name2" nz-input placeholder="Enter email address" formControlName='email' />
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="optionForm.controls.email.touched && optionForm.controls.email.invalid && optionForm.controls.email.errors.required">
+                            Please Enter Email
+                        </span>
+                    </div> <br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label nzRequired nzFor="name">Subject : </label>&nbsp;
+                    <input class="name4" nz-input placeholder="Subject" formControlName='subject' />
+                    <div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label>Attachment :</label>&nbsp;
+                    <nz-upload nzAction="https://jsonplaceholder.typicode.com/posts/">
+                       <button> <i nz-icon nzType="upload"></i> &nbsp;&nbsp;<span>Upload</span></button>
+                    </nz-upload>
+                </div>
+            </div><br>
+            <div class="row">
+                <div>
+                <label class="namee" nzRequired nzFor="name">Body :</label>
+                <textarea formControlName="message" class="body" nz-input rows="4" cols="58" placeholder="Enter the text"></textarea>
+
+                <span class="validationtest"
+                    *ngIf="optionForm.controls.message.touched && optionForm.controls.message.invalid && optionForm.controls.message.errors.required">
+                    Enter Message
+                </span>
+            </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template #modalFooterrr>
+        <button nz-button nzType="primary" (click)=" handleOkMiddle()" (click)='sendData()'
+        [nzLoading]="isConfirmLoading">Send</button>
+        <button nz-button nzType="default" (click)="handleCancelMiddle()">Cancel</button>
+       
+    </ng-template>
+
+
+</nz-modal>

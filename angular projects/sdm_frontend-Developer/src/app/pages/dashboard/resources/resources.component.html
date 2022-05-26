@@ -1,0 +1,355 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li><a (click)="projectDetails()">{{pName}}</a></li>
+          <li>Resources</li>
+      </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+      Customer Name : <b class="cName">{{cName}}</b>
+  </div>
+</div>
+<!-- Resources Search -->
+<div class="card">
+<nz-collapse nzAccordion>
+  <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+    <form [formGroup]="searchForm">
+      <div class="row" id="fRow">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Resource Name</label>
+          <input nz-input placeholder="Resource Name"  formControlName="searchResource" (keyup.enter)="getAllResources()" />
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Start Date</label>
+          <nz-date-picker nzPlaceHolder= "yyyy-MM-dd"
+            formControlName="searchStartDate" (keyup.enter)="getAllResources()"></nz-date-picker>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>End Date</label>
+          <nz-date-picker nzPlaceHolder='End Date'  nzPlaceHolder= "yyyy-MM-dd"  [nzFormat]="'yyyy-MM-dd'"
+            formControlName="searchEndDate" (keyup.enter)="getAllResources()"></nz-date-picker>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Resource Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="Resource Type"  formControlName="searchType">
+            <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <button class="resetResource" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon
+              nzType="redo"></i>Reset</button>
+          <button class="searchResource" (click)="getAllResources()" nz-button nzType="primary"><i nz-icon
+                nzType="search"></i>Search</button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+</div>
+<!-- Resources Grid -->
+<div class="card" id="grid">
+  <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+        <label class="rec">No. of Records : {{records}}</label>
+      </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+          </div>
+        </div>
+        <div class="card-body" id="gridBody">
+      <nz-table #basicTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+        nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+        [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+        (nzPageSizeChange)="onPageSizeChange($event)">
+        <thead>
+          <tr>
+            <th *ngFor="let column of listOfColumns"
+                 [nzWidth]="column.width">
+            {{ column.name }}
+             </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of listOfData ; let i = index ">
+            <tr>
+              <td>{{ pageSize *(pageNum-1)+i+1 }}</td>
+              <td>{{ data.resourceName }}</td>
+              <td>{{ resourceLabel[data.resourceType]}}</td>
+              <td >{{ data.resourceTitle }}</td>
+              <td>{{ data.startDate | date:'MMM d, yyyy' }}</td>
+              <td>{{ data.endDate | date:'MMM d, yyyy' }}</td>
+              <td>
+                <i nz-icon nzType="edit" (click)="editRow(data)" nzTheme="outline"></i>&nbsp;
+                <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                  (nzOnConfirm)="deleteRow(data)"></i>&nbsp;
+                <i nz-icon nzType="plus-circle" nzEllipsis nzTooltipTitle="Add Review" nz-tooltip
+                  (click)="addReview(data)" nzTheme="outline"></i>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+  <!-- Add Resources -->
+  <nz-modal [(nzVisible)]="addResourceVisible" nzTitle="Add Resources"
+   (nzOnCancel)="addCancel()" [nzFooter]="modalFooter">
+    <form nz-form [formGroup]="addResourceForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Resource Type<span class="validationtest">*</span></label>
+          <nz-select  nzAllowClear (ngModelChange)="resType($event)" nzPlaceHolder="Resource Type"
+           formControlName="resourceType">
+            <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+          <div
+            *ngIf="this.addResourceForm.get('resourceType').errors?.required && this.addResourceForm.get('resourceType').touched">
+            <span class="validationtest">Please Select Resource Type</span></div>
+        </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="resourceI">
+              <label >Resource Name<span class="validationtest">*</span></label>
+              <nz-select  nzAllowClear nzPlaceHolder="Resource Name" formControlName="rNameInternal">
+                <nz-option *ngFor="let option of rName" [nzValue]="option.MailId" [nzLabel]="option.UserName">
+                </nz-option>
+              </nz-select>
+              <div>
+                <span class="validationtest"  *ngIf="addResourceForm.controls.rNameInternal.touched && addResourceForm.controls.rNameInternal.invalid
+                    && addResourceForm.controls.rNameInternal.errors.required"> Please select resource name</span> </div>
+          </div>
+      </div>
+        <div class="row" *ngIf="resourceE">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <label>Resource Name<span class="validationtest">*</span></label>
+              <input nz-input maxlength="81" placeholder="Resource Name" formControlName="rNameExternal" />
+              <div *ngIf="this.addResourceForm.get('rNameExternal').errors?.required &&
+               this.addResourceForm.get('rNameExternal').touched">
+                <span class="validationtest">Resource Name Is Required</span></div>
+                 <div *ngIf="this.addResourceForm.get('rNameExternal').errors?.maxlength">
+                    <span class="validationtest">Only 80 Characters are allowed</span></div>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Email Id</label>
+                <input nz-input maxlength="61" placeholder="Mail Id" formControlName="mail"  />
+               <div>
+                <span class="validationtest"  *ngIf="addResourceForm.controls.mail.touched && addResourceForm.controls.mail.invalid
+               && addResourceForm.controls.mail.errors.required">Please enter mail id</span> </div>
+             <div *ngIf="this.addResourceForm.get('mail').errors?.maxlength">
+             <span class="validationtest">Only 60 Characters are allowed</span></div>
+             <div *ngIf="this.addResourceForm.get('mail').errors?.email">
+              <span class="validationtest">Please enter valid email address</span></div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Start Date</label>
+            <nz-date-picker name="startDate"  nzPlaceHolder= "yyyy-MM-dd"  [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartChange($event)"
+            formControlName="sDate" >
+            </nz-date-picker>
+            <div *ngIf="this.addResourceForm.get('sDate').errors?.required && this.addResourceForm.get('sDate').touched">
+              <small class="validationtest">Start Date Is Required</small></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>End Date</label>
+          <nz-date-picker name="endDate"  nzPlaceHolder= "yyyy-MM-dd"  [nzDisabledDate]="disabledEndDate" formControlName="eDate">
+        </nz-date-picker>
+        <div *ngIf="this.addResourceForm.get('eDate').errors?.required && this.addResourceForm.get('eDate').touched">
+          <small class="validationtest">End Date Is Required</small></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Role</label>
+            <nz-select nzAllowClear nzPlaceHolder="Select Role" formControlName="role">
+              <nz-option *ngFor="let option of roleDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Skillset</label>
+            <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillset'>
+              <nz-option *ngFor="let option of skillSet" [nzValue]="option.optionKey"
+              [nzLabel]="option.optionValue">
+          </nz-option>
+            </nz-select>
+        </div>
+      </div>
+      <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label >Billable</label>
+          <nz-select nzAllowClear nzPlaceHolder="Billable" formControlName='billable'>
+            <nz-option *ngFor="let option of billableDropDown" [nzValue]="option.value"
+            [nzLabel]="option.label">
+        </nz-option>
+          </nz-select>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Work Phone</label>
+            <input nz-input maxlength="16" minlength="10" placeholder="Work Phone" formControlName="workPhone" />
+            <div *ngIf="this.addResourceForm.get('workPhone').errors?.maxlength">
+              <span class="validationtest">Only 16 digits are allowed</span></div>
+              <div *ngIf="this.addResourceForm.get('workPhone').errors?.minlength">
+                <span class="validationtest">Minimum 10 digits are required</span></div>
+        <div *ngIf="this.addResourceForm.get('workPhone').errors?.pattern && this.addResourceForm.get('workPhone').invalid">
+                  <span class="validationtest">Only Numbers Are Allowed</span></div>
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Mobile Phone</label>
+            <input nz-input maxlength="16" minlength="10" placeholder="Mobile Phone" formControlName="mobilePhone" />
+           <div *ngIf="this.addResourceForm.get('mobilePhone').errors?.maxlength">
+            <span class="validationtest">Only 15 digits are allowed</span></div>
+            <div *ngIf="this.addResourceForm.get('mobilePhone').errors?.minlength">
+              <span class="validationtest">Minimum 10 digits are required</span></div>
+         <div *ngIf="this.addResourceForm.get('mobilePhone').errors?.pattern && this.addResourceForm.get('mobilePhone').invalid">
+              <span class="validationtest">Only Numbers Are Allowed</span></div>
+      </div>
+      </div>
+     <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Comments</label>
+          <textarea nz-input maxlength="1501" placeholder="Comments" formControlName="comments" nzAutosize></textarea>
+          <div *ngIf="this.addResourceForm.get('comments').errors?.maxlength">
+          <span class="validationtest">Only 1500 Characters are allowed</span></div>
+    </div>
+    </div>
+      <ng-template #modalFooter>
+        <button nz-button  nzType="primary" class="cancel" (click)="addCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+        <button nz-button nzType="primary"  class="save" [disabled] = "btnDisabled" (click)="saveResource()"> <i nz-icon nzType="save"></i>Save</button>
+      </ng-template>
+    </form>
+  </nz-modal>
+
+  <!-- Edit Resources -->
+  <nz-modal  [(nzVisible)]="editResourceVisible" nzTitle="Edit Resources"
+  (nzOnCancel)="updateCancel()"  [nzFooter]="modalFooter1">
+    <form [formGroup]="editResourceForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Resource Type<span class="validationtest">*</span></label>
+          <nz-select  nzAllowClear nzPlaceHolder="Resource Type" formControlName="resourceType">
+            <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+          <div
+            *ngIf="this.editResourceForm.get('resourceType').errors?.required && this.editResourceForm.get('resourceType').touched">
+            <span class="validationtest">Please Select Resource Type</span></div>
+        </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"  *ngIf="resourceI">
+              <label >Resource Name<span class="validationtest">*</span></label>
+              <nz-select  nzAllowClear nzPlaceHolder="Resource Name" formControlName="rNameInternal">
+                <nz-option *ngFor="let option of rName" [nzValue]="option.MailId" [nzLabel]="option.UserName">
+                </nz-option>
+              </nz-select>
+              <div *ngIf="this.editResourceForm.get('rNameInternal').errors?.required && this.editResourceForm.get('rNameInternal').touched">
+                <span class="validationtest">Resource Name Is Required</span></div>
+          </div>
+      </div>
+        <div class="row" *ngIf="resourceE"  >
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <label >Resource Name<span class="validationtest">*</span></label>
+              <input nz-input placeholder="Resource Name" maxlength="81" formControlName="rNameExternal"  />
+              <div *ngIf="this.editResourceForm.get('rNameExternal').errors?.required && this.editResourceForm.get('rNameExternal').touched">
+                <span class="validationtest">Resource Name Is Required</span></div>
+                 <div *ngIf="this.editResourceForm.get('rNameExternal').errors?.maxlength">
+                    <span class="validationtest">Only 80 Characters are allowed</span></div>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Email Id</label>
+                <input nz-input placeholder="Mail Id" maxlength="61" formControlName="mail" />
+                <div>
+                  <span class="validationtest"  *ngIf="editResourceForm.controls.mail.touched && editResourceForm.controls.mail.invalid
+                 && editResourceForm.controls.mail.errors.required">Please enter mail id</span> </div>
+               <div *ngIf="this.editResourceForm.get('mail').errors?.maxlength">
+               <span class="validationtest">Only 60 Characters are allowed</span></div>
+               <div *ngIf="this.editResourceForm.get('mail').errors?.email">
+                <span class="validationtest">Please enter valid email address</span></div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Start Date</label>
+          <nz-date-picker name="startDate"  nzPlaceHolder= "yyyy-MM-dd"  [nzDisabledDate]="disabledStartDateedit" (ngModelChange)="onStartChange($event)"
+           formControlName="sDate" class="start">
+          </nz-date-picker>
+        <div
+          *ngIf="this.editResourceForm.get('sDate').errors?.required && this.editResourceForm.get('sDate').touched">
+          <small class="validationtest">Start Date Is Required</small></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>End Date</label>
+          <nz-date-picker name="endDate"  nzPlaceHolder= "yyyy-MM-dd"  [nzDisabledDate]="disabledStartDateedit"
+          formControlName="eDate" class="end">
+        </nz-date-picker>
+        <div
+          *ngIf="this.editResourceForm.get('eDate').errors?.required && this.editResourceForm.get('eDate').touched">
+          <small class="validationtest">End Date Is Required</small></div>
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Role</label>
+            <nz-select nzAllowClear nzPlaceHolder="Select Role" formControlName="role">
+              <nz-option *ngFor="let option of roleDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Skillset</label>
+            <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillset'>
+              <nz-option *ngFor="let option of skillSet" [nzValue]="option.optionKey"
+              [nzLabel]="option.optionValue">
+          </nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <label >Billable</label>
+            <nz-select nzAllowClear nzPlaceHolder="Billable" formControlName='billable'>
+              <nz-option *ngFor="let option of billableDropDown" [nzValue]="option.value"
+              [nzLabel]="option.label">
+          </nz-option>
+            </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <label>Work Phone</label>
+              <input nz-input placeholder="Work Phone" maxlength="15" minlength="10" formControlName="workPhone" />
+              <div *ngIf="this.editResourceForm.get('workPhone').errors?.maxlength">
+                <span class="validationtest">Only 16 digits are allowed</span></div>
+                <div *ngIf="this.editResourceForm.get('workPhone').errors?.minlength">
+                  <span class="validationtest">Minimum 10 digits are required</span></div>
+             <div *ngIf="this.editResourceForm.get('workPhone').errors?.pattern && this.editResourceForm.get('workPhone').invalid">
+                  <span class="validationtest">Only Numbers Are Allowed</span></div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <label>Mobile Phone</label>
+              <input nz-input placeholder="Mobile Phone" maxlength="15" minlength="10" formControlName="mobilePhone" />
+              <div *ngIf="this.editResourceForm.get('mobilePhone').errors?.maxlength">
+                <span class="validationtest">Only 16 digits are allowed</span></div>
+                <div *ngIf="this.editResourceForm.get('mobilePhone').errors?.minlength">
+                  <span class="validationtest">Minimum 10 digits are required</span></div>
+             <div *ngIf="this.editResourceForm.get('mobilePhone').errors?.pattern && this.editResourceForm.get('mobilePhone').invalid">
+                  <span class="validationtest">Only Numbers Are Allowed</span></div>
+        </div>
+        </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <label>Comments</label>
+            <textarea nz-input placeholder="Comments" maxlength="1501"  formControlName="comments" nzAutosize></textarea>
+            <div *ngIf="this.editResourceForm.get('comments').errors?.maxlength">
+            <span class="validationtest">Only 1500 Characters are allowed</span></div>
+      </div>
+      </div>
+      <ng-template #modalFooter1>
+        <button nz-button nzType="primary" class="cancel" (click)="updateCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+        <button nz-button nzType="primary" class="save" (click)="updateResource()"> <i nz-icon nzType="edit"></i>Update</button>
+      </ng-template>
+    </form>
+  </nz-modal>

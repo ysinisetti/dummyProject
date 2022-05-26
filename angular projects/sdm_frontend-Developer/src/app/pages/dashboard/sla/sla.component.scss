@@ -1,0 +1,79 @@
+.sla {
+  background-color: white !important;
+  color: black !important;
+}
+.low {
+  background-color: #c6f0ca !important;
+  color: black !important;
+}
+.normal {
+  background-color: #ece6aa !important;
+  color: black !important;
+}
+.high {
+  background-color: #f3d4b7 !important;
+  color: black !important;
+}
+.urgent {
+  background-color: #f55e59 !important;
+  color: black !important;
+}
+.action {
+  background-color: #5acbee !important;
+  color: black !important;
+}
+
+.btn {
+  margin-top: 15px;
+  float: right;
+  margin-right: 25px;
+  margin-bottom: 20px;
+}
+.cancel {
+  font-weight: bold;
+  margin-top: 30px;
+  width: 100px;
+  color: black !important;
+  background-color: #f0f0f0 !important;
+  border:white !important;
+}
+.save {
+  font-weight: bold;
+  width: 100px;
+}
+#grid1 {
+  margin-top: 1px;
+}
+#gridBody {
+  margin-top: -33px;
+  margin-bottom: 2px;
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn{
+    width: 90%;
+    float: right;
+    margin-right: 15px;
+    }
+.customer {
+    margin-top: -3px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: -2px;
+    }
+  .ant-table {
+    overflow-x: scroll !important;
+  }
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 94%;
+    float: right;
+    margin-right: 16px;
+    }
+  .customer {
+    margin-top: -3px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: -2px;
+    }
+  }

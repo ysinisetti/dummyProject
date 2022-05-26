@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="gotoHome()">Home</a></li>
+            <li>Librarian Assets</li>
+        </ul>
+    </div>
+</div>
+<div class="card">
+    <nz-collapse nzAccordion>
+        <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="librarianForm">
+                <div class="row" id="fRow">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Asset Title</label>
+                        <input nz-input placeholder="Asset Title" name="assetTitle" formControlName="assetTitle" />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>SkillSet</label>
+                        <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillSet'>
+                            <nz-option *ngFor="let option of assetSkillSet" [nzValue]="option.optionKey"
+                                [nzLabel]="option.optionValue">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Asset Type</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Asset Type" formControlName="assetType">
+                            <nz-option *ngFor="let option of assetType" [nzValue]="option.optionKey"
+                                [nzLabel]="option.optionValue">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Author</label>
+                        <input nz-input placeholder="Author" name="author" formControlName="author" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"></div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <button class="reset1" (click)="resetLibarian()" nz-button nzType="primary"><i nz-icon
+                                nzType="redo"></i>Reset</button>
+                        <button class="search1" (click)="getAssetsBySearch()" nz-button nzType="primary"><i nz-icon
+                                nzType="search"></i>Search</button>
+                    </div>
+                </div>
+            </form>
+        </nz-collapse-panel>
+    </nz-collapse>
+</div>
+<div class="card" id="grid">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                    <label class="rec">No. of Records : {{totalPages}}</label>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <button class="add" (click)="clickOnAdd()" nz-button nzType="primary"><i nz-icon
+                            nzType="plus"></i>Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card-body" id="gridBody">
+                <nz-table #expandTable [nzData]="assetsData" nzTableLayout="fixed" [nzPaginationPosition]
+                    nzShowSizeChanger nzShowPagination [nzTotal]="totalPages" [nzPageSize]="pageSize"
+                    [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+                    (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+                                {{ column.name }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of assetsData; let i=index">
+                            <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                            <td nzEllipsis nzTooltipTitle="{{data.title}}" nz-tooltip>{{data.title}}</td>
+                            <td nzEllipsis nzTooltipTitle="{{skillset[data.skillSet]}}" nz-tooltip>
+                                {{skillset[data.skillSet]}}<span *ngIf="data.skillSet===''">NA</span></td>
+                            <td nzEllipsis>{{dAssetType[data.assetType]}}<span *ngIf="data.assetType===''">NA</span>
+                            </td>
+                            <td>{{data.createdDate  | date: 'MMM d, yyyy'}}</td>
+                            <td>{{data.author}}</td>
+                            <td>{{dStatus[data.assetStatus]}}<span *ngIf="data.assetStatus===''">NA</span></td>
+                            <td>
+                                <i nz-icon nzType="download" class="download" (click)="downloadFile(data.id)"
+                                    nzTheme="outline"></i>&nbsp;
+                                <i nz-icon nzType="edit" nzTooltipTitle="Details" nz-tooltip nzTheme="outline"
+                                    (click)="editAsset(data.id)">
+                                </i>&nbsp;
+                                <i nz-icon nzType="delete" nz-popconfirm nzPopconfirmTitle="Sure to Delete?"
+                                    (nzOnConfirm)="deleteRow(data.id)" nzTheme="outline"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>
+<nz-modal [(nzVisible)]="openAddAssetform" nzTitle="Add Librarian Asset" (nzOnCancel)="Cancel()"
+    [nzFooter]="modalFooter">
+    <form [formGroup]="addAssetform">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Asset Title <span class="validationtest">*</span></label>
+                <input nz-input nzLabel="Title" placeholder="Asset Title" formControlName="title" maxlength="76">
+                <div *ngIf="this.addAssetform.get('title').errors?.required && this.addAssetform.get('title').touched">
+                    <span class="text-danger">Title Is Required</span></div>
+                <div *ngIf="this.addAssetform.get('title').errors?.maxlength && this.addAssetform.get('title').invalid">
+                    <span class="text-danger">Only 75 Characters are allowed allowed</span>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Skill Set <span class="validationtest"></span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Choose Asset Skillset" formControlName="assetSkillset">
+                    <nz-option *ngFor="let options of assetSkillSet" [nzValue]="options.optionKey"
+                        [nzLabel]="options.optionValue"></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Asset Type <span class="validationtest"></span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Choose Asset Type" formControlName="assetType">
+                    <nz-option *ngFor="let options of assetType" [nzValue]="options.optionKey"
+                        [nzLabel]="options.optionValue"></nz-option>
+                </nz-select>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Asset Status </label>
+                <nz-select nzAllowClear nzPlaceHolder="Choose Asset Status" formControlName="assetStatus">
+                    <nz-option *ngFor="let options of assetStatusdata" [nzValue]="options.optionKey"
+                        [nzLabel]="options.optionValue"></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Description <span class="validationtest"></span></label><br>
+                <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....'
+                    formControlName="description" nzAutosize></textarea>
+            </div>
+        </div>
+        <ng-template #modalFooter>
+            <button nz-button nzType="primary" class="cancel" (click)="Cancel()"> <i nz-icon
+                    nzType="close"></i>Cancel</button>
+            <button nz-button nzType="primary" class="save" (click)="addLibrarian()"> <i nz-icon
+                    nzType="save"></i>Save</button>
+        </ng-template>
+    </form>
+</nz-modal>

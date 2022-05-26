@@ -1,0 +1,182 @@
+<nz-breadcrumb>
+  <div>
+   <a  (click)="details()"><p class="title" >{{ProjectName}} <span class="arrow"></span></p></a>
+ </div>
+   <nz-breadcrumb-item>
+    <p class= "bread">SLA</p>
+   </nz-breadcrumb-item>
+ </nz-breadcrumb>
+<div class="card">
+
+  <nz-page-header class="site-page-header"  nzTitle="SLA">
+  </nz-page-header>
+  <div class="card-body" style="padding-top: 0px;">
+    <!-- <form [formGroup]="prjForm"> -->
+    <div class="row">
+      <div class="col-4">
+        <!-- <label nzRequired nzFor="Name">Customer Name:&nbsp; {{cusName}}</label>&nbsp; -->
+
+      </div>
+      <div class="col-4">
+        <!-- <label>Project Name :&nbsp;{{proName}}</label>&nbsp; -->
+
+      </div>
+      <div class="col-4" style="padding-left: 180px;margin-top: 10px;">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input type="text" nz-input placeholder="Search Here"  [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" />
+          <!-- <input type="text"  (input)="onSearch($event.target.value)" nz-input placeholder="Search Here" /> -->
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" (click)="search1()" nzSearch><i nz-icon nzType="search"></i></button>
+        </ng-template>
+      </div>
+    </div>
+    <!-- </form> -->
+  </div>
+ </div>
+
+<div class="card">
+  <br>
+  <div class="row">
+    <div class="col-12 justify-content-end" style="padding-left: 90.5%;margin-top: -10px;">
+      <button nz-button (click)="addRow()" nzType="primary"><i nz-icon nzType="plus"
+          nzTheme="outline"></i>Add</button>
+    </div>
+  </div>
+
+  <div class="card-body">
+      <div class="row">
+          <div class="col-12">
+              <div class="card" style="margin-top: 15px;">
+                  <nz-table nzShowSizeChanger nzShowPagination #basicTable  nzBordered  class="tablescroll" [nzData]="tableData"
+                      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                      <!-- (nzCurrentPageDataChange)="onCurrentPageDataChange($event)" -->
+                      <thead >
+                          <tr >
+                              <th nzWidth="4%" style="background-color: white !important;color: black !important" >SLA Targets </th>
+                              <th nzWidth="4%" style="background-color: #c6f0ca !important;color: black !important">LOW</th>
+                              <th nzWidth="4%" style="background-color: #ece6aa !important;color: black !important">NORMAL</th>
+                              <th nzWidth="4%" style="background-color: #f3d4b7 !important;color: black !important">HIGH</th>
+                              <th nzWidth="4%" style="background-color: #f55e59 !important;color: black !important">URGENT</th>
+                              <th nzWidth="1%" style="background-color: #5acbee !important;color: black !important" >Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let data of basicTable.data  | filter:searchTerm">
+                              <td>{{ data.pName }}</td>
+                              <td>{{ data.low }}</td>
+                              <td>{{ data.normal }}</td>
+                              <td>{{data.high}}</td>
+                              <td>{{data.urgent}}</td>
+                              <td>
+                                  <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)"> </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a nz-popconfirm nzPopconfirmTitle="Sure to delete?"  (nzOnConfirm)="deleteRow(data.pName)">
+                            <i nz-icon nzTheme="fill"   nzType="delete"></i>
+
+                          </a>
+                                </td>
+                          </tr>
+                      </tbody>
+                  </nz-table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+    <!-- ***************To add a Target**************** -->
+<nz-modal nzWidth="55%" nzHeight="60%" [(nzVisible)]="isVisible" nzTitle="Add a target "
+   (nzOnCancel)="handleCancel()"  [nzFooter]="modalFooter">
+   <form [formGroup]="addData" >
+    <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">&nbsp;&nbsp;
+      <label class="sla">SLA Target :</label>
+      <nz-select class= "label1"   nzAllowClear nzPlaceHolder="SLA Target" formControlName="pName">
+          <nz-option *ngFor="let option of optionList1" [nzValue]="option" [nzLabel]="option.label">
+          </nz-option>
+      </nz-select>
+  </div><br>
+    <div class="row">
+      <div class="col-6">
+    <nz-form-item>
+      <label Required>Low : </label> &nbsp;
+        <input class= "label"  nz-input nzLabel="Task Name" placeholder="Low" required name="taskName1" formControlName="low"/>
+        </nz-form-item>
+            </div>
+            <div class="col-6">
+              <nz-form-item>
+                <label Required>Normal: </label> &nbsp;
+                  <input class= "label"  nz-input nzLabel="Task Name" placeholder="Normal" required name="taskName1" formControlName="normal"/>
+                  </nz-form-item>
+                      </div>
+    </div>
+<div class="row">
+  <div class="col-6">
+      <nz-form-item>
+        <label Required>High :</label> &nbsp;
+          <input class= "label"  nz-input nzLabel="Task Name" placeholder="High" required name="taskName1" formControlName="high"/>
+          </nz-form-item>
+              </div>
+
+              <div class="col-6">
+                  <nz-form-item>
+                    <label Required>Urgent : </label> &nbsp;
+                      <input class= "label"  nz-input nzLabel="Task Name" placeholder="Urgent" required name="taskName1" formControlName="urgent"/>
+                      </nz-form-item>
+                          </div>
+
+    </div>
+
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" (click)="handleSubmit1()"><i nz-icon nzType="save"></i>Save</button>
+      <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+    </ng-template>
+    </form>
+  </nz-modal>
+
+
+  <nz-modal nzWidth="55%" nzHeight="60%" [(nzVisible)]="isVisible1" nzTitle="Edit a target"
+  (nzOnCancel)="handleCancel()"  [nzFooter]="modalFooterr">
+  <form [formGroup]="editData" >
+      <div class="row">
+          <div class="col-6">
+        <nz-form-item>
+          <label Required>Low : </label> &nbsp;
+            <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="low"/>
+            </nz-form-item>
+                </div>
+                <div class="col-6">
+                  <nz-form-item>
+                    <label Required>Normal : </label> &nbsp;
+                      <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="normal"/>
+                      </nz-form-item>
+                          </div>
+        </div><br>
+    <div class="row">
+      <div class="col-6">
+          <nz-form-item>
+            <label Required>High: </label> &nbsp;
+              <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="high"/>
+              </nz-form-item>
+                  </div>
+
+                  <div class="col-6">
+                      <nz-form-item>
+                        <label Required>Urgent:  </label> &nbsp;
+                          <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="urgent"/>
+                          </nz-form-item>
+                              </div>
+
+        </div>
+
+   <ng-template #modalFooterr>
+     <button nz-button nzType="primary"   (click)="updateTask()"><i nz-icon
+      nzType="edit"></i>Update</button>
+     <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+   </ng-template>
+   </form>
+ </nz-modal>
+
+
+
+
+
+

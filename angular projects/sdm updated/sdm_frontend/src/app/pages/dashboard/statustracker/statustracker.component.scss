@@ -1,0 +1,150 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+
+nz-select {
+  width: 100%;
+}
+
+// .btn {
+//     margin-top: 29px;
+//     width: 100px;
+//     float: right;
+// }
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .name {
+    width: 215px;
+    margin-top: 3%;
+  }
+  .duration {
+    width: 26px;
+  }
+  // @media (min-width:300px) and (max-width:500px) {
+  // }
+  // @media (min-width:501px) and (max-width:767px) {
+  //     .search {
+  //         margin-top: 17%;
+  //         float: right;
+  //     }
+  // }
+}
+
+.projectname {
+  font-size: 15px;
+}
+
+.btn {
+  width: 100px;
+  float: right;
+  margin-top: -10px;
+}
+
+.btn1 {
+  margin-top: -5px;
+  width: 100px;
+  margin-left: 8px;
+  float: right;
+}
+
+.btn2 {
+  margin-top: -5px;
+  width: 100px;
+  margin-right: 8px;
+  float: right;
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+    margin-right: 8px;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .btn1 {
+    width: 100%;
+  }
+  .btn2 {
+    width: 100%;
+  }
+}
+
+ul.breadcrumb {
+  margin-top: -22px;
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+}
+
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  position: relative;
+  padding: 11px 5px;
+  padding-left: 40px;
+  color: black !important;
+  line-height: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+.record {
+  margin-top: -8px;
+  color: black;
+}
+
+.tableHeader {
+  margin-top: -20px;
+}
+
+.addBTn {
+  margin-right: 30px;
+}

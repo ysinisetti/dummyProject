@@ -1,0 +1,305 @@
+<!-- <div>
+    <br>
+    <div class="container">
+        <div class="container">
+            <div fxLayout="column" fxLayoutGap="20px" fxLayout.gt-md="row" fxLayoutAlign="space-around center"
+                class="content">
+                <div class="blocks">
+                    <button button="submit" mat-raised-button color="primary" (click)="Dialog()">
+                        <mat-icon>add</mat-icon> Create Alert
+                    </button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <div fxLayout="row" fxLayoutAlign="center center" class="content">
+                <mat-card-content>
+                    <div class="table">
+                        <table mat-table [dataSource]="dataSource| slice: lowValue : highValue" matSort
+                            class="mat-elevation-z8">
+
+                            <ng-container matColumnDef="Sno">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <h3>Sno</h3>
+                                </th>
+                                <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <h3>name</h3>
+                                </th>
+                                <td mat-cell *matCellDef="let option">
+                                    <h4>{{option.name}} </h4>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="link">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <h3>link</h3>
+                                </th>
+                                <td mat-cell *matCellDef="let option">
+                                    <a class="font" href="{{option.link}}" target="_blank">{{option.link}}</a>
+                                </td>
+                            </ng-container>
+
+
+
+                            <ng-container matColumnDef="createdOn">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <h3>createdOn</h3>
+                                </th>
+                                <td mat-cell *matCellDef="let option">
+                                    <h4>{{option.createdOn| date:'medium' }}</h4>
+
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <h4>status</h4>
+                                </th>
+                                <td mat-cell *matCellDef="let option">
+                                    <mat-slide-toggle (change)="toggleIsAwesome($event,option)"
+                                        [checked]="option.status"></mat-slide-toggle>
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+
+                                    <h3 style="margin-left: 30px;">Action </h3>
+                                </th>
+                                <td mat-cell *matCellDef="let data" class="action-link">
+                                    <button mat-button (click)="openEdit(data)">
+                                        <mat-icon class="icon" color="primary" matTooltip="Do u want to edit alert"
+                                            aria-label="Button that displays a tooltip when focused or hovered over">
+                                            edit</mat-icon>
+                                    </button>
+
+                                    <button mat-button (click)="openDelete(data.sno)">
+                                        <mat-icon class="icon" color="warn" matTooltip="Do u want to delete alert"
+                                            aria-label="Button that displays a tooltip when focused or hovered over">
+                                            delete</mat-icon>
+                                    </button>
+
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+
+                    </div>
+                </mat-card-content>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div>
+    <br>
+    <div class="container">
+        <div class="container">
+            <div fxLayout="column" fxLayoutGap="20px" fxLayout.gt-md="row" fxLayoutAlign="space-around center"
+                class="content">
+                <div class="blocks">
+                    <button button="submit" mat-raised-button color="primary" (click)="Dialog()">
+                        <mat-icon>add</mat-icon> Create Alert
+                    </button>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="container">
+
+            <mat-card-content>
+                <div class="table">
+                    <ngx-datatable class="material expandable" #table [columnMode]="ColumnMode.force"
+                        [headerHeight]="120" [footerHeight]="50" rowHeight="auto" [rows]="dataSource"
+                        (page)="onPage($event)">
+
+                        <ngx-datatable-row-detail [rowHeight]="140"  #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:35px;">
+                                    <div><strong>please refer the given link </strong></div>
+                                    <a class="font" href="{{row.link}}" target="_blank">{{row.link}}</a>
+                                </div> -->
+                                <app-extra-table-data (toggle)="onDetailToggle($event)" [row]="row">
+                                </app-extra-table-data>
+                            </ng-template>
+
+                        </ngx-datatable-row-detail>
+                        <!-- <app-extra-table-data (toggle)="onDetailToggle($event)" [loggedIn]="login"></app-extra-table-data> -->
+
+
+                        <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
+                            [canAutoResize]="false">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                                <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                                    [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                                    (click)="toggleExpandRow(row,$event)">
+                                </a>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="Index" [width]="50" [sortable]="false">
+                            <ng-template ngx-datatable-header-template>
+                                <div>
+                                    <div>
+                                        <b> index</b>
+                                    </div>
+                                    <div style="margin-top: 30px;">
+                                        <mat-icon class="icon" (click)="resetSearch()" color="primary"
+                                            matTooltip="Do You to reset search fields"
+                                            aria-label="Button that displays a tooltip when focused or hovered over">
+                                            highlight_off</mat-icon>
+
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                                {{ rowIndex }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="name" [width]="300" [sortable]="false">
+                            <ng-template ngx-datatable-header-template>
+                                <div>
+                                    <div>
+                                        <b>name </b>
+                                    </div>
+                                    <div style="margin-top: 20px;">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label for="userName"> Search </mat-label>
+                                            <input matInput id="userName" autocomplete="off" type="text"
+                                                placeholder="Search" [(ngModel)]="name1"
+                                                (keyup)="updateFilter($event,'name')">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{row.name}}
+                            </ng-template>
+
+                        </ngx-datatable-column>
+
+
+                        <!-- <ng-template ngx-datatable-header-template>
+                            <div class="datatable-header-cell-wrapper ellipsis" style="z-index: 9999;">
+                            <div class="datatable-header-cell-wrapper" style="width: 100%;height: 30px;" matTooltip='Status' matTooltipShowDelay="250">
+                            <span class="datatable-header-cell-label draggable">Status</span>
+                            </div>
+                            </div>
+                            
+                            </ng-template>
+                            <ng-template let-row="row" let-expanded="expanded" let-value="value" ngx-datatable-cell-template>
+                            <div class="status" (click)="toggleExpandRow(row, expanded)" (select)="chooseRow(row)">
+                            <a style="text-decoration: none !important;" matTooltip="{{value}}" matTooltipShowDelay="250">
+                            {{value}}
+                            </a>
+                            </div>
+                            </ng-template> -->
+
+
+
+                        <ngx-datatable-column name="link" [width]="300">
+                            <ng-template ngx-datatable-header-template>
+                                <div>
+                                    <div>
+                                        <b>link</b>
+                                    </div>
+                                    <div style="margin-top: 20px">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label for="userName"> Search </mat-label>
+                                            <input matInput id="userName" autocomplete="off" type="text"
+                                                placeholder="Search" maxlength="20"
+                                                (keyup)="updateFilter($event,'link')" [(ngModel)]="name">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-row="row " ngx-datatable-cell-template>
+                                <a class="font" href="{{row.link}}" target="_blank">{{row.link}}</a>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="createdOn" [width]="300">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{row.createdOn| date:'medium' }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="status" [width]="80">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                <mat-slide-toggle (change)="toggleIsAwesome($event,row)" [checked]="row.status"
+                                    matTooltip="Enable to post "
+                                    aria-label="Button that displays a tooltip when focused or hovered over">
+                                </mat-slide-toggle>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="action" [width]="170" [sortable]="false">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                <button mat-button (click)="openEdit(row)">
+                                    <mat-icon class="icon" color="primary" matTooltip="Do u want to edit alert"
+                                        aria-label="Button that displays a tooltip when focused or hovered over">
+                                        edit</mat-icon>
+                                </button>
+
+                                <button mat-button (click)="openDelete(row.sno)">
+                                    <mat-icon class="icon" color="warn" matTooltip="Do u want to delete alert"
+                                        aria-label="Button that displays a tooltip when focused or hovered over">
+                                        delete</mat-icon>
+                                </button>
+
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+
+                </div>
+            </mat-card-content>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <ngx-datatable-column [sortable]="true" prop="status" [canAutoResize]="false" [draggable]="false" [resizeable]="false"
+    [headerCheckboxable]="false" name="Status" 
+    [width]="150">
+    <ng-template ngx-datatable-header-template>
+        <div class="datatable-header-cell-wrapper ellipsis" style="z-index: 9999;">
+            <div class="datatable-header-cell-wrapper" style="width: 100%;height: 30px;" matTooltip='Status'
+                matTooltipShowDelay="250">
+                <span class="datatable-header-cell-label draggable">Status</span>
+            </div>
+        </div>
+
+    </ng-template>
+    <ng-template let-row="row" let-expanded="expanded" let-value="value" ngx-datatable-cell-template>
+        <div class="status" >
+            <a style="text-decoration: none !important;" matTooltip="{{value}}" matTooltipShowDelay="250">
+                {{value}}
+            </a>
+        </div>
+    </ng-template> -->

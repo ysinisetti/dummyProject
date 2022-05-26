@@ -1,0 +1,141 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a routerLink="/dashboard/examList">{{practiceName}}</a></li>
+      <li>Author and SubTopics</li>
+    </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+    Topic Name : <b class="cName">{{topicName}}</b>
+  </div>
+</div>
+<div class="card" id="car">
+  <div class="card-body">
+    <nz-tabset class="tabs" id="card">
+      <nz-tab nzTitle="Authors">
+        <div class="card" id="grid">
+          <form [formGroup]="authorForm">
+            <div class="row header">
+                       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                <nz-form-label>Author<span class="validationtest">*</span></nz-form-label>
+                <nz-select class="author" nzAllowClear nzPlaceHolder="Choose Author" formControlName="author"
+                  name="Author">
+                  <nz-option *ngFor="let options of listOfResources" [nzValue]="options.Label"
+                    [nzLabel]="options.Label"></nz-option>
+                </nz-select>
+                <div class="valid">
+                  <div *ngIf="this.authorForm.get('author').errors?.required && this.authorForm.get('author').touched">
+                    <span class="text-danger">Author Is Required</span></div>
+                  <div *ngIf="this.authorForm.get('author').errors?.pattern && this.authorForm.get('author').invalid">
+                    <span class="text-danger">Only Alphabets Are Allowed</span></div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <button class="add" (click)="addAuthor()" nz-button nzType="primary">
+                  <i nz-icon nzType="plus"></i>Add</button>
+              </div>
+            </div>
+          </form>
+          <div class="card-body" id="gridBody">
+            <nz-table #basicTable [nzData]="allAuthors" class="table">
+              <thead>
+                <tr>
+                  <th nzWidth="10%">Author Id</th>
+                  <th nzWidth="5%">Created By</th>
+                  <th nzWidth="4%">Created Date</th>
+                  <th nzWidth="6%">Status</th>
+                  <th nzWidth="4%">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data ">
+                  <td>{{data.authorId}}</td>
+                  <td>{{data.createdBy}}</td>
+                  <td>{{data.createdDate | date: 'MMM d, yyyy'}}</td>
+                  <td>{{data.status}}</td>
+                  <td class="trash"><a nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                      (nzOnConfirm)="deleteAuthor(data.id)">
+                      <i nz-icon nzTheme="outline" nzType="delete"></i>
+                    </a></td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="SubTopics">
+        <div class="card" id="grid">
+          <form [formGroup]="subTopicForm">
+            <div class="row header">
+              <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                <nz-form-label>SubTopic <span class="validationtest">*</span></nz-form-label>
+                <input class="author" nz-input nzLabel="SubTopic" formControlName="subTopic" placeholder="SubTopic" name="SubTopic" />
+               <div class="valid"><div *ngIf="this.subTopicForm.get('subTopic').errors?.required && this.subTopicForm.get('subTopic').touched">
+                  <span class="text-danger">Sub Topic Is Required</span></div>
+                <div *ngIf="this.subTopicForm.get('subTopic').errors?.pattern && this.subTopicForm.get('subTopic').invalid">
+                  <span class="text-danger">Only Alphabets Are Allowed</span></div>
+                  </div>
+              </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <button class="add" (click)="addSubTopic()" nz-button nzType="primary"><i nz-icon
+                    nzType="plus"></i>Add</button>
+              </div>
+            </div>
+          </form>
+          <div class="card-body" id="gridBody">
+            <nz-table  #basicTable1 [nzData]="allSubTopics">
+              <thead>
+                <tr>
+                  <th nzWidth="3%">#</th>
+                  <th nzWidth="15%">SubTopic</th>
+                  <th nzWidth="5%">Status</th>
+                  <th nzWidth="4%">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable1.data; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{data.subTopicName}}</td>
+                  <td>{{data.status}}</td>
+                  <td class="edit">
+                    <i nz-icon nzType="edit" nzTheme="outline" (click)="editST(data)"></i>&nbsp;&nbsp;
+                    <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteST(data.id)">
+                      <i nz-icon nzTheme="outline" nzType="delete"></i>&nbsp;&nbsp;
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>
+
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openEditSTForm" nzTitle="Edit SubTopic" (nzOnCancel)="cancel()"
+  [nzFooter]="EditSubTopicFooter">
+  <form [formGroup]="editSTForm" (ngSubmit)="modifyST()">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> SubTopic <span class="star">*</span></label>
+        <input nz-input nzLabel="Title" placeholder="SubTopic " name="SubTopic" formControlName="subTopic" />
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status </label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <ng-template #EditSubTopicFooter>
+      <nz-form-control>
+        <button nz-button class="cancel" (click)="cancel()"><i nz-icon nzType="close"
+            nzTheme="outline"></i>Cancel</button>
+        <button type="submit" nz-button nzType="primary" class="save" (click)="modifyST()"><i nz-icon nzType="edit"
+            nzTheme="outline"></i>Update</button>
+      </nz-form-control>
+    </ng-template>
+  </form>
+</nz-modal>

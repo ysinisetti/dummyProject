@@ -1,0 +1,78 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+// .btn {
+// margin-left: 255px;
+//margin-top: -60px;
+// width: 100%;
+// margin-bottom: -50px;
+// float: right;
+// }
+.btn {
+  float: right;
+  width: 100px;
+  margin-bottom: 10px;
+  margin-top: -5px;
+}
+
+.project {
+  margin-left: 25px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    float: right;
+    width: 100px;
+    margin-bottom: 10px;
+    margin-top: -5px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    float: right;
+    width: 100px;
+    margin-bottom: 10px;
+    margin-top: -5px;
+  }
+}
+
+.label {
+  width: 200px;
+  //   margin-left: 35px;
+}
+
+#cust {
+  float: right;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  // margin-right: -20px;
+  font-size: 18px !important;
+}
+
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  margin-left: -5px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

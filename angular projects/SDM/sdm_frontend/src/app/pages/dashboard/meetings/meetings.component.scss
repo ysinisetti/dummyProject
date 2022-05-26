@@ -1,0 +1,52 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  left: 85%;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.events .ant-badge-status {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+.notes-month {
+  text-align: center;
+  font-size: 28px;
+}
+
+.notes-month section {
+  font-size: 28px;
+}
+
+.ng-template .large {
+  color: #fff;
+}
+.bread {
+  margin-top: -35px;
+  font-size: 16px;
+  margin-left: 160px;
+}
+.title {
+  //text-align: center;
+  //font-weight: bold;
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  // float:right;
+  margin-left: 65px;
+  //margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,37 @@
+
+.button {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 6px;
+  }
+.card mat-card{
+      padding: 0px;
+     margin-top: 11%;
+        
+ }
+  .form{
+      margin:10px;
+      padding: 20px;   
+  }
+  .field{
+      width:75%;
+  }
+  .buttons{
+    display: flex;
+    flex-wrap: wrap;
+   
+  }
+  .space{
+    flex: 8 1 0;
+   
+  }
+  .login {
+    flex: 2 1 0;
+    padding-right:6px;
+  }
+  
+  .register {
+    flex:2 1 0;
+  }
+  
+  

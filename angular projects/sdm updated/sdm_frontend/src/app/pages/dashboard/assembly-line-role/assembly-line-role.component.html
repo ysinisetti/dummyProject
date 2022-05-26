@@ -1,0 +1,83 @@
+<ul class="breadcrumb">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li>Assembly Line Role</li>
+</ul>
+<nz-collapse nzAccordion>
+    <nz-collapse-panel class="header" nzHeader="Assembly Line Role" [nzActive]="true">
+        <form [formGroup]="assemblyLineRoleForm">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>SkillSet</label>
+                    <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillSet'>
+                        <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+                            [nzLabel]="option.optionValue">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Status</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+                        <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+                            [nzLabel]="option.optionValue">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12"></div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <button class="btnClass" style="float: right;" nz-button nzType="primary"
+                        (click)="searchAssemblyLineRole()"><i nz-icon nzType="search"></i>Search</button>
+                    <button class="btnClass" nz-button nzType="primary" (click)="resetAssemblyLineRole()"><i nz-icon
+                            nzType="redo"></i>Reset</button>
+                </div><br>
+            </div>
+        </form>
+    </nz-collapse-panel>
+</nz-collapse>
+<div class="card"><br>
+    <div class="card-body">
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12"></div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                        <button style="width: 100px;margin-top:-49px;float: right;" (click)="clickOnAdd()" nz-button
+                            nzType="primary"><i nz-icon nzType="plus"></i>Add</button>&nbsp;
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="gridData" nzTableLayout="fixed"
+                    [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+                    [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+                    (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead>
+                        <tr>
+                            <th>Contact Name</th>
+                            <th>Contact Type</th>
+                            <th>Created Date</th>
+                            <th>Approved Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable.data ">
+                            <td>{{data.contactName}}</td>
+                            <td>{{data.contactType}}</td>
+                            <td>{{data.createdDate}}</td>
+                            <td>{{data.approvedDate}}</td>
+                            <td>{{data.status}}</td>
+                            <td>
+                                <i nz-icon nzType="edit" nzTheme="fill" (click)="editIssue(data.id)">
+                                </i>
+                                <i nz-icon nzType="file-add" nzTheme="outline" (click)="onClickAdd()"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <h6>No. of Records : 0</h6>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+<!-- <ul class="breadcrumb">
+ <li><a (click)="gotoHome()">Home</a></li>
+ <li>Enabblement</li>
+ </ul> -->
+
+<ul class="breadcrumb">
+    <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+
+
+        <li><a (click)="gotoHome()">Home</a></li>
+        <!-- <li><a (click)="details()">{{ProjectName}}</a></li> -->
+        <li>Enablement</li>
+    </div>
+    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+        <li class="btn2">Customer Name : Miracle Software Systems</li>
+    </div>
+</ul>
+<nz-collapse nzAccordion>
+    <nz-collapse-panel class="header" nzHeader="Enabblement" [nzActive]="true">
+        <form [formGroup]="enabelementForm">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Title</label>
+                    <input nz-input placeholder="Title" name="title" formControlName="title" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>SkillSet</label>
+                    <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillSet'>
+                        <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+                            [nzLabel]="option.optionValue">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Course Type</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Course Type" formControlName="courseType">
+                        <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+                            [nzLabel]="option.optionValue">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Course No</label>
+                    <input nz-input placeholder="Course No" name="courseNo" formControlName="courseNo" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Start Date</label>
+                    <nz-date-picker nzPlaceHolder='Start Date' name="startDate" formControlName="startDate">
+                    </nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>End Date</label>
+                    <nz-date-picker nzPlaceHolder='End Date' name="endDate" formControlName="endDate">
+                    </nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"></div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <button class="btnClass" style="float: right;" nz-button nzType="primary" (click)="reset()"><i
+                            nz-icon nzType="redo"></i>Reset</button>
+                    <button class="btnClass" nz-button nzType="primary" (click)="Search()"><i nz-icon
+                            nzType="search"></i>Search</button>
+                </div><br>
+            </div>
+        </form>
+    </nz-collapse-panel>
+</nz-collapse>
+<div class="card"><br>
+    <div class="card-body">
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                        <h6>No. of Records : 0</h6>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                        <button style="width: 100px;margin-top:-49px;float: right;" (click)="clickOnAdd()" nz-button
+                            nzType="primary"><i nz-icon nzType="plus"></i>Add</button>&nbsp;
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="gridData" nzTableLayout="fixed"
+                    [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+                    [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+                    (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead>
+                        <tr>
+                            <th nzWidth=3%>Ticket Id</th>
+                            <th nzWidth=6%>Title</th>
+                            <th nzWidth=6%>Status</th>
+                            <th nzWidth=6%>Priority</th>
+                            <th nzWidth=6%>Created By</th>
+                            <th nzWidth=4%>Assigned To</th>
+                            <th nzWidth=6%>Created Date</th>
+                            <th nzWidth=3%>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable.data ">
+                            <td>{{data.taskId}}</td>
+                            <td>{{data.title}}</td>
+                            <td>{{data.uxStatus}}</td>
+                            <td>{{data.uxPriority}}</td>
+                            <td>{{data.createdBy}}</td>
+                            <td>{{data.assignedTo}}</td>
+                            <td>{{data.createdDate}}</td>
+                            <td>
+                                <i nz-icon nzType="edit" nzTheme="fill" (click)="editIssue(data.id)">
+                                </i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</div>

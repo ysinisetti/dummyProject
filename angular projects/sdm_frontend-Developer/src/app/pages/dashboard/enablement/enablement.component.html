@@ -1,0 +1,200 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li>Enablement</li>
+    </ul>
+  </div>
+</div>
+<!-- Search Enablement -->
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+      <form [formGroup]="enabelementForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Title</label>
+            <input nz-input placeholder="Title" name="title" formControlName="searchtitle" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Course Type</label>
+            <nz-select nzAllowClear nzPlaceHolder="Course Type" formControlName='searchtype'>
+              <nz-option *ngFor="let option of courseDownLists" [nzValue]="option.optionKey"
+                [nzLabel]="option.optionValue">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Role</label>
+            <nz-select nzAllowClear nzPlaceHolder="Role" formControlName='searchroll'>
+              <nz-option *ngFor="let option of skillsetList" [nzValue]="option.optionKey"
+                [nzLabel]="option.optionValue">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Created Date</label>
+            <nz-date-picker nzPlaceHolder="Created Date" name="cDate" formControlName="createdDate">
+            </nz-date-picker>
+          </div>
+        </div>
+        <div>
+          <button class="btn" nz-button nzType="primary" (click)="enablementSearch()"><i nz-icon
+              nzType="search"></i>Search</button>
+        </div>
+        <div>
+          <button class="btn" nz-button nzType="primary" (click)="enablementReset()"><i nz-icon
+              nzType="redo"></i>Reset</button>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<!-- Enablement table -->
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{records}}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="startEdit('data')" nz-button nzType="primary"><i nz-icon
+          nzType="plus"></i>Add</button>&nbsp;
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="tableData" nzTableLayout="fixed"
+      [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages"
+      [nzPageSize]="pageSize" [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+      <thead>
+        <tr>
+          <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+            {{ column.name }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td>{{ pageSize *(pageNum-1)+i+1}}</td>
+          <td>{{data.cNo}}</td>
+          <td>{{data.cTitle}}</td>
+          <td>{{courseset[data.uxCourseType]}}</td>
+          <td>{{skillset[data.uxRoleType]}}</td>
+          <td>{{data.createdBy}}</td>
+          <td>{{data.createdDate | date: 'MMM d, yyyy' }}</td>
+          <td>
+            <span>
+              <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 20px;">
+                <i nz-icon nzType="more" nzTheme="outline"> </i>
+              </a>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item (click)="clickOnCourseDetails(data)">
+                    <i nz-icon nzType="eye" nzTheme="outline"></i>Course Details
+                  </li>
+                  <li nz-menu-item (click)="startEdit(data)">
+                    <i nz-icon nzType="edit" nzTheme="outline"> </i>Edit
+                  </li>
+                  <li nz-menu-item (click)="deleteRow(data)">
+                    <i nz-icon nzType="delete" nzTheme="outline"> </i>Delete
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<!-- Add and Update -->
+<nz-modal [(nzVisible)]="visiblEdit" nzWidth="50%" nzHeight="50%" nzTitle="{{title}}" (nzOnCancel)="cancelEnablement()"
+  [nzFooter]="modalFooter3">
+  <form [formGroup]="courseForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> <label nzRequired nzFor="name">Title <span
+            class="validationtest"> *</span>
+        </label>
+        <nz-input-group>
+          <input nz-input placeholder="Title" formControlName='title' maxlength="71" />
+          <div *ngIf="this.courseForm.get('title').errors?.required && this.courseForm.get('title').touched">
+            <span class="text-danger">Title Is Required</span></div>
+          <div *ngIf="this.courseForm.get('title').errors?.maxlength && this.courseForm.get('title').invalid">
+            <span class="text-danger">Only 70 Characters Are Allowed</span>
+          </div>
+          <div *ngIf="this.courseForm.get('title').errors?.pattern && this.courseForm.get('title').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </nz-input-group>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label nzRequired nzFor="name">Course No</label>
+        <input nz-input placeholder="Course No" formControlName='courseNo' maxlength="11" />
+        <div *ngIf="this.courseForm.get('courseNo').errors?.maxlength && this.courseForm.get('courseNo').invalid">
+          <span class="text-danger">Only 10 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.courseForm.get('courseNo').errors?.pattern && this.courseForm.get('courseNo').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Course Type <span class="validationtest"> *</span>
+        </label>
+        <nz-select nzAllowClear nzPlaceHolder="Course Type" formControlName='type' maxlength="4">
+          <nz-option *ngFor="let option of courseDownLists" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.courseForm.get('type').errors?.required && this.courseForm.get('type').touched">
+          <span class="text-danger">Course Type Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label nzRequired nzFor="name">Duration(Hours) <span class="validationtest"> *</span>
+        </label>
+        <input nz-input placeholder="Duration(Hours)" formControlName='duration' />
+        <div *ngIf="this.courseForm.get('duration').errors?.required && this.courseForm.get('duration').touched">
+          <span class="text-danger">Duration Is Required</span></div>
+        <div *ngIf="this.courseForm.get('duration').errors?.maxlength && this.courseForm.get('duration').invalid">
+          <span class="text-danger">Only 3 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.courseForm.get('duration').errors?.pattern && this.courseForm.get('duration').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Role <span class="validationtest"> *</span>
+        </label>
+        <nz-select nzAllowClear nzPlaceHolder="Role" formControlName='role'>
+          <nz-option *ngFor="let option of skillsetList" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.courseForm.get('role').errors?.required && this.courseForm.get('role').touched">
+          <span class="text-danger">Role Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label nzRequired nzFor="name">References</label>
+        <input nz-input placeholder="Course References" formControlName='crsReferences' maxlength="51" />
+        <div
+          *ngIf="this.courseForm.get('crsReferences').errors?.maxlength && this.courseForm.get('crsReferences').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.courseForm.get('crsReferences').errors?.pattern && this.courseForm.get('crsReferences').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label> Description </label>
+        <textarea nz-input PlaceHolder="Write something on me " nzLabel="Description" formControlName="description"
+          maxlength="251" nzAutosize></textarea>
+        <div *ngIf="this.courseForm.get('description').errors?.maxlength && this.courseForm.get('description').invalid">
+          <span class="text-danger">Only 250 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.courseForm.get('description').errors?.pattern && this.courseForm.get('description').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+    </div>
+    <ng-template #modalFooter3>
+      <button nz-button class="cancel" (click)="cancelEnablement()" nzType="primary"><i nz-icon nzType="close"
+          nzTheme="outline"></i>Cancel</button>
+      <button nz-button nzType="primary" class="save" (click)="saveRupdate()"><i nz-icon
+          nzType="{{icon}}"></i>{{btnLabel}}</button>
+    </ng-template>
+  </form>
+  <br><br>
+</nz-modal>

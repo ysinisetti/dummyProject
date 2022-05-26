@@ -1,0 +1,140 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+#table {
+  margin-top: -10px;
+}
+nz-modal {
+  height: 900px;
+}
+.tabs {
+  margin-top: -30px;
+}
+.reco {
+  margin-left: -1110px;
+}
+.rec {
+  margin-left: -1130px;
+}
+
+b {
+  color: #00aae7;
+}
+.bta {
+  float: right;
+  margin-right: -10px;
+}
+.btadd {
+  float: right;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btadd {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btadd {
+    width: 100%;
+    float: right;
+  }
+}
+.bttodo {
+  float: right;
+  margin-bottom: 10px;
+  margin-top: -10px;
+  margin-right: 10px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .bttodo {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .bttodo {
+    width: 100%;
+    float: right;
+  }
+}
+#card {
+  margin-top: 5px;
+}
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  margin-left: -23px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+button {
+  width: 90px;
+}
+.card-body {
+  background-color: white;
+}
+.h6 {
+  margin-left: 13px;
+}
+thead {
+  background-color: rgb(255, 255, 255);
+}
+.ant-table-thead > tr > th {
+  color: #999ca0 !important;
+  font-weight: bold !important;
+  text-align: left;
+  background: #ffff !important;
+  border-bottom: 1px solid #e4e9f0;
+  transition: background 0.3s ease;
+}
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+.fRow {
+  margin-left: 30px;
+}

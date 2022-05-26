@@ -1,0 +1,495 @@
+
+<div class="row">
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="dashboard()">Home</a></li>
+            <li><a (click)="proj()">{{pName}}</a></li>
+            <li>Milestones</li>
+        </ul>
+    </div>
+    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+        <p class="projectname">Customer Name :<b style="color:  #0275d8;"> {{cName}}</b></p>
+    </div>
+</div>
+
+<!-- <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+    <li><a (click)="dashboard()">Home</a></li>
+    <li><a (click)="proj()">{{pName}}</a></li>
+    <li>Milestones</li>
+    </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="text-align: right;font-size: 18px;">
+    <p> {{cName}}</p>
+    </div>
+    </div> -->
+
+<!-- <ul class="breadcrumb">
+    <li><a (click)="dashboard()">Home</a></li>
+    <li><a (click)="proj()">{{pName}}</a></li>
+    <li>Milestones</li>
+  </ul>
+  -->
+
+<nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+        <form [formGroup]="searchForm">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Title</label>
+                    <input nz-input placeholder="Title Name" name="title" formControlName="searchValue" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Start Date</label>
+                    <nz-date-picker formControlName="searchStartDate" nzFormat="MM-dd-yyyy"></nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>End Date</label>
+                    <nz-date-picker formControlName="searchEndDate" nzFormat="MM-dd-yyyy"></nz-date-picker>
+                </div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                        <button  (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon nzType="redo" ></i>Reset</button>
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                        <button  (click)="getAllData()" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+                       
+                    </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                   <p >
+                        <button class="btn1" (click)="getAllData()" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+                        <button class="btn2" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon nzType="redo" ></i>Reset</button>
+                    </p>
+                 </div> -->
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" style="margin-left: -8px;">
+                    <button class="btn1" (click)="getAllData()" nz-button nzType="primary"><i nz-icon nzType="search" ></i>Search</button>&nbsp;
+                    <button class="btn2" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon nzType="redo"></i>Reset</button>
+                       </div>
+
+            </div>
+        </form>
+    </nz-collapse-panel>
+</nz-collapse>
+<br>
+
+
+
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="row">
+                    <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label class="projectname" >Project Name: {{pName}}</label><br>
+                        <label class="projectname" >Customer Name: {{cName}}</label>
+                    </div> -->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <p class="record"><b>No. of Records : {{records}}</b></p>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <button class="btn" (click)="AddRow()" nz-button nzType="primary"><i nz-icon
+                                nzType="plus"></i>Add</button>
+                    </div>
+                </div>
+
+            </div>
+          <br>
+        
+            <div class="col-12">
+                <!----------------------------------------- Milstones Table ------------------------------------------------>
+                <nz-table #nzTable style="margin-top: 0px;" [nzData]="tableData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+                    nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+                    [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+                    (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead (nzSortChange)="sort($event)" nzSingleSort>
+                        <tr>
+                            <th [nzWidth]="'50px'" nzShowSort nzSortKey="tName">TITLE</th>
+                            <th [nzWidth]="'30px'" nzShowSort nzSortKey="sDate">START DATE</th>
+                            <th [nzWidth]="'30px'" nzShowSort nzSortKey="eDate">END DATE</th>
+                            <th [nzWidth]="'50px'">DURATION<br>(DAYS)</th>
+                            <th [nzWidth]="'50px'">DELIEVERABLES </th>
+                            <th [nzWidth]="'40px'">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of nzTable.data">
+                            <tr>
+
+                                <td><span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='D'">
+                                        <i nz-icon nzType="cluster" nzTheme="twotone"></i></span>
+                                    <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='T'"><i nz-icon
+                                            nzType="reconciliation" nzTheme="twotone"></i></span>
+                                    <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='M'"> <i nz-icon
+                                            nzType="flag" nzTheme="twotone"
+                                            [nzTwotoneColor]="'#f81229'"></i></span>{{ item.Name }}</td>
+                                <td>{{ item.StartDate | date:'MM-dd-yyyy'}}</td>
+                                <td>{{ item.EndDate | date:'MM-dd-yyyy' }}</td>
+                                <td>{{ item.Duration }}</td>
+                                <td [nzExpand]="expandSet.has(item.Id)"
+                                    (nzExpandChange)="onExpandChange(item.Id, $event)"></td>
+                                <td>
+                                    <a (click)="startEdit1(item)"><i nz-icon nzType="edit"
+                                            nzTheme="twotone"></i></a>&nbsp;
+                                    <a> <i nz-icon nzType="delete" nzTheme="twotone" nz-popconfirm
+                                            nzPopconfirmTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteRow(item.Id)"></i></a>
+
+                                </td>
+                            </tr>
+                            <tr [nzExpand]="expandSet.has(item.Id)">
+
+                                <!-- <nz-page-header class="site-page-header" nzTitle="Deliverables" style="padding-top: 2px;">
+                                </nz-page-header> -->
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <h3 style="color: grey;">Deliverables</h3>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <button nz-button [nzType]="'primary'" class="btn"
+                                            (click)="AddInnerTable(item.Id)" style="float: right; margin-top: 3px;"><i
+                                                nz-icon nzType="plus"></i>Add</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+
+
+                                <nz-table #nzTable class="innerTable" [nzData]="item.child" nzTableLayout="fixed"
+                                    [nzShowPagination]="false">
+                                    <thead>
+                                        <tr>
+                                            <th>TITLE</th>
+                                            <th>DESCRIPTION</th>
+                                            <th>STATUS (%)</th>
+                                            <th>UPDATED BY</th>
+                                            <th>UPDATED DATE</th>
+
+                                            <th>ACTION</th>
+                                        </tr>
+
+
+                                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let data1 of nzTable.data">
+                            <tr>
+
+                                <td> <span style="padding: 0px 5px 0px 0px;">
+                                        <i nz-icon nzType="cluster" nzTheme="outline"></i></span>{{ data1.Name }}</td>
+                                <td nzEllipsis nz-tooltip [nzTitle]=" data1.Description">{{ data1.Description }}</td>
+                                <td>{{[data1.Status] }}</td>
+                                <td>{{ data1.CreatedBy }}</td>
+                                <td>{{ data1.CreatedDate | date:'MM-dd-yyyy' }}</td>
+                                <td>
+                                    <i nz-icon nzType="edit" (click)="startEdit(data1)" nzTheme="twotone"></i>&nbsp;
+                                    <i nz-icon nzType="delete" nzTheme="twotone" nz-popconfirm
+                                        nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data1.Id)"></i>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </nz-table>
+                <br>
+
+                </tr>
+                </ng-container>
+                </tbody>
+                </nz-table>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<ng-template #modalFooter>
+    <button nz-button  nzType="primary" [disabled]="!addDevForm.valid" (click)="handleSave1()"><i nz-icon
+            nzType="save"></i>Save</button>
+    <button nz-button nzType="primary"  (click)="handleCancel1()"><i nz-icon nzType="close"></i>Cancel</button>
+</ng-template>
+<nz-modal [(nzVisible)]="isVisible1" nzWidth="50%" nzHeight="50% " [nzFooter]="modalFooter" nzTitle="Add"
+    (nzOnCancel)="handleCancel1()" (nzOnSubmit)="handleSave1()">
+
+    <!------------------------------------------- Add Deliverables------------------------------------- -->
+    <form [formGroup]="addDevForm" (ngSubmit)="handleSave1()">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Deliverable Title</label>
+                    <nz-input-group>
+                        <input formControlName="intitle" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.addDevForm.get('intitle').errors?.required && this.addDevForm.get('intitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.addDevForm.get('intitle').errors?.maxlength && this.addDevForm.get('intitle').invalid">
+                            <span class="text-danger">Only 25 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.addDevForm.get('intitle').errors?.pattern && this.addDevForm.get('intitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Status (%)</label>
+                    <nz-input-group>
+                        <input formControlName="instatus" nz-input placeholder="Enter Status">
+                        <div
+                            *ngIf="this.addDevForm.get('instatus').errors?.required && this.addDevForm.get('instatus').touched">
+                            <span class="text-danger">Status is Required</span></div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+        </div>
+        <div class="row">
+            <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Owner</label>
+                    <nz-input-group>
+                        <input class="name" nz-input readonly placeholder="Owner" maxlength="20"
+                            formControlName="uploadedBy" id="fName" />
+                    </nz-input-group>
+                </nz-form-item>
+            </div> -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label> Attachment </label>
+                    <input type="file" formControlName="attachment" nz-input placeholder="upload">
+                    <!-- <nz-upload formControlName="attachment"
+                    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    [nzHeaders]="{ authorization: 'authorization-text' }">
+                    <button nz-button><i nz-icon nzType="upload"></i>Click to Upload</button>
+                  </nz-upload> -->
+                </nz-form-item>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Description</label>
+                    <textarea nz-input formControlName="desc" placeholder="Enter Description" nzAutosize></textarea>
+                    <!-- <textarea formControlName="desc" nz-input rows="3" placeholder="Enter Description"></textarea> -->
+                    <div *ngIf="this.addDevForm.get('desc').errors?.required && this.addDevForm.get('desc').touched">
+                        <span class="text-danger">Description Is Required</span></div>
+                    <div *ngIf="this.addDevForm.get('desc').errors?.maxlength && this.addDevForm.get('desc').invalid">
+                        <span class="text-danger">Only 225 Characters are allowed</span>
+                    </div>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+
+
+</nz-modal>
+<ng-template #modalFooter1>
+    <button nz-button nzType="primary" [disabled]="!devForm.valid" (click)="handleSave2()"><i nz-icon
+            nzType="save"></i>Save</button>
+    <button nz-button nzType="primary" (click)="handleCancel2()"><i nz-icon nzType="close"></i>Cancel</button>
+</ng-template>
+
+
+<!--=--------------------------------------------------- Edit Deliverables-------------------------------------------------------------------- -->
+<nz-modal [(nzVisible)]="isVisible2" nzWidth="50%" nzHeight="50%" [nzFooter]="modalFooter1" nzTitle="Edit"
+    (nzOnSubmit)="handleSave2()" (nzOnCancel)="handleCancel2()">
+    <form [formGroup]="devForm" (ngSubmit)="handleSave2()">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Deliverable Title</label>
+                    <nz-input-group>
+                        <input formControlName="inEdittitle" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.devForm.get('inEdittitle').errors?.required && this.devForm.get('inEdittitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.devForm.get('inEdittitle').errors?.maxlength && this.devForm.get('inEdittitle').invalid">
+                            <span class="text-danger">Only 25 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.devForm.get('inEdittitle').errors?.pattern && this.devForm.get('inEdittitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span>
+                        </div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Status (%)</label>
+                    <nz-input-group>
+                        <input formControlName="inEditstatus" nz-input placeholder="Enter Status">
+                        <div
+                            *ngIf="this.devForm.get('inEditstatus').errors?.required && this.devForm.get('inEditstatus').touched">
+                            <span class="text-danger">Status is Required</span></div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+        </div>
+        <div class="row">
+            <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Owner</label>
+                    <nz-input-group>
+                        <input class="name" nz-input readonly placeholder="Owner" maxlength="20"
+                            formControlName="uploadedBy" id="fName" />
+                    </nz-input-group>
+                </nz-form-item>
+            </div> -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label> Attachment </label>
+                    <input type="file" formControlName="attachment1" nz-input placeholder="upload">
+                    <!-- <nz-upload formControlName="attachment1"
+                    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    [nzHeaders]="{ authorization: 'authorization-text' }">
+                    <button nz-button><i nz-icon nzType="upload"></i>Click to Upload</button>
+                  </nz-upload> -->
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Description</label>
+                    <textarea nz-input formControlName="description" placeholder="Enter Description"
+                        nzAutosize></textarea>
+                    <!-- <textarea formControlName="description" nz-input rows="3" placeholder="Enter Description"></textarea> -->
+                    <div
+                        *ngIf="this.devForm.get('description').errors?.required && this.devForm.get('description').touched">
+                        <span class="text-danger">Description Is Required</span></div>
+                    <div
+                        *ngIf="this.devForm.get('description').errors?.maxlength && this.devForm.get('description').invalid">
+                        <span class="text-danger">Only 225 Characters are allowed</span>
+                    </div>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</nz-modal>
+<ng-template #modalFooter2>
+    <button nz-button nzType="primary" [disabled]="!addForm.valid" (click)="Save()"><i nz-icon
+            nzType="save"></i>Save</button>
+    <button nz-button nzType="primary" (click)="Cancel()"><i nz-icon nzType="close"></i>Cancel</button>
+</ng-template>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="50%" nzHeight="50%" nzTitle="Add" [nzFooter]="modalFooter2"
+    (nzOnCancel)="handleCancel()">
+    <!-- -----------------------------------------------Add Milestones------------------------------------------------------------------------------- -->
+    <form [formGroup]="addForm" (ngSubmit)="Save()">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label> Title </label>
+                    <nz-input-group>
+                        <input formControlName="addTitle" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.addForm.get('addTitle').errors?.required && this.addForm.get('addTitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.addForm.get('addTitle').errors?.maxlength && this.addForm.get('addTitle').invalid">
+                            <span class="text-danger">Only 25 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.addForm.get('addTitle').errors?.pattern && this.addForm.get('addTitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Start Date</label>
+                    <nz-date-picker name="startDate" [nzDisabledDate]="disabledStartDate"
+                        (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+                        nzPlaceHolder='Start Date' [nzFormat]="'MM-dd-yyyy'" formControlName="sDate"></nz-date-picker>
+                    <div *ngIf="this.addForm.get('sDate').errors?.required && this.addForm.get('sDate').touched">
+                        <span class="text-danger">Start Date is Required</span></div>
+                </nz-form-item>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>End Date</label>
+                    <nz-date-picker name="endDate" [nzOpen]="endOpen" (ngModelChange)="onEndChange($event)"
+                        (nzOnOpenChange)="handleEndOpenChange($event)" [nzDisabledDate]="disabledEndDate"
+                        placeholder="End Date" [nzFormat]="'MM-dd-yyyy'" formControlName="eDate">
+                    </nz-date-picker>
+                    <div *ngIf="this.addForm.get('eDate').errors?.required && this.addForm.get('eDate').touched">
+                        <span class="text-danger">End Date is Required</span></div>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</nz-modal>
+
+<ng-template #modalFooter3>
+    <button nz-button nzType="primary" [disabled]="!editmileForm.valid" (click)="Save3()"><i nz-icon
+            nzType="save"></i>Save</button>
+    <button nz-button nzType="primary" (click)="Cancel3()"><i nz-icon nzType="close"></i>Cancel</button>
+</ng-template>
+
+<nz-modal [(nzVisible)]="visiblEdit" nzWidth="50%" nzHeight="50%" nzTitle="Edit" [nzFooter]="modalFooter3"
+    (nzOnCancel)="Cancel3()">
+    <!-- -----------------------------------------------Edit Milestones------------------------------------------------------------------------------ -->
+    <form [formGroup]="editmileForm" (ngSubmit)="Save3()">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-form-item>
+                    <label> Title </label>
+                    <nz-input-group>
+                        <input formControlName="editDevTitle" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.editmileForm.get('editDevTitle').errors?.required && this.editmileForm.get('editDevTitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.editmileForm.get('editDevTitle').errors?.maxlength && this.editmileForm.get('editDevTitle').invalid">
+                            <span class="text-danger">Only 25 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.editmileForm.get('editDevTitle').errors?.pattern && this.editmileForm.get('editDevTitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>Start Date</label>
+                    <nz-date-picker name="startDate" [nzDisabledDate]="disabledStartDateEdit"
+                        (ngModelChange)="onStartChangeEdit($event)" (nzOnOpenChange)="handleStartOpenChangeEdit($event)"
+                        nzFormat="MM-dd-yyyy" formControlName="editstartDate"></nz-date-picker>
+                    <div
+                        *ngIf="this.editmileForm.get('editstartDate').errors?.required && this.editmileForm.get('editstartDate').touched">
+                        <span class="text-danger">Start Date Is Required</span></div>
+                </nz-form-item>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-form-item>
+                    <label>End Date</label>
+                    <nz-date-picker name="endDate" [nzDisabledDate]="disabledEndDateEdit"
+                        (ngModelChange)="onEndChangeEdit($event)" (nzOnOpenChange)="handleEndOpenChangeEdit($event)"
+                        [nzOpen]="endOpenEdit" placeholder="End Date" nzFormat="MM-dd-yyyy"
+                        formControlName="editendDate">
+                        <div
+                            *ngIf="this.editmileForm.get('editendDate').errors?.required && this.editmileForm.get('editendDate').touched">
+                            <span class="text-danger">End Date Is Required</span></div>
+                    </nz-date-picker>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <!-- /div> -->
+    </form>
+
+</nz-modal>
+

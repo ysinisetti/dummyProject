@@ -1,0 +1,37 @@
+   
+    body {
+        
+        padding-left:2900px;
+        
+    }
+    fieldset {
+        border:#678; 
+        border-radius: 17px;
+        padding: 3px;
+        padding-left: 40px;
+        background:lightblue;
+        
+    }
+
+    legend {
+       color:green;
+    }
+    .form-control {
+        top:150;
+         width:95%;
+    }
+    label small {
+        color: #678 !important;
+    }
+    span.req {
+        color:red;
+        font-size: 112%;
+    }
+    div.container{
+    padding-left: 250px;  
+    padding-top:100px;
+
+
+    
+
+    }

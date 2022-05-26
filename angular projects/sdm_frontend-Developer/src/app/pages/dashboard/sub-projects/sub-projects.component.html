@@ -1,0 +1,270 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a (click)="details1()">{{proName}}</a></li>
+      <li>Project-View</li>
+    </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+    Customer Name : <b class="cName">{{cusName}}</b>
+  </div>
+</div>
+
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <form [formGroup]="searchForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label> Title</label>
+            <input nz-input placeholder="Task Name" name="title" formControlName="searchTitle" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label> Start Date</label>
+            <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName="searchStartDate"></nz-date-picker>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label> End Date</label>
+            <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName="searchEndDate"></nz-date-picker>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label> Type</label>
+            <nz-select nzAllowClear formControlName="searchType" [(ngModel)]="typeSelected" nzPlaceHolder="Status">
+              <nz-option name="type" *ngFor="let option of optionList" [nzValue]="option.Value"
+                [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <button class="btn" (click)="getTableData()" nz-button nzType="primary"><i nz-icon
+                nzType="search"></i>Search</button>&nbsp;
+            <button class="btn" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon
+                nzType="redo"></i>Reset</button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+
+
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{noOfRecords}}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="showGlobalAddModel('Add')" nz-button nzType="primary"><i nz-icon
+          nzType="plus"></i>Add</button>
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table #editRowTable [nzData]="listOfData" [nzFrontPagination]="false" cdkDropList [cdkDropListData]="listOfData"
+      (cdkDropListDropped)="onDrop($event)">
+      <thead>
+        <tr>
+          <th nzWidth="7%">Level</th>
+          <th nzWidth="6%">Id</th>
+          <th nzWidth="6%">P-Id</th>
+          <th nzWidth="25%">Title</th>
+          <th nzWidth="9%">Type</th>
+          <th nzWidth="10%">Start Date</th>
+          <th nzWidth="10%">End Date</th>
+          <th nzWidth="11%">Duration(Days) </th>
+          <th nzWidth="20%">Resources</th>
+          <th nzWidth="35%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d1 of editRowTable.data; let i = index" (keyup.enter)="enterKeyUpdate(d1)"
+          (click)="onTrClick(d1,i)" cdkDrag>
+          <td>
+            <i nz-icon nzType="left-circle" nzTheme="outline" [disabled]="disable"
+              (click)="decrement(d1)"></i>&nbsp;{{d1.level}}&nbsp;
+            <i nz-icon nzType="right-circle" nzTheme="outline" (click)="increment(d1)"></i>
+          </td>
+          <ng-container *ngIf="!(currentIndex == i); else editTemplate">
+            <td>{{d1.Id}}</td>
+            <td>{{d1.ParentId}}</td>
+            <td><span *ngIf="d1.ParentId != null " class="tabSpace"></span><span class="titleIcon"
+                *ngIf="d1.Type==='S'">
+                <i nz-icon nzType="folder" nzTheme="fill"></i></span>
+              <span class="titleIcon" *ngIf="d1.Type==='D'">
+                <i nz-icon nzType="cluster" nzTheme="outline"></i></span>
+              <span class="titleIcon" *ngIf="d1.Type==='T'"><i nz-icon nzType="reconciliation"
+                  nzTheme="twotone"></i></span>
+              <span class="titleIcon" *ngIf="d1.Type==='M'"> <i nz-icon nzType="flag" nzTheme="twotone"
+                  [nzTwotoneColor]="'#f81229'"></i></span> {{ d1.Name }}</td>
+            <td>{{ type[d1.Type] }}</td>
+            <td>{{ d1.StartDate | date: 'MMM d, yyyy' }}</td>
+            <td>{{ d1.EndDate | date: 'MMM d, yyyy' }}</td>
+            <td>{{ d1.Duration }} </td>
+            <td nzEllipsis nzTooltipTitle="{{d1.AssignedTo}}" nz-tooltip>{{ d1.AssignedTo }}</td>
+
+          </ng-container>
+          <ng-template #editTemplate>
+            <td><input style="width: 50px;" type="text" placeholder="Enter no" name='no' nz-input [(ngModel)]="d1.Id" />
+            </td>
+            <td><input style="width: 50px;" type="text" placeholder="Enter no" name='no' nz-input
+                [(ngModel)]="d1.ParentId" /></td>
+            <td><input type="text" placeholder="Enter Title" name='title' nz-input [(ngModel)]="d1.Name" /></td>
+            <td><input type="text" placeholder="Enter Type" name='type' nz-input [(ngModel)]="type[d1.Type]" /></td>
+            <td>
+              <nz-date-picker placeholder="mmm dd,yyyy" name='startDate' nz-input [(ngModel)]="d1.StartDate">
+              </nz-date-picker>
+            </td>
+            <td>
+              <nz-date-picker placeholder="mmm dd,yyyy" name='endDate' nz-input [(ngModel)]="d1.EndDate">
+              </nz-date-picker>
+            </td>
+            <td><input type="text" placeholder="Enter duration" name='duration' nz-input [(ngModel)]="d1.Duration" />
+            </td>
+            <td><input type="text" placeholder="Enter resources" name='resources' nz-input
+                [(ngModel)]="d1.AssignedTo" /></td>
+          </ng-template>
+          <td>
+            <i nz-icon nzType="edit" (click)="showEditModel(d1,'Edit')" nzTheme="fill"></i>&nbsp;
+            <i nz-icon nzType="delete" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+              (nzOnConfirm)="deleteRow(d1.Id)" nzTheme="fill"></i>&nbsp;
+            <i nz-icon *ngIf="d1.Type != 'M'" (click)="showRowAddModel(d1,'Add')" nzType="plus-circle"></i>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+  </div>
+</div>
+
+
+
+<!----------------add and edit modal------------------------>
+<nz-modal nzWidth="60%" nzWrapClassName="vertical-center-modal" [(nzVisible)]="addPopUp" nzTitle="{{addItem}}"
+  (nzOnCancel)="addCancel()" (nzOnOk)="addNewRecord()">
+  <br>
+  <div *ngIf="addItem =='Add' || addItem === 'add'" class="row">
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+      <nz-select name="categoryType" [(ngModel)]="newRecordType" (ngModelChange)="validateForm.reset();showAddForm()"
+        nzPlaceHolder="Choose The Category here">
+        <nz-option *ngIf="!enableDeliverable" nzValue="Task" nzLabel="Task"></nz-option>
+        <nz-option *ngIf="!enableDeliverable" nzValue="Milestone" nzLabel="Milestone"></nz-option>
+        <nz-option *ngIf="!enableDeliverable && !enableSubject" nzValue="SubProject" nzLabel="SubProject"></nz-option>
+        <nz-option *ngIf="enableDeliverable" nzValue="Deliverable" nzLabel="Deliverable"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+
+
+  <form *ngIf="newRecordType" nz-form [formGroup]="validateForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Name</label><span class="validationtest">*</span>
+        <input formControlName="taskName" maxlength="51" nz-input placeholder="Name" />
+        <div *ngIf="this.validateForm.get('taskName').errors?.required && this.validateForm.get('taskName').touched">
+          <span class="text-danger">Name Is Required</span></div>
+        <div *ngIf="this.validateForm.get('taskName').errors?.maxlength && this.validateForm.get('taskName').invalid">
+          <span class="text-danger">Only 50 Characters are allowed</span>
+        </div>
+      </div>
+
+
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        <label>Duration (Day's)</label><span class="validationtest">*</span>
+        <input nz-input formControlName="subProjectDuration" maxlength="3" placeholder="No of Days">
+        <div
+          *ngIf="this.validateForm.get('subProjectDuration').errors?.required && this.validateForm.get('subProjectDuration').touched">
+          <span class="text-danger">Duration Is Required</span></div>
+        <div
+          *ngIf="this.validateForm.get('subProjectDuration').errors?.pattern && this.validateForm.get('subProjectDuration').invalid">
+          <span class="text-danger">Only Numbesrs Are Allowed</span>
+        </div>
+      </div>
+
+      <div *ngIf="addItem === 'Edit' || addItem ==='D' " class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        <label>Type</label>
+        <nz-select formControlName="type">
+          <nz-option *ngFor="let type of dropdownType" [nzValue]="type.value" [nzLabel]="type.label">
+          </nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="row">
+      <div
+        *ngIf="newRecordType ==='Task' || newRecordType ==='Deliverable' || newRecordType ==='T' || newRecordType ==='D' "
+        class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> Assigned To </label>
+        <nz-select [nzSize]="size" nzMode="tags" nzPlaceHolder="Add Resource Name" formControlName="taskAssingedTo">
+          <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.UserName" [nzValue]="option.UserName">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Dependencies</label>
+        <nz-select [nzSize]="size" nzMode="tags" nzPlaceHolder="Add Dependencies" formControlName="dependenciesList">
+          <nz-option *ngFor="let option of listOfDependencies" [nzValue]="option.Name" [nzLabel]="option.Name">
+          </nz-option>
+        </nz-select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label>
+        <textarea formControlName="desc" maxlength="512" nz-input rows="1" placeholder="write something"></textarea>
+        <div *ngIf="this.validateForm.get('desc').errors?.maxlength && this.validateForm.get('desc').invalid">
+          <span class="text-danger">Only 512 Characters are allowed</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Start Date</label>
+        <nz-date-picker nzFormat="yyyy-MM-dd" nzPlaceHolder='yyyy-mm-dd' name="startDate"
+          [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartChange($event);getEndDate()"
+          formControlName="StartDate1"></nz-date-picker>
+        <div
+          *ngIf="this.validateForm.get('StartDate1').errors?.required && this.validateForm.get('StartDate1').touched">
+          <span class="text-danger">Start date is Required</span></div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>End Date</label>
+        <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd" nzPlaceHolder='yyyy-mm-dd'
+          name="endDate" placeholder="End Date" formControlName="EndDate1"></nz-date-picker>
+        <div *ngIf="this.validateForm.get('EndDate1').errors?.required && this.validateForm.get('EndDate1').touched">
+          <span class="text-danger">End date is Required</span></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Priority</label>
+        <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName="sPriority">
+          <nz-option *ngFor="let option of priority" [nzValue]="option.Value" [nzLabel]="option.Label">
+          </nz-option>
+        </nz-select>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Status" formControlName='sStatus'>
+          <ng-container *ngFor="let type of  status">
+            <nz-option *ngIf="type.Value === 'Assigned' || type.Value === 'In-Progress' || type.Value === 'Opened'"
+              [nzValue]="type.Value" [nzLabel]="type.Label"></nz-option>
+          </ng-container>
+        </nz-select>
+      </div>
+    </div>
+  </form>
+  <br>
+  <br>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" class="cancel" (click)="addCancel()"> <i nz-icon
+        nzType="close"></i>Cancel</button>
+    <button nz-button nzType="primary" class="save" [disabled]="addSubmitButton" (click)="saveModel()"> <i nz-icon
+        nzType="save"></i>Save</button>
+  </div>
+
+</nz-modal>

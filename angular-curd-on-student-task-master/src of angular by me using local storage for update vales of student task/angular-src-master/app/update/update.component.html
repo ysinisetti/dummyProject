@@ -1,0 +1,34 @@
+<div>
+    <form [formGroup]="updateForm">
+        <table  class="list" style="margin-right: 10% !important;">
+            <tr>
+                <td><label>Student Name :</label></td>
+                <td><input type="text" formControlName = "sName"></td>
+            </tr>
+            <tr>
+                <td><label>College Name:</label></td>
+                <td><input type="text" formControlName = "cName"></td>
+            </tr>
+            <tr>
+                <td><label>Student Branch:</label></td>
+                <td><input type="text" formControlName = "sBranch"></td>
+            </tr>
+            <tr>
+                <td><label>Phone Number:</label></td>
+                <td><input type="text" formControlName = "pNumber"></td>
+            </tr>
+            <tr>
+                <td><label>Collage Code:</label></td>
+                <td><input type="text" formControlName = "cCode"></td>
+            </tr>
+            <tr>
+                <td><label>EmailId:</label></td>
+                <td><input type="text" formControlName = "emailId"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button (click)='update()'>Register</button></td>
+            </tr>
+        </table>
+    </form>
+    </div>

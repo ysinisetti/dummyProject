@@ -1,0 +1,122 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li>Exams List</li>
+      </ul>
+  </div>
+</div>
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <form [formGroup]="searchExamListForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Practice Name</label>
+            <input nz-input placeholder="Practice Name" name="Practice Name" formControlName="practiceName" />
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Topic Name</label>
+            <input nz-input placeholder="Topic Name" name="Topic Name" formControlName="topicName" />
+          </div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12">
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <button class="btn" (click)="cancel()" nz-button nzType="primary">
+            <i nz-icon nzType="redo"></i>Reset</button>
+          <button class="btn" (click)="allExamsList()" nz-button nzType="primary">
+            <i nz-icon nzType="search"></i>Search</button>
+        </div>
+      </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{ totalPages }}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="addOrEdit('','A')" nz-button nzType="primary">
+        <i nz-icon nzType="plus"></i>Add</button>
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table #record [nzData]="allExams" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+      nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+      [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+      <thead>
+        <tr>
+          <th nzWidth="3%">#</th>
+          <th nzWidth="20%">Practice Name</th>
+          <th nzWidth="20%">Topic Name</th>
+          <th nzWidth="13%">Add Author/Sub Topic</th>
+          <th nzWidth="8%">Add Questions</th>
+          <th nzWidth="5%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let list of record.data; let i = index" >
+        <td> {{pageSize *(pageNum-1)+i+1}}</td>
+        <td>{{list.domainName}}</td>
+        <td nzEllipsis nzTooltipTitle="{{list.topicName}}" nz-tooltip>{{list.topicName}}</td>
+        <td  (click)="GoTo(list,'A')"><i nz-icon nzType="user-add" nzTheme="outline" style="margin-left: 70px;"></i></td>
+        <td  (click)="GoTo(list,'Q')" style="text-align: center;">Go</td>
+        <td>
+          <i nz-icon nzType="edit" (click)="addOrEdit(list,'E')" nzTheme="outline" style="margin-left: 20px;"> </i></td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<!-- POPUP FOR ADD Or EDIT Exam List -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openAddEditForm" nzTitle="{{ title }}" (nzOnCancel)="cancel()"
+  [nzFooter]="editFooter">
+  <form [formGroup]="addEditExamListForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> Practice Name <span class="validationtest">*</span></label>
+          <nz-select nzShowSearch nzAllowClear formControlName="practiceName" [nzDropdownRender]="renderTemplate" nzPlaceHolder="Choose Domain Name">
+            <nz-option *ngFor="let item of allDomain" [nzLabel]="item.Label" [nzValue]="item.Value"></nz-option>
+          </nz-select>
+          <ng-template #renderTemplate>
+            <div class="container">
+              <input type="text" nz-input #inputElement />
+              <a class="add-item" (click)="addDomain(inputElement.value)"><i nz-icon nzType="plus"></i> Add item</a>
+            </div>
+          </ng-template>
+          <div *ngIf="this.addEditExamListForm.get('practiceName').errors?.required && this.addEditExamListForm.get('practiceName').touched">
+            <span class="text-danger">Practice Name Is Required</span></div>
+          <div *ngIf="this.addEditExamListForm.get('practiceName').errors?.maxlength &&
+              this.addEditExamListForm.get('practiceName').invalid">
+            <span class="text-danger">Only 50 characters are allowed</span>
+          </div>
+      </div>
+      <div  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> Topic Name <span class="validationtest">*</span></label>
+        <input nz-input nzLabel="Topic Name" placeholder="Topic Name" required formControlName="topicName"
+          maxlength="101" />
+          <div *ngIf="this.addEditExamListForm.get('topicName').errors?.required && this.addEditExamListForm.get('topicName').touched">
+            <span class="text-danger">Topic Name Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> Status <span class="validationtest">*</span></label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+        </nz-select>
+        <div *ngIf="this.addEditExamListForm.get('status').errors?.required && this.addEditExamListForm.get('status').touched">
+          <span class="text-danger">Status Is Required</span></div>
+      </div>
+    </div>
+    <ng-template #editFooter>
+      <button nz-button class="cancel" (click)="cancel()">
+        <i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+      <button type="submit" class="save" nz-button nzType="primary" (click)="addOrUpdateList()">
+        <i nz-icon nzType="{{ icon }}" nzTheme="outline"> </i>{{ btnLabel }}
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>
+

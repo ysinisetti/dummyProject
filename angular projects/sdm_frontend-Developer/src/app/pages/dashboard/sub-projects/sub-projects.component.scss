@@ -1,0 +1,121 @@
+@media (min-width: 300px) and (max-width: 767px) {
+  .ant-table {
+    overflow-x: scroll;
+  }
+}
+
+.btn {
+  margin-top: 10px;
+  float: right;
+  margin-right: 2px;
+  margin-bottom: 10px;
+  }
+  .search {
+  margin-top: 11px;
+  float: right;
+  margin-right: -211px;
+  margin-bottom: -5px;
+  }
+  @media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+  width: 100%;
+  float: right;
+  }
+  .add {
+    width: 91%;
+    float: right;
+    // margin-right: 15px;
+    }
+  .reset {
+  width: 100%;
+  float: right;
+  }
+  .search {
+  width: 100%;
+  float: right;
+  }
+  .customer {
+    margin-top: -3px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: -2px;
+    }
+    .cancel{
+      font-weight:bold !important;
+      margin-top: 30px !important;
+      width: 100px !important;
+      color: black !important;
+      background-color: #f0f0f0 !important;
+      }
+      .save{
+      font-weight: bold;
+      width: 92%;
+      }
+  }
+  @media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+  width: 100%;
+  float: right;
+  }
+  .add {
+  width: 91%;
+  float: right;
+  // margin-right: 15px;
+  }
+  .reset {
+  width: 100%;
+  float: right;
+  }
+  .search {
+  width: 100%;
+  float: right;
+  }
+  .customer {
+    margin-top: -3px;
+    text-align: left;
+    font-size: 14px;
+    margin-left: -2px;
+    }
+    .cancel{
+      font-weight:bold !important;
+      margin-top: 30px !important;
+      width: 100px !important;
+      color: black !important;
+      background-color: #f0f0f0 !important;
+      }
+      .save{
+      font-weight: bold;
+      width: 100%;
+      }
+  }
+
+  .cancel{
+    font-weight:bold !important;
+    margin-top: 30px !important;
+    width: 100px !important;
+    color: black !important;
+    background-color: #f0f0f0 !important;
+    }
+    .save{
+    font-weight: bold;
+    
+    }
+  
+
+.titleIcon{
+  padding: 0px 5px 0px 0px;
+}
+::ng-deep .cdk-drag-preview {
+  display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.tabSpace{
+  display: inline-block; 
+  margin-left: 40px; 
+  }
+
+

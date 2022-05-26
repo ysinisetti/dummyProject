@@ -1,0 +1,118 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select,
+.search {
+  width: 200px;
+}
+
+::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  position: relative;
+  padding: 11px 5px;
+  padding-left: 40px;
+  color: black !important;
+  line-height: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+.btn {
+  width: 100px;
+  float: right;
+  margin-top: 10px;
+}
+.btn1 {
+  margin-top: 29px;
+  width: 100px;
+  margin-left: 8px;
+  float: right;
+}
+.btn2 {
+  margin-top: 29px;
+  width: 100px;
+  margin-right: 8px;
+  float: right;
+}
+.customer {
+  margin-top: -21px;
+  text-align: right;
+  font-size: 18px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+  }
+  .customer {
+    margin-top: 2px;
+    text-align: left;
+    font-size: 18px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .customer {
+    margin-top: 2px;
+    text-align: left;
+    font-size: 18px;
+  }
+  .btn1 {
+    width: 100%;
+  }
+  .btn2 {
+    width: 100%;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+nz-table[nzPaginationPosition] {
+  padding-right: 320px;
+}
+
+nz-select {
+  width: 100%;
+}
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -5px;
+  margin-top: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 2px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

@@ -1,0 +1,234 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.chartCard {
+  background-color: lightgray;
+}
+.btn {
+  margin-top: 19px;
+  width: 100px;
+  margin-left: 1070px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.bread {
+  margin-top: -38px;
+  margin-left: 146px;
+}
+.title {
+  margin-top: -54px;
+  margin-left: 59px;
+}
+.search {
+  width: 250px;
+}
+.assignedTo {
+  width: 250px;
+  margin-left: 20px;
+}
+.searchbar {
+  margin-left: 78%;
+}
+.edate,
+.sdj {
+  width: 250px;
+}
+// .title {
+//   width: 250px;
+//   margin-left: 67px;
+// }
+.request {
+  margin-left: 5px;
+  width: 250px;
+}
+.status {
+  width: 250px;
+  margin-left: 55px;
+}
+.priority {
+  width: 250px;
+  margin-left: 40px;
+}
+.issue {
+  width: 250px;
+  margin-left: 10px;
+}
+
+.description {
+  margin-left: 120px;
+  margin-top: -35px;
+}
+.des {
+  margin-left: 10px;
+}
+// .bread {
+//   margin-left: 180px !important;
+// }
+.site-page-header {
+  margin-bottom: -50px;
+  margin-top: -20px;
+  margin-left: -20px;
+}
+.add {
+  margin-top: -10px;
+  margin-left: 92%;
+  margin-bottom: 10px;
+}
+.fRow {
+  margin-left: 20px;
+}
+#search {
+  margin-top: 20px;
+  margin-left: 153%;
+  margin-bottom: -10px;
+}
+.sForm {
+  width: 250px;
+  // margin-left: 10px;
+  position: relative;
+}
+.sName {
+  margin-left: -25px;
+  margin-top: 8px;
+  position: absolute;
+}
+
+.searchbtn {
+  // margin-left: 40px;
+  margin-top: 40px;
+  width: 100px;
+}
+.addbtn {
+  margin-left: 60px;
+  margin-top: 40px;
+  width: 100px;
+}
+
+/////////BreadCrumb/////////
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -5px;
+  margin-top: -22px;
+  margin-left: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 2px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+.btn2 {
+  margin-bottom: 10px;
+  margin-right: -25px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn2 {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn2 {
+    width: 100%;
+    float: right;
+  }
+  .cName {
+    color: #00aae7;
+  }
+}
+.btnClass {
+  margin-top: 37px;
+  width: 120px;
+
+  // float: right;
+}
+// ///////////////BreadCrumb///
+// ul.breadcrumb {
+//   padding: 1px 10px;
+//   list-style: none;
+//   background-color: #eee;
+//   margin-bottom: 10px;
+//   margin-top: -22px;
+//   margin-left: -20px;
+// }
+// ul.breadcrumb li {
+//   display: inline;
+//   font-size: 18px;
+// }
+// ul.breadcrumb li + li:before {
+//   padding: 2px;
+//   color: black;
+//   content: '/\00a0';
+// }
+// ul.breadcrumb li a {
+//   color: #0275d8;
+//   text-decoration: none;
+// }
+// ul.breadcrumb li a:hover {
+//   color: #01447e;
+//   text-decoration: underline;
+// }
+.cName {
+  color: #0275d8;
+}
+////////////////Dashboard
+
+.chart {
+  float: left;
+  width: 250px;
+  height: 200px;
+  margin: 30px;
+  padding: 2px;
+  // padding-left: 120px;
+}
+.chart1 {
+  float: left;
+  width: 250px;
+  height: 200;
+  margin: 30px;
+  padding: 2px;
+  // padding-left: 120px;
+}
+h4 {
+  text-align: center;
+}
+nz-table[nzPagination] {
+  display: false;
+}
+.table {
+  width: 90%;
+
+  padding: 2px;
+}
+.table1 {
+  width: 90%;
+
+  padding: 2px;
+}

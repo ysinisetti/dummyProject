@@ -1,0 +1,31 @@
+.width{
+    display: flex;
+    width:100%;
+    background-color:rgb(233, 230, 230);
+    margin: -8px;
+    padding:10px;
+
+  }
+  .one {
+    flex: 2 1 0;
+    margin-left:20px;
+    padding-top:5px;
+  }
+  .two {
+    flex:6 1 0;
+  }
+  .three{
+    flex:3 1 0;
+   padding-right: 30px;
+  }
+  .button{
+    height: 30px;
+    margin-top: 20px;
+  }
+  .field{
+    ::ng-deep .mat-form-field {
+        height: 5px;; // example
+    }
+  }
+  
+ 

@@ -1,0 +1,299 @@
+
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li><a (click)="details()">{{ProjectName}}</a></li>
+    <li routerLink="/dashboard/changes">Changes</li>
+  </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <li class="btn2">Customer Name : <b class="cName">{{customerName}}</b></li>
+  </div>
+</ul>
+<div class="card">
+  <div class="card-header">
+    <h5>
+      <strong class="mr-3">{{title}}</strong>
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addUpdateChangeForm">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Ticket Id</label>
+          <input nz-input placeholder="Ticket Id" formControlName='ticktId' />
+  <div *ngIf="this.addUpdateChangeForm.get('ticktId').errors?.required && this.addUpdateChangeForm.get('ticktId').touched">
+    <span class="text-danger">Ticket Id Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('ticktId').errors?.maxlength && this.addUpdateChangeForm.get('ticktId').invalid">
+    <span class="text-danger">upto 4 Digits are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('ticktId').errors?.pattern && this.addUpdateChangeForm.get('ticktId').invalid">
+    <span class="text-danger">Only Numbers Are Allowed</span></div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Title <span class="validationtest">*</span></label>
+          <input nz-input placeholder="Title" formControlName="title" />
+  <div *ngIf="this.addUpdateChangeForm.get('title').errors?.required && this.addUpdateChangeForm.get('title').touched">
+    <span class="text-danger">Title Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('title').errors?.maxlength && this.addUpdateChangeForm.get('title').invalid">
+    <span class="text-danger">Only 70 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('title').errors?.pattern && this.addUpdateChangeForm.get('title').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Change Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="Issue Type" formControlName="issueType">
+            <nz-option *ngFor="let option of issueType" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('issueType').errors?.required && this.addUpdateChangeForm.get('issueType').touched">
+    <span class="text-danger">Issue Type Is Required</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Estimated Time</label>
+          <input nzType="number" nz-input placeholder=" Estimated Time" formControlName="estimatedTime" maxlength="1" />
+    <div *ngIf="this.addUpdateChangeForm.get('estimatedTime').errors?.required && this.addUpdateChangeForm.get('estimatedTime').touched">
+      <span class="text-danger">Estimated Time Is Required</span></div>
+    <div *ngIf="this.addUpdateChangeForm.get('estimatedTime').errors?.pattern && this.addUpdateChangeForm.get('estimatedTime').invalid">
+      <span class="text-danger">Only Numbers Are Allowed</span></div>
+        </div>
+        <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Consumed Time</label>
+          <input nzType="number" nz-input placeholder=" Consumed Time" formControlName="consumedTime" maxlength="1" />
+  <div *ngIf="this.addUpdateChangeForm.get('consumedTime').errors?.required && this.addUpdateChangeForm.get('consumedTime').touched">
+    <span class="text-danger">Consumed Time Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('consumedTime').errors?.pattern && this.addUpdateChangeForm.get('consumedTime').invalid">
+    <span class="text-danger">Only Numbers Are Allowed</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Status</label>
+          <nz-select readonly=false nzAllowClear nzPlaceHolder="Status" formControlName="status">
+            <nz-option *ngFor="let option of status" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('status').errors?.required && this.addUpdateChangeForm.get('status').touched">
+    <span class="text-danger">Status Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Percentage Complete</label>
+          <input type="number" nz-input placeholder="Percentage Complete" formControlName="percentageComplete"
+            maxlength="3" />
+  <div *ngIf="this.addUpdateChangeForm.get('percentageComplete').errors?.required && this.addUpdateChangeForm.get('percentageComplete').touched">
+    <span class="text-danger">Percentage Complete Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('percentageComplete').errors?.maxlength && this.addUpdateChangeForm.get('percentageComplete').invalid">
+    <span class="text-danger">Only 3 Numbers are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('percentageComplete').errors?.pattern && this.addUpdateChangeForm.get('percentageComplete').invalid">
+    <span class="text-danger">Only Numbers Are Allowed</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Priority</label>
+          <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName="priority">
+            <nz-option *ngFor="let option of priority" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('priority').errors?.required && this.addUpdateChangeForm.get('priority').touched">
+    <span class="text-danger">Priority Is Required</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Severity</label>
+          <nz-select nzAllowClear nzPlaceHolder="Severity" formControlName="severity">
+            <nz-option *ngFor="let option of severity" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('severity').errors?.required && this.addUpdateChangeForm.get('severity').touched">
+    <span class="text-danger">Severity Is Required</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Bucket</label>
+          <nz-select nzAllowClear nzPlaceHolder="Bucket" formControlName="bucket">
+            <nz-option *ngFor="let option of bucket" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('bucket').errors?.required && this.addUpdateChangeForm.get('bucket').touched">
+    <span class="text-danger">Bucket Is Required</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Category</label>
+          <nz-select nzAllowClear nzPlaceHolder="Category" formControlName="category">
+            <nz-option *ngFor="let option of category" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('category').errors?.required && this.addUpdateChangeForm.get('category').touched">
+    <span class="text-danger">Category Is Required</span></div>
+        </div>
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+
+        </div>
+        <div  *ngIf="enable" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Resolution Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="Resolution Type" formControlName="resolutionType">
+            <nz-option *ngFor="let option of resulationType" [nzValue]="option.optionKey"
+              [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('resolutionType').errors?.required && this.addUpdateChangeForm.get('resolutionType').touched">
+    <span class="text-danger">Resolution Type Is Required</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Components</label>
+          <input nz-input placeholder="Components" formControlName="components" />
+  <div *ngIf="this.addUpdateChangeForm.get('components').errors?.required && this.addUpdateChangeForm.get('components').touched">
+    <span class="text-danger">Components Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('components').errors?.maxlength && this.addUpdateChangeForm.get('components').invalid">
+    <span class="text-danger">Only 100 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('components').errors?.pattern && this.addUpdateChangeForm.get('components').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Environments</label>
+          <nz-select nzAllowClear nzPlaceHolder="Environments" formControlName="environments">
+            <nz-option *ngFor="let option of environment" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+  <div *ngIf="this.addUpdateChangeForm.get('environments').errors?.required && this.addUpdateChangeForm.get('environments').touched">
+    <span class="text-danger">Environments Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('environments').errors?.maxlength && this.addUpdateChangeForm.get('environments').invalid">
+    <span class="text-danger">Only 25 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('environments').errors?.pattern && this.addUpdateChangeForm.get('environments').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Affected Versions</label>
+          <input nz-input placeholder="Affected Versions" formControlName="affectedVersions" />
+  <div *ngIf="this.addUpdateChangeForm.get('affectedVersions').errors?.required && this.addUpdateChangeForm.get('affectedVersions').touched">
+    <span class="text-danger">Affected Versions Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('affectedVersions').errors?.maxlength && this.addUpdateChangeForm.get('affectedVersions').invalid">
+    <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('affectedVersions').errors?.pattern && this.addUpdateChangeForm.get('affectedVersions').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Labels</label>
+          <input nz-input placeholder="Labels" formControlName="labels" />
+  <div *ngIf="this.addUpdateChangeForm.get('labels').errors?.required && this.addUpdateChangeForm.get('labels').touched">
+    <span class="text-danger">Labels are Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('labels').errors?.maxlength && this.addUpdateChangeForm.get('labels').invalid">
+    <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('labels').errors?.pattern && this.addUpdateChangeForm.get('labels').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Fixed Versions</label>
+          <input nz-input placeholder="Fixed Versions" formControlName="fixedVersions" />
+  <div *ngIf="this.addUpdateChangeForm.get('fixedVersions').errors?.required && this.addUpdateChangeForm.get('fixedVersions').touched">
+    <span class="text-danger">Fixed Versions Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('fixedVersions').errors?.maxlength && this.addUpdateChangeForm.get('fixedVersions').invalid">
+    <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('fixedVersions').errors?.pattern && this.addUpdateChangeForm.get('fixedVersions').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">References</label>
+          <input nz-input placeholder="References" formControlName="references" />
+  <div *ngIf="this.addUpdateChangeForm.get('references').errors?.required && this.addUpdateChangeForm.get('references').touched">
+    <span class="text-danger">References Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('references').errors?.maxlength && this.addUpdateChangeForm.get('references').invalid">
+    <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('references').errors?.pattern && this.addUpdateChangeForm.get('references').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Assigned To</label>
+          <nz-select [nzSize]="size" nzMode="tags" nzPlaceHolder="Choose Assigned Persons" name="sDate"
+          formControlName="assignedTo">
+          <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value">
+          </nz-option>
+        </nz-select>
+
+  <div *ngIf="this.addUpdateChangeForm.get('assignedTo').errors?.required && this.addUpdateChangeForm.get('assignedTo').touched">
+    <span class="text-danger">Assigned To Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('assignedTo').errors?.maxlength && this.addUpdateChangeForm.get('assignedTo').invalid">
+    <span class="text-danger">Only 25 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('assignedTo').errors?.pattern && this.addUpdateChangeForm.get('assignedTo').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Deployed By</label>
+          <nz-select [nzSize]="size" nzMode="tags" nzPlaceHolder="Choose Deployed By" name="sDate"
+          formControlName="deployedBY">
+          <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value">
+          </nz-option>
+        </nz-select>
+
+  <div *ngIf="this.addUpdateChangeForm.get('deployedBY').errors?.required && this.addUpdateChangeForm.get('deployedBY').touched">
+    <span class="text-danger">Deployed By Is Required</span></div>
+  <div *ngIf="this.addUpdateChangeForm.get('deployedBY').errors?.maxlength && this.addUpdateChangeForm.get('deployedBY').invalid">
+    <span class="text-danger">Only 25 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateChangeForm.get('deployedBY').errors?.pattern && this.addUpdateChangeForm.get('deployedBY').invalid">
+    <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Assigned Date</label>
+          <nz-date-picker nzPlaceHolder="yyyy-mm-dd" formControlName="assignedDate"></nz-date-picker>
+  <div *ngIf="this.addUpdateChangeForm.get('assignedDate').errors?.required && this.addUpdateChangeForm.get('assignedDate').touched">
+    <span class="text-danger">Assigned Date Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Deployed Date</label>
+          <nz-date-picker nzPlaceHolder="yyyy-mm-dd" formControlName="deployedDate"></nz-date-picker>
+  <div *ngIf="this.addUpdateChangeForm.get('deployedDate').errors?.required && this.addUpdateChangeForm.get('deployedDate').touched">
+    <span class="text-danger">Deployed Date Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Target Date</label>
+          <nz-date-picker nzPlaceHolder="yyyy-mm-dd" formControlName="targetDate"></nz-date-picker>
+  <div *ngIf="this.addUpdateChangeForm.get('targetDate').errors?.required && this.addUpdateChangeForm.get('targetDate').touched">
+    <span class="text-danger">Target Date Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Resolved Date</label>
+          <nz-date-picker nzPlaceHolder="yyyy-mm-dd" formControlName="resolvedDate"></nz-date-picker>
+  <div *ngIf="this.addUpdateChangeForm.get('resolvedDate').errors?.required && this.addUpdateChangeForm.get('resolvedDate').touched">
+    <span class="text-danger">Resolved Date Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Closed Date</label>
+          <nz-date-picker nzPlaceHolder="yyyy-mm-dd" formControlName="closedDate"></nz-date-picker>
+    <div *ngIf="this.addUpdateChangeForm.get('closedDate').errors?.required && this.addUpdateChangeForm.get('closedDate').touched">
+      <span class="text-danger">Closed Date Is Required</span></div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Description</label>
+          <textarea nz-input placeholder="Please enter description" formControlName="description" nzAutosize></textarea>
+  <div *ngIf="this.addUpdateChangeForm.get('description').errors?.required && this.addUpdateChangeForm.get('description').touched">
+    <span class="text-danger">Description Is Required</span></div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Root Cause Analysis</label>
+          <textarea nz-input placeholder="Please enter Root Cause Analysis" formControlName="rootCauseAnalysis"
+            nzAutosize></textarea>
+  <div *ngIf="this.addUpdateChangeForm.get('rootCauseAnalysis').errors?.required && this.addUpdateChangeForm.get('rootCauseAnalysis').touched">
+    <span class="text-danger">Root Cause Analysis Is Required</span></div>
+        </div>
+        <div  *ngIf="enable" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Resolution</label>
+          <textarea nz-input placeholder="Please enter resolution" formControlName="resolution" nzAutosize></textarea>
+  <div *ngIf="this.addUpdateChangeForm.get('resolution').errors?.required && this.addUpdateChangeForm.get('resolution').touched">
+    <span class="text-danger">Resolution Is Required</span></div>
+        </div>
+        <br />
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <button class="btn" nz-button nzType="primary" (click)="addRUpdateChanges()">
+            <i nz-icon nzType="{{icon}}" nzTheme="outline"></i>{{btnLabel}}</button>&nbsp;
+          <button class="btn1" nz-button nzType="primary" (click)="resetIssue()">
+            <i nz-icon nzType="sync" nzTheme="outline"></i>Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

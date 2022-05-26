@@ -1,0 +1,228 @@
+<nz-breadcrumb>
+  <div>
+   <a  (click)="details()"><p class="title" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+ </div>
+   <nz-breadcrumb-item>
+    <p class= "bread">Resources</p>
+   </nz-breadcrumb-item>
+ </nz-breadcrumb>
+ <div class="card">
+  <nz-page-header class="site-page-header" nzTitle="{{pName}} Resources">
+ </nz-page-header>
+ <!-- <div class="card-body"> -->
+       <form [formGroup]="prjForm" class="header">
+           <div class="row">
+             <div class="col-4">
+               <label class="cName">Customer Name :&nbsp;{{cName}}</label>&nbsp;
+               </div>
+               <div class="col-4">
+                 <label  class="pName">Project Name :&nbsp;{{pName}}</label>&nbsp;
+             </div>
+             <div class="col-4" >
+               <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton"  class="search">
+                <input type="text" nz-input placeholder="Search Here"  [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" />             
+               </nz-input-group>
+               <ng-template #suffixIconButton >
+                 <button nz-button nzType="primary"  (click)="search1()" nzSearch><i nz-icon nzType="search"></i></button>
+               </ng-template>
+             </div>
+           </div>
+       </form>
+   </div>
+<!-- </div> -->
+   <div class="card">
+       <div class="row">
+         <div class="card-body">
+           <div class="col-12">
+                   <button nz-button (click)="addRow()" class="add" nzType="primary">
+                     <i nz-icon nzType="plus"></i>  Add</button>
+               
+                   
+                   <nz-table nzShowSizeChanger nzShowPagination #editRowTable [nzData]="listOfData" nzTableLayout="fixed"
+                    [nzFrontPagination]="true" [nzShowPagination]="true">
+                       <thead   (nzSortChange)="sort($event)" nzSingleSort>
+                         <tr>
+                           <th nzWidth="5%">#</th>
+                           <th nzWidth="20%" nzShowSort nzSortKey="fName">NAME</th>
+                           <!-- <th nzWidth="13%" nzShowSort nzSortKey="lName" >LAST NAME</th> -->
+                           <th nzWidth="15%" nzShowSort nzSortKey="role">ROLE</th>
+                           <th nzWidth="18%" >START DATE</th>
+                           <th nzWidth="18%" >END DATE</th>
+                           <th nzWidth="15%" nzShowSort nzSortKey="type">TYPE</th>
+                           <!-- <th nzWidth="18%" nzShowSort nzSortKey="resourceType">RESOURCE TYPE</th> -->
+                           <th >ACTION</th>
+                         </tr>
+                       </thead>
+                       <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                          <ng-container *ngFor="let data of listOfData | filter:searchTerm ; let i = index ">
+                           <tr  cdkDrag>
+                             <td>{{i+1}}</td>
+                           <!-- <td>{{[data.resourceTitle] }}</td> -->
+                           <td>{{ data.resourceName }}</td>
+                           <td>{{[data.resourceTitle] }}</td>
+                           <td>{{ data.startDate | date:'MM-dd-yyyy'  }}</td>
+                           <td>{{ data.endDate | date:'MM-dd-yyyy'}}</td>
+                           <!-- <td>{{Type[data.objectType]}}</td> -->
+                           <td>{{Resource[data.resourceType] }}</td>
+                     <td>
+                     <i nz-icon nzType="edit" (click)="editRow(data)" nzTheme="fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                     <i nz-icon nzType="delete" nzTheme="fill"
+                     nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                          (nzOnConfirm)="deleteRow(data)"></i>
+                     </td>
+                         </tr>
+                       </ng-container>
+                       </tbody>
+                       </nz-table>
+                       <h6>No. of Records : {{records}}</h6>
+                       </div>
+               </div>
+           </div>
+           <!-- Add Resources -->
+  <nz-modal nzWidth="70%" nzHeight="60%" [(nzVisible)]="isVisible" nzTitle="Add Project Resources"
+  (nzOnCancel)="Cancel()"  [nzFooter]="modalFooter">
+  <form nz-form [formGroup]="addResourceForm" (ngSubmit)="Save()">
+   <div class="row">
+         <div class="col-4">
+           <nz-form-item>
+             <nz-form-label style="margin-left: -21px;" [nzSm]="6" [nzXs]="24" Required nzFor="fName">Name</nz-form-label>&nbsp;
+               <input class= "namen" nz-input placeholder="Name"  maxlength="20" formControlName="fName" id="fName" />
+               <div *ngIf="this.addResourceForm.get('fName').errors?.required && this.addResourceForm.get('fName').touched">
+                <small class="text-danger">Name Is Required</small></div>
+              <div *ngIf="this.addResourceForm.get('fName').errors?.maxlength && this.addResourceForm.get('fName').invalid">
+                <small class="text-danger">Only 25 Characters are allowed</small>
+              </div>
+              <div *ngIf="this.addResourceForm.get('fName').errors?.pattern && this.addResourceForm.get('fName').invalid">
+                <small class="text-danger">Only Characters Are Allowed</small></div>
+           </nz-form-item>
+</div>
+<div class="col-4">
+ <nz-form-item>
+   <nz-form-label [nzSm]="6" [nzXs]="24" id="role1" Required nzFor="role">Role</nz-form-label>
+    <input class= "name" nz-input placeholder="Role"  maxlength="20" formControlName="role" id="role" />
+    <div *ngIf="this.addResourceForm.get('role').errors?.required && this.addResourceForm.get('role').touched">
+      <small class="text-danger">Please Select Role</small></div>
+</nz-form-item>
+</div>
+<!-- <div class="col-4">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" Required nzFor="type">Type</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please Select Type !">
+    <nz-select class= "resource" nzAllowClear nzPlaceHolder="Select Type" formControlName="type">
+    <nz-option *ngFor="let option of type" [nzValue]="option.value" [nzLabel]="option.label">
+    </nz-option>
+</nz-select>
+</nz-form-control>
+</nz-form-item>
+</div> -->
+<!-- <div class="col-4">
+  <nz-form-item>
+    <nz-form-label  Required nzFor="resourceType">Type</nz-form-label>
+    <nz-select  class= "resource" nzAllowClear nzPlaceHolder="Resource Type" formControlName="resourceType">
+    <nz-option *ngFor="let option of resourceType" [nzValue]="option.value" [nzLabel]="option.label">
+    </nz-option>
+</nz-select>
+<div *ngIf="this.addResourceForm.get('resourceType').errors?.required && this.addResourceForm.get('resourceType').touched">
+  <small class="text-danger">Please Select Resource</small></div>
+</nz-form-item>
+</div> -->
+<div class="col-4">
+  <nz-form-label Required >Type</nz-form-label>&nbsp;
+  <nz-select class= "resource" nzAllowClear nzPlaceHolder="Resource Type" formControlName="resourceType" style="width: 200px;">
+    <nz-option *ngFor="let option of resourceType" [nzValue]="option.value" [nzLabel]="option.label">
+    </nz-option>
+</nz-select>
+<div *ngIf="this.addResourceForm.get('resourceType').errors?.required && this.addResourceForm.get('resourceType').touched">
+  <small class="text-danger">Please Select Type</small></div>
+</div>
+</div>
+
+<div class="row">
+ <div class="col-4">
+   <nz-form-item>
+     <nz-form-label [nzSm]="6" [nzXs]="24" Required nzFor="sDate">Start Date</nz-form-label>&nbsp;
+       <nz-date-picker class= "name" [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='Start Date' formControlName='sDate'></nz-date-picker>
+       <div *ngIf="this.addResourceForm.get('sDate').errors?.required && this.addResourceForm.get('sDate').touched">
+        <small class="text-danger">Date Is Required</small></div>
+ </nz-form-item>
+</div>
+ <div class="col-4">
+   <nz-form-item>
+     <nz-form-label [nzSm]="6" [nzXs]="24" Required nzFor="sDate">End Date</nz-form-label>
+       <nz-date-picker class= "name"  [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='End Date' formControlName='eDate'></nz-date-picker>
+       <div *ngIf="this.addResourceForm.get('eDate').errors?.required && this.addResourceForm.get('eDate').touched">
+        <small class="text-danger">Date Is Required</small></div>
+ </nz-form-item>
+   </div>
+</div>
+
+<!-- <div class="row">  
+   </div> -->
+   <ng-template #modalFooter>
+     <button nz-button nzType="primary" (click)="Save()"> <i nz-icon nzType="save"></i>Save</button>
+     <button nz-button nzType="primary" (click)="Cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+   </ng-template>
+   </form>
+ </nz-modal>
+<!-- Edit Resources -->
+ <nz-modal nzWidth="68%" nzHeight="80%" [(nzVisible)]="isVisible1" nzTitle="Edit Project Resources"
+ (nzOnCancel)="UpdateCancel()"  [nzFooter]="modalFooter1">
+ <form [formGroup]="editResourceForm">
+  <div class="row">
+        <div class="col-4">
+          <label nzFor="Name">Name :</label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <input  class= "namee" nz-input placeholder="Name" formControlName="fName2" />
+  <div *ngIf="this.editResourceForm.get('fName2').errors?.required && this.editResourceForm.get('fName2').touched">
+    <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.editResourceForm.get('fName2').errors?.maxlength && this.editResourceForm.get('fName2').invalid">
+    <small class="text-danger">Only 25 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editResourceForm.get('fName2').errors?.pattern && this.editResourceForm.get('fName2').invalid">
+    <small class="text-danger">Only Characters Are Allowed</small>
+</div>
+</div>
+<div class="col-4">
+<label>Role :</label>&nbsp;
+<input  class= "nami" nz-input placeholder="role"  maxlength="20" formControlName="role2" id="roles" />
+<div *ngIf="this.editResourceForm.get('role2').errors?.required && this.editResourceForm.get('role2').touched">
+  <small class="text-danger">Please Select Role</small></div>
+</div>
+<!-- <div class="col-4">
+  <label> Type</label>&nbsp;
+  <nz-select nzAllowClear nzPlaceHolder="Select Type" formControlName="type2">
+    <nz-option *ngFor="let option of type2" [nzValue]="option.value" [nzLabel]="option.label">
+    </nz-option>
+</nz-select>
+</div> -->
+  <div class="col-4">
+    <label>Type :</label>&nbsp;
+    <nz-select  nzAllowClear nzPlaceHolder="Resource Type" formControlName="resourceType1">
+      <nz-option *ngFor="let option of resourceType1" [nzValue]="option.value" [nzLabel]="option.label">
+      </nz-option>
+  </nz-select>
+  <div *ngIf="this.editResourceForm.get('resourceType1').errors?.required && this.editResourceForm.get('resourceType1').touched">
+    <small class="text-danger">Please Select Type</small></div>
+  </div>
+</div>
+<br>
+<div class="row">
+<div class="col-4">
+<label>Start Date :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<nz-date-picker class= "name"  [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='Start Date' formControlName='sDate2'></nz-date-picker>
+<div *ngIf="this.editResourceForm.get('sDate2').errors?.required && this.editResourceForm.get('sDate2').touched">
+  <small class="text-danger">Date Is Required</small></div>
+</div>
+<div class="col-4">
+  <label>End Date :</label>&nbsp;&nbsp;&nbsp;
+  <nz-date-picker class= "name"  [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='End Date' formControlName='eDate2'></nz-date-picker>
+  <div *ngIf="this.editResourceForm.get('eDate2').errors?.required && this.editResourceForm.get('eDate2').touched">
+    <small class="text-danger">Date Is Required</small></div>
+  </div>
+</div>
+<br>
+  <ng-template #modalFooter1>
+    <button nz-button nzType="primary" (click)="Update()">  <i nz-icon nzType="edit"></i>Update</button>
+    <button nz-button nzType="primary" (click)="UpdateCancel()">  <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+  </form>
+</nz-modal>

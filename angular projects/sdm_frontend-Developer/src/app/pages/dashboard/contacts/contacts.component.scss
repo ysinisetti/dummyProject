@@ -1,0 +1,20 @@
+.btn {
+  margin-top: 37px;
+  float: right;
+  margin-right: 0px;
+  /* margin-bottom: 10px; */
+  margin-left: 5px;
+  }
+
+  @media (min-width: 300px) and (max-width: 500px) {
+    .btn {
+    width: 100%;
+    float: right;
+    }
+    }
+  @media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+  width: 100px;
+  float: right;
+  }
+}

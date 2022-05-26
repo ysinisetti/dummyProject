@@ -1,0 +1,32 @@
+.save {
+  margin-right: 8px;
+}
+.ant-table-tbody > tr > td {
+  font-family: 'Open Sans', sans-serif;
+// color: #fbfbfd !important;
+font-weight: bold !important;
+text-align: left;
+// background: #2368a0  !important;
+border-bottom: 1px solid #e4e9f0;
+// margin-top: -10px !important;
+// height: 20px !important;
+padding-top: 10px;
+}
+.level1 {
+background-color: greenyellow;
+padding-left: 15px;
+}
+.level2 {
+background-color: rgb(163, 132, 132);
+padding-left: 35px;
+}
+.level3 {
+background-color: aqua;
+padding-left: 55px;
+}
+.level4 {
+background-color: rgb(167, 223, 223);
+text-align: center;
+padding-left: 75px;
+
+}

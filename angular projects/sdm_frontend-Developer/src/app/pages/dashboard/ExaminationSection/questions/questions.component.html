@@ -1,0 +1,163 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a routerLink="/dashboard/examList">Exam List</a></li>
+      <li>Questions</li>
+    </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+    Practice Name : <b class="cName">Java</b>
+  </div>
+</div>
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false" >
+      <form [formGroup]="searchQuestionForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Question</label><br>
+            <input nz-input placeholder="Question" name="Question" formControlName="question" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Created By</label><br>
+            <nz-select nzAllowClear nzPlaceHolder="Choose Created By" name="Created By" formControlName="createdBy">
+              <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>SubTopic</label><br>
+            <nz-select nzAllowClear nzPlaceHolder="Choose SubTopic" name="SubTopic" formControlName="subTopic">
+              <nz-option *ngFor="let options of subTopics" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="btn" (click)="getAllQuestions()" nz-button nzType="primary"><i nz-icon
+                nzType="search"></i>Search</button>
+            <button class="btn" (click)="cancel()" nz-button nzType="primary"><i nz-icon
+                nzType="redo"></i>Reset</button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<div class="card" id="grid">
+  <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+        <label class="rec">No. of Records : {{totalPages}}</label>
+      </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        <button class="add" (click)="addOrEdit('','A')" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+      </div>
+    </div>
+    <div class="card-body" id="gridBody">
+<nz-table  #basicTable [nzData]="allQuestions" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+[nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+(nzPageSizeChange)="onPageSizeChange($event)">
+  <thead>
+    <tr>
+      <th nzWidth=3%>#</th>
+      <th nzWidth=15%>Question</th>
+      <th nzWidth=6%>Created By</th>
+      <th nzWidth=7%>Created Date</th>
+      <th nzWidth=12%>Description</th>
+      <th nzWidth=5%>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>{{i+1}}</td>
+        <td nzEllipsis nzTooltipTitle="{{data.question}}" nz-tooltip>{{data.question}}</td>
+        <td>{{data.createdBy}}</td>
+        <td>{{data.createdDate | date: 'MMM d, yyyy' }}</td>
+        <td nzEllipsis nzTooltipTitle="{{data.explanation}}" nz-tooltip >{{data.explanation}}</td>
+        <td>
+          <i nz-icon nzType="edit" nzTheme="outline" (click)="addOrEdit(data,'E')"></i>&nbsp;&nbsp;
+          <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteQuestion(data.id)">
+            <i nz-icon nzTheme="outline" nzType="delete"></i>&nbsp;&nbsp;</a>
+        </td>
+      </tr>
+  </tbody>
+</nz-table>
+</div>
+</div>
+<!-- POPUP FOR ADD Release -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openAddEditForm" nzTitle="{{title}}" (nzOnCancel)="cancel()"
+  [nzFooter]="modalFooter">
+  <form [formGroup]="addEditQuestionForm" >
+    <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <label>SubTopic <span class="validationtest">*</span></label>
+      <nz-select nzAllowClear nzPlaceHolder="Choose SubTopic" name="SubTopic" formControlName="subTopic">
+        <nz-option *ngFor="let options of subTopics" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+      </nz-select>
+      <div *ngIf="this.addEditQuestionForm.get('subTopic').errors?.required && this.addEditQuestionForm.get('subTopic').touched">
+        <span class="text-danger">Sub Topic Is Required</span></div>
+    </div>
+
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Question <span class="validationtest">*</span></label>
+        <textarea nz-input nzLabel="Question" placeholder="Enter Question" formControlName="question" nzAutosize></textarea>
+        <div *ngIf="this.addEditQuestionForm.get('question').errors?.required && this.addEditQuestionForm.get('question').touched">
+          <span class="text-danger">Question Is Required</span></div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Option 1 <span class="validationtest">*</span></label>
+        <input nz-input placeholder="Please enter Option 1" name="Option 1" formControlName="option1" />
+             <div *ngIf="this.addEditQuestionForm.get('option1').errors?.required && this.addEditQuestionForm.get('option1').touched">
+          <span class="text-danger">Option 1 Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Option 2 <span class="validationtest">*</span></label>
+        <input nz-input placeholder="Please enter Option 2" name="Option 2" formControlName="option2" />
+             <div *ngIf="this.addEditQuestionForm.get('option2').errors?.required && this.addEditQuestionForm.get('option2').touched">
+          <span class="text-danger">Option 2 Is Required</span></div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Option 3 <span class="validationtest">*</span></label>
+        <input nz-input placeholder="Please enter Option 3" name="Option 3" formControlName="option3" />
+             <div *ngIf="this.addEditQuestionForm.get('option3').errors?.required && this.addEditQuestionForm.get('option3').touched">
+          <span class="text-danger">Option 3 Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Option 4</label>
+        <input nz-input placeholder="Please enter Option 4" name="Option 4" formControlName="option4" />
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Ans (1-4) <span class="validationtest">*</span></label>
+        <input nz-input placeholder="Please Provide Option No." name="ans" formControlName="answer" />
+        <div *ngIf="this.addEditQuestionForm.get('answer').errors?.required && this.addEditQuestionForm.get('answer').touched">
+          <span class="text-danger">Answer Is Required</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" name="Status" formControlName="status">
+          <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Value"></nz-option>
+        </nz-select>
+      </div>
+
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label>
+        <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....' formControlName="description"
+          maxlength="256" nzAutosize></textarea>
+        <div *ngIf="this.addEditQuestionForm.get('description').errors?.maxlength && this.addEditQuestionForm.get('description').invalid">
+          <span class="text-danger">Only 255 Characters are allowed</span></div>
+      </div>
+    </div>
+  </form>
+      <ng-template #modalFooter>
+      <button nz-button class="cancel" (click)="cancel()"><i nz-icon nzType="close"
+          nzTheme="outline"></i>Cancel</button>
+      <button type="submit" nz-button nzType="primary" class="save" (click)="saveOrModify()"><i nz-icon nzType="{{icon}}"
+          nzTheme="outline"></i>{{btnLabel}}</button>
+    </ng-template>
+
+</nz-modal>
+

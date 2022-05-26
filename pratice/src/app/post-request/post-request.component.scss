@@ -1,0 +1,68 @@
+.example-card {
+    // max-width: 1550px;
+    // margin-left:20px;
+    margin-top:20px;  
+  }
+  .toolBar{
+    margin-top:14px;
+    // flex: 1 1 auto;
+    // z-index: 1;
+    // position: fixed;
+    z-index: 1;
+    position: fixed;
+    width:56.5%;
+        // position: relative;
+  }
+  .cardSpace{
+    padding-top: 80px;
+  }
+  
+  .example-header-image {
+    background-image: url('https://www.w3schools.com/howto/img_avatar.png');
+    background-size: cover;
+  }
+  .width{
+    display: flex;
+    width:100%
+  }
+  .one {
+    flex: 2 1 0;
+}
+
+.two {
+    flex:6 1 0;
+}
+
+  .buttons{
+    display: flex;
+    flex-wrap: wrap;
+   
+  }
+  .like {
+    flex: 1 1 0;
+    padding-right:6px;
+  }
+  
+  .disLike {
+    flex:1 1 0;
+  
+  }
+  .space{
+    flex: 8 1 0;
+   
+  }
+  .approve {
+    flex:1 1 0;
+    padding-right:6px;
+   
+    
+  }
+  
+  .reject {
+    flex:1 1 0;
+   
+  }
+  .form{
+    width: 60%;
+  }
+  

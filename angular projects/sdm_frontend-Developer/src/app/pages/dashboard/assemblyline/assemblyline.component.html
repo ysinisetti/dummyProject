@@ -1,0 +1,111 @@
+<!-- BreadCrumb -->
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="gotoHome()">Home</a></li>
+            <li>Assembly Lines</li>
+        </ul>
+    </div>
+  </div>
+  <!-- Assembly Line Search -->
+  <div class="card">
+    <nz-collapse nzAccordion>
+     <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+         <form [formGroup]="searchForm">
+             <div class="row" id="fRow" >
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                     <label>Assembly Line Title</label>                     
+                     <input nz-input placeholder="Assembly Line Title" formControlName="ASLtitle"/>
+                 </div>
+                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                 </div>
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                   <button class="reset" nz-button nzType="primary" (click)="resetSearch()"><i nz-icon
+                     nzType="redo"></i>Reset</button>
+                  <button class="search" nz-button nzType="primary"
+                 (click)="getAssemblyLines()"><i nz-icon nzType="search"></i>Search</button>
+                 </div>
+             </div>
+         </form>
+     </nz-collapse-panel>
+   </nz-collapse>
+ </div>
+<!-- Assembly line grid -->
+<div class="card" id="grid">
+    <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label class="rec">No. of Records :{{records}} </label>
+        </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <button class="add" (click)="addAssemblyLine()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+            </div>
+          </div>
+          <div class="card-body" id="gridBody">
+        <nz-table #basicTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+          nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+          [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+          (nzPageSizeChange)="onPageSizeChange($event)">
+          <thead>
+            <tr>                         
+              <th *ngFor="let column of listOfColumns"
+                   [nzWidth]="column.width">
+              {{ column.name }}
+               </th>
+            </tr>  
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of listOfData ; let i = index ">
+              <tr>
+                <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                <td>{{data.title}}</td>
+                <td>{{statusLabel[data.status]}}</td>
+                <td nzEllipsis nzTooltipTitle="{{data.description}}" nz-tooltip>{{data.description }}</td>              
+               <td>
+                  <i nz-icon nzType="edit"  (click)="editAssemblyLine(data)" nzTheme="outline"></i>&nbsp;
+                  <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                    (nzOnConfirm)="deleteRow(data)"></i>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+
+<!-- Add Assembly Lines -->
+<nz-modal nzWidth="50%" nzHeight="80%" [(nzVisible)]="addAssemblyLineVisible" nzTitle="Add Assembly Line" (nzOnCancel)="assemblyLineCancel()"
+[nzFooter]="modalFooter">
+<form nz-form [formGroup]="addAsmblyLineForm">
+  <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+          <label>Assembly Line Title<span class="validationtest">*</span></label>
+          <input nz-input maxlength="21" placeholder="Assembly Line Title" formControlName="ASLtitle"/>
+          <div *ngIf="this.addAsmblyLineForm.get('ASLtitle').errors?.required &&
+          this.addAsmblyLineForm.get('ASLtitle').touched">
+           <span class="validationtest">Assembly Line Title is required</span></div>
+            <div *ngIf="this.addAsmblyLineForm.get('ASLtitle').errors?.maxlength">
+               <span class="validationtest">Only 20 characters are allowed</span></div>   
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+            <label>Status</label>
+            <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+              <nz-option *ngFor="let option of statusType" [nzValue]="option.Values" [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select>
+    </div>
+  </div>
+    <div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">     
+       <label>Description</label>
+       <textarea nz-input placeholder="Description" formControlName="description" nzAutosize></textarea>     
+    </div>
+  </div>
+
+  <ng-template #modalFooter>
+    <button nz-button class="cancel" nzType="primary" (click)="assemblyLineCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+    <button nz-button class="save" nzType="primary"  [disabled] = "btnDisabled" (click)="assemblyLineSave()"> <i nz-icon nzType="save"></i>Save</button>
+  </ng-template>
+</form>
+</nz-modal>
+
+

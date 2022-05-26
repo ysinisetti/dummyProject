@@ -1,0 +1,20 @@
+<!-- <div fxLayoutAlign="center center" class="card">
+    <mat-card fxFlex="35">
+        <div class="dialog">Are u sure u want to delete</div>
+        <form [formGroup]="confirmationform" fxLayoutAlign="stretch" fxLayout="column" class="form"> -->
+            <div fxLayoutAlign="center center"  class="card">
+                <mat-card style="padding-top: 30px;">
+                    <h3>     Are you sure  want to {{name}}  ????   </h3>
+                    <!-- <form [formGroup]="confirmationform" fxLayoutAlign="stretch" fxLayout="column"  class="form"> -->
+
+          
+            <div class="buttons">
+                <!-- <div class="space"></div> -->
+                <div class="next">
+                    <button mat-raised-button mat-dialog-close color="warn" (click)=close() >Cancel</button>&nbsp;
+                    <button mat-raised-button color="primary" (click)=operation()>ok</button>
+                    </div>
+            </div>
+        <!-- </form> -->
+    </mat-card>
+</div>

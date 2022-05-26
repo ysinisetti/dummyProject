@@ -1,0 +1,32 @@
+<div class="container center_div">
+    <form  [formGroup]="regForm">
+        <h1>Update the existing user</h1>
+        <br>
+        <table class="list" style="margin-right: 10% !important;">
+            <tr>
+                <td><label>College Code</label></td>
+                <td><input type="text" formControlName="colgcodecontrol"></td>
+            </tr>
+            <tr>
+                <td><label>College Name:</label></td>
+                <td><input type="text" formControlName="colgnameControl"></td>
+            </tr>
+            <tr>
+                <td><label>Email Id</label></td>
+                <td><input type="text" formControlName="emailControl"></td>
+            </tr>
+            <tr>
+                <td><label>Name</label></td>
+                <td><input type="text" formControlName="nameControl"></td>
+            </tr>
+            <tr>
+                <td><label>Phone number</label></td>
+                <td><input type="text" formControlName="phnoControl"></td>
+            </tr>
+            <tr>
+                <!-- <td></td> -->
+                <td><button type="button" class="btn btn-dark" (click)='updatedData()'>update</button></td>
+            </tr>
+        </table>
+    </form>
+</div> 

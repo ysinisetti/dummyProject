@@ -1,0 +1,53 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.card {
+  background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgYHBwoNBwcGBhMHBgcHDQ8ICRANFBQYFhQRFikYHSkgHxolGyIfITIqJSkrLjMuIR8/OEsuNygtLjcBCgoKDQ0NGg0NDysZFRkrKysrKy03KysrKysrKysrKysrKy0rKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAKgBLAMBIgACEQEDEQH/xAAZAAEBAQEBAQAAAAAAAAAAAAAAAgEDBAf/xAAbEAEBAQACAwAAAAAAAAAAAAAAEQFRgQIhQf/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+z0qWujDa2pAVSpKLVUqaUKsRW0FCaUFCaUFDKVBramlBVKmlFVSsAbW1ICqVICqVIChLaDWppQUJpQUJraDRlKDhSppWmFUqQFVtQUKulTShVCaVBQmlBTU0oKE0oqipraDaVlAVSpAVSpAVSsAVSpAVSpKLVUTShViaUFCaUFCaUHClTStOaqVgg2tqShVUqaUKqlTQVVbUgKpU0oKE0oKKylBVKmlBVKmlBVbU0oqqVNKCqVICq2obQqqJpQqhNKgoTW0FCaUV56VNbWnKtramlBVKmlFVSprQVSpAVSpAVSppQWIraCippQVSppRVVqaUKoTSgqlTSgqlYIVVKkoVVKmlFqqVLQVSpKCqVNKDhSppWnNVKmlBVGUoNramlBVKmgKpUgKramlFVSppQVSpAVWorahVCaUKoqaUFUqa2gqlTSgqlTQVVKmtoKpUgKpUlBVKmlBwElac1Ca2goTSgqlTSiqpU1tBtbU0oKpUgKpUiC6VICqVNKFUJpQqm1NKKqlTSgqlTSgoZSgqlTSgqlSAqlS2gqlTSivO1Da05KE0oqhNKCqVNbQVSppUFUqaUFFS0G1tSAqlSCqpU0oVVbU0oVVKmlBQkoKE1tBQmlBVKmlFVSpraCqVNKCqVIDgVJWnNVKmlQVSpraCqJpQUJpQqhNbQa2pKKqlTSgqlTSgqtqaBVUqQKqlSApqG0VQmlBQmlBVKmtqCqVNKCqVNKCisKDz0qRpzVW1DQVSpKCqJAUJpRViaUKoqaUFUqa2g2tqaUFUqaAqlSUFVtSIqipKoqlTSoKraitoKomlBQmlCqE1tCtbUlFeetqRpyVSpBVUqQFVqGgoTSgoTShVCa2hWtTSgoTSiqGUBtKwBVKkQVSpAVW1DQVSpAVRNBVCa2goTShVFTSg4gKwAAAAAANYA0YA0YA0AAABrAG0oAUoClbWANpQApQBtAAZu76nf0ALpfLgEWl3huaAP/Z');
+  background-repeat: no-repeat;
+  height: 130px;
+  width: 280px;
+  background-size: cover;
+  box-shadow: 0 20px 20px 0 rgba(192, 203, 207, 0.6);
+  //background-color:white;
+  border-radius: 10%;
+}
+
+.para {
+  color: black;
+  font-size: small;
+}
+
+h5 {
+  color: black;
+  margin-top: -50px;
+}
+p {
+  margin-top: 40px;
+}
+
+.title {
+  color: #595c97;
+  margin-left: 70px;
+  margin-top: -54px;
+  margin-bottom: 10px;
+}

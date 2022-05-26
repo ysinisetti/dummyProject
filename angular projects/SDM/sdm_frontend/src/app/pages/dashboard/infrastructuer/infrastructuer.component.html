@@ -1,0 +1,478 @@
+<nz-breadcrumb>
+  <div>
+   <a  (click)="details()"><p class="title" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+ </div>
+   <nz-breadcrumb-item>
+    <p class= "bread">Infratructure</p>
+   </nz-breadcrumb-item>
+ </nz-breadcrumb>
+ 
+<div class="card">
+  <nz-page-header class="site-page-header" nzTitle="InfraStructure">
+  </nz-page-header>
+  <form class="search">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+  <input type="text" name="search" [(ngModel)]="searchTask" nz-input placeholder="Search ..." />
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+  <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  </form>
+ </div>
+ <div class="card">
+  <button nz-button (click)="addRow()" class="add" nzType="primary">
+  <i nz-icon nzType="plus">
+  </i>
+  Add
+  </button><br>
+  <div class="card-body" >
+  <nz-table nzShowSizeChanger nzShowPagination #basicTable [nzData]="allResoursesDetails" class="table" [nzPageSize]="8">
+  <thead>
+  <tr>
+  <th nzWidth="3%">#</th>
+  <th nzWidth="10%">Name</th>
+  <th nzWidth="10%">Infra Type</th>
+  <th nzWidth="6%">Location</th>
+  <th nzWidth="6%">Environment</th>
+  <th nzWidth="10%">Operating System</th>
+  <th nzWidth="6%">Contact Name</th>
+  <th nzWidth="3%">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of allResoursesDetails; let i=index">
+  <td>{{i+1}}</td>
+  <td>{{data.name }}</td>
+  <td>{{InfraType[data.infraType]}}</td>
+  <td>{{data.location}}</td>
+  <td>{{EnvironmentType[data.environment]}}</td>
+  <td>{{OperatingSystem[data.operatingSystem]}}</td>
+  <td>{{data.contactName}}</td>
+  <td>
+  <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)"> </i>&nbsp;&nbsp;
+  <a nz-popconfirm nzPopconfirmTitle="Sure to delete?"(nzOnConfirm)="deleteRow(data.id)">
+  <i nz-icon nzTheme="fill" nzType="delete"></i>&nbsp;&nbsp;</a>
+  </td>
+  </tr>
+  </tbody>
+  </nz-table>
+  <h6 >No. Of Records : {{records}} </h6>
+  </div>
+ </div>
+ 
+  <!-- POPUP FOR ADD InfraStructure -->
+  <nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="isVisible" nzTitle="Add InfraStructure" (nzOnCancel)="cancel()" [nzFooter]="modalFooter">
+  <form [formGroup]="addInfraForm" (ngSubmit)="newInfra()">
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Host Name : </label>
+  <input class="host" nz-input nzLabel="Host Name" placeholder="Host Name" required formControlName="hostName"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.hostName.touched && addInfraForm.controls.hostName.invalid && addInfraForm.controls.hostName.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('hostName').errors?.maxlength && this.addInfraForm.get('hostName').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('hostName').errors?.pattern && this.addInfraForm.get('hostName').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Operating System : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Operating System" formControlName="operatingSystem" class="opearting" style="width: 200px;">
+  <nz-option nzValue="L" nzLabel="Linux"></nz-option>
+  <nz-option nzValue="W" nzLabel="Windows"></nz-option>
+  <nz-option nzValue="M" nzLabel="Mac"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.operatingSystem.touched && addInfraForm.controls.operatingSystem.invalid && addInfraForm.controls.operatingSystem.errors.required">
+  Please Choose OS
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Environment : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Environment" formControlName="environment" class="environment" style="width: 200px;">
+  <nz-option nzValue="S" nzLabel="Staging"></nz-option>
+  <nz-option nzValue="D" nzLabel="Dev"></nz-option>
+  <nz-option nzValue="P" nzLabel="Prod"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.environment.touched && addInfraForm.controls.environment.invalid && addInfraForm.controls.environment.errors.required">
+  Please Choose Environment
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Public IPAddress : </label>
+  <input class="public" nz-input nzLabel="Public IPAddress" placeholder="* * * . * * . * . *" required formControlName="publicIPAddress"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.publicIPAddress.touched && addInfraForm.controls.publicIPAddress.invalid && addInfraForm.controls.publicIPAddress.errors.required">
+  Please Enter Public IPAddress
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('publicIPAddress').errors?.maxlength && this.addInfraForm.get('publicIPAddress').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('publicIPAddress').errors?.pattern && this.addInfraForm.get('publicIPAddress').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Private IPAddress : </label>
+  <input class="private" nz-input nzLabel="Private IPAddress" placeholder="* * * . * * . * . *" required formControlName="privateIPAddress"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.privateIPAddress.touched && addInfraForm.controls.privateIPAddress.invalid && addInfraForm.controls.privateIPAddress.errors.required">
+  Please Enter Private IPAddress
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('privateIPAddress').errors?.maxlength && this.addInfraForm.get('privateIPAddress').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('privateIPAddress').errors?.pattern && this.addInfraForm.get('privateIPAddress').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Infra Type : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Infra Type" formControlName="infraType" class="infra" style="width: 200px;">
+  <nz-option nzValue="P" nzLabel="Physical Server"></nz-option>
+  <nz-option nzValue="V" nzLabel="Virtual Server"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.infraType.touched && addInfraForm.controls.infraType.invalid && addInfraForm.controls.infraType.errors.required">
+  Please Choose Infra Type
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Contact EmailId : </label>
+  <input class="contactEmail" nz-input nzLabel="Contact Email Id" nzFor="email" placeholder="* * * * @gmail.com " required formControlName="contactEmailId"/>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.contactEmailId.touched && addInfraForm.controls.contactEmailId.invalid && addInfraForm.controls.contactEmailId.errors.required">
+  Please enter mailID
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('contactEmailId').errors?.maxlength && this.addInfraForm.get('contactEmailId').invalid">
+  <small class="text-danger">Only 40 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('contactEmailId').errors?.pattern && this.addInfraForm.get('contactEmailId').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Contact Name : </label>
+  <input class="contactName" nz-input nzLabel="Contact Name" placeholder="Contact Name " required formControlName="contactName"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.contactName.touched && addInfraForm.controls.contactName.invalid && addInfraForm.controls.contactName.errors.required">
+  Please Contact Name
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('contactName').errors?.maxlength && this.addInfraForm.get('contactName').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('contactName').errors?.pattern && this.addInfraForm.get('contactName').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Location : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Location" formControlName="location" class="location" style="width: 200px;">
+  <nz-option nzValue=" Onprem" nzLabel=" Onprem"></nz-option>
+  <nz-option nzValue="AWS" nzLabel="AWS"></nz-option>
+  <nz-option nzValue="Azure" nzLabel="Azure"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.location.touched && addInfraForm.controls.location.invalid && addInfraForm.controls.location.errors.required">
+  Please Choose Location
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Name : </label>
+  <input class="name" nz-input nzLabel="Name" placeholder="Name" required formControlName="name"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.name.touched && addInfraForm.controls.name.invalid && addInfraForm.controls.name.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('name').errors?.maxlength && this.addInfraForm.get('name').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('name').errors?.pattern && this.addInfraForm.get('name').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+  </nz-form-item>
+  </div>
+</div>
+  <!-- <div class="col-8"> -->
+  <nz-form-item>
+  <label Required>Description : </label>
+  <textarea rows="3" class="description" nz-input nzLabel="Description" placeholder="Description" required formControlName="description"></textarea>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.description.touched && addInfraForm.controls.description.invalid && addInfraForm.controls.description.errors.required">
+  Write Description
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('description').errors?.maxlength && this.addInfraForm.get('description').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.addInfraForm.get('description').errors?.pattern && this.addInfraForm.get('description').invalid">
+  <small class="text-danger">Enter Only Characters and Numbers</small>
+  </div>
+  </nz-form-item>
+  <!-- </div> -->
+ 
+ 
+  <ng-template #modalFooter>
+  <button type="submit" nz-button nzType="primary" [disabled]="!addInfraForm.valid" (click)="newInfra()" ><i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+  <!-- POPUP FOR EDIT InfraStructure -->
+  <nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="isVisible1" nzTitle="Edit InfraStructure" (nzOnCancel)="cancel()" [nzFooter]="Footer1">
+  <form [formGroup]="editInfraForm" (ngSubmit)="modifyInfra()">
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Host Name : </label>
+  <input class="host" nz-input nzLabel="Host Name" placeholder="Host Name" required formControlName="hostName"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.hostName.touched && editInfraForm.controls.hostName.invalid && editInfraForm.controls.hostName.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('hostName').errors?.maxlength && this.editInfraForm.get('hostName').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('hostName').errors?.pattern && this.editInfraForm.get('hostName').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Operating System : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Operating System" formControlName="operatingSystem" class="opearting" style="width: 200px;">
+  <nz-option nzValue="L" nzLabel="Linux"></nz-option>
+  <nz-option nzValue="W" nzLabel="Windows"></nz-option>
+  <nz-option nzValue="M" nzLabel="Mac"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.operatingSystem.touched && editInfraForm.controls.operatingSystem.invalid && editInfraForm.controls.operatingSystem.errors.required">
+  Please Choose OS
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Environment : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Environment" formControlName="environment" class="environment" style="width: 200px;">
+  <nz-option nzValue="S" nzLabel="Staging"></nz-option>
+  <nz-option nzValue="D" nzLabel="Dev"></nz-option>
+  <nz-option nzValue="P" nzLabel="Prod"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.environment.touched && editInfraForm.controls.environment.invalid && editInfraForm.controls.environment.errors.required">
+  Please Choose Environment
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Public IPAddress : </label>
+  <input class="public" nz-input nzLabel="Public IPAddress" placeholder="* * * . * * . * . *" required formControlName="publicIPAddress"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.publicIPAddress.touched && editInfraForm.controls.publicIPAddress.invalid && editInfraForm.controls.publicIPAddress.errors.required">
+  Please Enter Public IPAddress
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('publicIPAddress').errors?.maxlength && this.editInfraForm.get('publicIPAddress').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('publicIPAddress').errors?.pattern && this.editInfraForm.get('publicIPAddress').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Private IPAddress : </label>
+  <input class="private" nz-input nzLabel="Private IPAddress" placeholder="* * * . * * . * . *" required formControlName="privateIPAddress"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.privateIPAddress.touched && editInfraForm.controls.privateIPAddress.invalid && editInfraForm.controls.privateIPAddress.errors.required">
+  Please Enter Private IPAddress
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('privateIPAddress').errors?.maxlength && this.editInfraForm.get('privateIPAddress').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('privateIPAddress').errors?.pattern && this.editInfraForm.get('privateIPAddress').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Infra Type : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Infra Type" formControlName="infraType" class="infra" style="width: 200px;">
+  <nz-option nzValue="P" nzLabel="Physical Server"></nz-option>
+  <nz-option nzValue="V" nzLabel="Virtual Server"></nz-option>
+ 
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.infraType.touched && editInfraForm.controls.infraType.invalid && editInfraForm.controls.infraType.errors.required">
+  Please Choose Infra Type
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Contact EmailId : </label>
+  <input class="contactEmail" nz-input nzLabel="Contact Email Id" nzFor="email" placeholder="* * * * @gmail.com " required formControlName="contactEmailId"/>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.contactEmailId.touched && editInfraForm.controls.contactEmailId.invalid && editInfraForm.controls.contactEmailId.errors.required">
+  Please enter mailID
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('contactEmailId').errors?.maxlength && this.editInfraForm.get('contactEmailId').invalid">
+  <small class="text-danger">Only 40 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('contactEmailId').errors?.pattern && this.editInfraForm.get('contactEmailId').invalid">
+  <small class="text-danger">Follow Given Pattern</small>
+  </div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Contact Name : </label>
+  <input class="contactName" nz-input nzLabel="Contact Name" placeholder="Contact Name " required formControlName="contactName"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.contactName.touched && editInfraForm.controls.contactName.invalid && editInfraForm.controls.contactName.errors.required">
+  Please Contact Name
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('contactName').errors?.maxlength && this.editInfraForm.get('contactName').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('contactName').errors?.pattern && this.editInfraForm.get('contactName').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+ 
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Location : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Location" formControlName="location" class="location" style="width: 200px;">
+  <nz-option nzValue=" Onprem" nzLabel=" Onprem"></nz-option>
+  <nz-option nzValue="AWS" nzLabel="AWS"></nz-option>
+  <nz-option nzValue="Azure" nzLabel="Azure"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.location.touched && editInfraForm.controls.location.invalid && editInfraForm.controls.location.errors.required">
+  Please Choose Location
+  </span>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Name : </label>
+  <input class="name" nz-input nzLabel="Name" placeholder="Name" required formControlName="name"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.name.touched && editInfraForm.controls.name.invalid && editInfraForm.controls.name.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('name').errors?.maxlength && this.editInfraForm.get('name').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('name').errors?.pattern && this.editInfraForm.get('name').invalid">
+  <small class="text-danger">Enter Only Characters</small>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <!-- <div class="row">
+  <div class="col-8"> -->
+  <nz-form-item>
+  <label Required>Description : </label>
+  <textarea  rows="3" class="description" nz-input nzLabel="Description" placeholder="Description" required formControlName="description"></textarea>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.description.touched && editInfraForm.controls.description.invalid && editInfraForm.controls.description.errors.required">
+  Write Description
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('description').errors?.maxlength && this.editInfraForm.get('description').invalid">
+  <small class="text-danger">Only 15 characters are allowed</small>
+  </div>
+  <div *ngIf="this.editInfraForm.get('description').errors?.pattern && this.editInfraForm.get('description').invalid">
+  <small class="text-danger">Enter Only Characters and Numbers</small>
+  </div>
+  </nz-form-item>
+  <!-- </div>
+ 
+  </div> -->
+  <ng-template #Footer1>
+  <nz-form-control>
+  <button type="submit" nz-button nzType="primary" [disabled]="!editInfraForm.valid" (click)="modifyInfra()"><i nz-icon
+    nzType="edit"></i>Update</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </nz-form-control>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+ 
+ 
+ <!------------------------------------------------------------------------------------------------------>
+ 

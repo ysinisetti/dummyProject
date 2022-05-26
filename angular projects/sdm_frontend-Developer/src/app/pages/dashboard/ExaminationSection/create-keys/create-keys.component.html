@@ -1,0 +1,190 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li>Key List</li>
+      </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <nz-tabset>
+        <!-- EXAM KEY SEARCH -->
+      <nz-tab nzTitle="Exam Key List">
+        <ng-template #titleTemplate>
+          Exam Key List
+        </ng-template>
+        <nz-collapse nzAccordion>
+          <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="searchForm">
+              <div class="row" id="fRow">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Practice</label>
+                  <nz-select nzAllowClear nzPlaceHolder="Practice"   formControlName="searchPractice"
+                   (ngModelChange)="getTopics($event)">
+                   <nz-option *ngFor="let option of practiceDropDown" [nzValue]="option.id" [nzLabel]="option.DomainName">
+                      </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Topic</label>
+                  <nz-select nzAllowClear nzPlaceHolder="Topic"  [nzDisabled]="dropdownDisabled"  formControlName="searchTopic"
+                   (ngModelChange)="getTopicId($event)">
+                    <nz-option *ngFor="let option of topicDropDown"  [nzValue]="option.id" [nzLabel]="option.TopicName">
+                    </nz-option>
+                  </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Start Date</label>
+                  <nz-date-picker nzPlaceHolder= "yyyy-MM-dd"
+                    formControlName="searchStartDate"></nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>End Date</label>
+                  <nz-date-picker nzPlaceHolder='End Date'  nzPlaceHolder= "yyyy-MM-dd"  [nzFormat]="'yyyy-MM-dd'"
+                    formControlName="searchEndDate" ></nz-date-picker>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <button class="reset" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon
+                      nzType="redo"></i>Reset</button>
+                  <button class="search" (click)="getKeysList()"  nz-button nzType="primary"><i nz-icon
+                        nzType="search"></i>Search</button>
+                </div>
+              </div>
+            </form>
+          </nz-collapse-panel>
+        </nz-collapse>
+        <br />
+        <!-- EXAM KEY LIST GRID -->
+        <div class="card" id="grid">
+          <div class="row">
+              <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                <label class="rec">No. of Records : {{records}}</label>
+              </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+                  </div>
+                </div>
+                <div class="card-body" id="gridBody">
+              <nz-table #basicTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+                nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages"  [nzPageSize]="pageSize"
+                [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+                (nzPageSizeChange)="onPageSizeChange($event)">
+                <thead>
+                  <tr>
+                    <th *ngFor="let column of listOfColumns"
+                         [nzWidth]="column.width">
+                    {{ column.name }}
+                     </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let data of listOfData ; let i = index ">
+                    <tr>
+                      <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                      <td>{{ data.vKey }}</td>
+                      <td>{{ data.topicName }}</td>
+                      <td>{{data.noOfQuestions}}</td>
+                      <td>{{data.duration }}</td>
+                      <td>{{ data.createdDate | date:'MMM d, yyyy' }}</td>
+                      <td>{{data.createdBy }}</td>
+                     </tr>
+                  </ng-container>
+                </tbody>
+              </nz-table>
+            </div>
+            </div>
+      </nz-tab>
+<!-- CREATE KEYS -->
+<nz-modal [(nzVisible)]="createKeysVisible" nzTitle="Create Keys"
+(nzOnCancel)="addCancel()" [nzFooter]="modalFooter">
+          <form [formGroup]="createKeysForm">
+              <div class="row" id="fRow">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                  <label>Practice<span class="validationtest">*</span></label>
+                  <nz-select nzAllowClear nzPlaceHolder="Practice" formControlName="practice"
+                  (ngModelChange)="addGetTopics($event)">
+                   <nz-option *ngFor="let option of practiceDropDown" [nzValue]="option.id" [nzLabel]="option.DomainName">
+                      </nz-option>
+                    </nz-select>
+                    <div
+                    *ngIf="this.createKeysForm.get('practice').errors?.required && this.createKeysForm.get('practice').touched">
+                    <span class="validationtest">Please Select Practice</span></div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                  <label>Topic<span class="validationtest">*</span></label>
+                  <nz-select nzAllowClear nzPlaceHolder="Topic"  formControlName="topic"
+                  [nzDisabled]="adddropdownDisabled" (ngModelChange)="addgetTopicId($event)">
+                    <nz-option *ngFor="let option of topicDropDown" [nzValue]="option.id" [nzLabel]="option.TopicName">
+                    </nz-option>
+                  </nz-select>
+                  <div
+                  *ngIf="this.createKeysForm.get('topic').errors?.required && this.createKeysForm.get('topic').touched">
+                  <span class="validationtest">Please Select Topic</span></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                  <label>No Of Questions</label>
+                  <input nz-input placeholder="No. of questions"  formControlName="questions"  />
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                  <label>Duration(Mins)</label>
+                  <input nz-input placeholder="Duration"  formControlName="duration"  />
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <label>Min Marks</label>
+                      <input nz-input placeholder="Min Marks"  formControlName="minMarks"  />
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <label>No Of Keys</label>
+                      <input nz-input placeholder="No Of Keys"  formControlName="keys"  />
+                    </div>
+              </div>
+              <ng-template #modalFooter>
+                  <button nz-button  nzType="primary" class="cancel" (click)="addCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+                  <button nz-button nzType="primary"  class="save" [disabled] = "btnDisabled" (click)="saveCreateKeys()"> <i nz-icon nzType="save"></i>Save</button>
+                </ng-template>
+              </form>
+            </nz-modal>
+
+<!-- generate keys report -->
+<nz-tab nzTitle="Generate Keys Report">
+  <ng-template #titleTemplate>
+ Generate Keys Report
+  </ng-template>
+  <form [formGroup]="KeysReportForm">
+      <div class="row" id="fRow">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Practice</label>
+          <nz-select nzAllowClear nzPlaceHolder="Practice"  formControlName="reportPractice"
+          (ngModelChange)="reportgetTopics($event)">
+           <nz-option *ngFor="let option of practiceDropDown" [nzValue]="option.id" [nzLabel]="option.DomainName">
+              </nz-option>
+            </nz-select>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Topic</label>
+          <nz-select nzAllowClear nzPlaceHolder="Topic"  formControlName="reportTopic"
+          [nzDisabled]="reportdropdownDisabled" (ngModelChange)="reportgetTopicId($event)">
+            <nz-option *ngFor="let option of topicDropDown" [nzValue]="option.id" [nzLabel]="option.TopicName">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"></div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <button  class="report"nzEllipsis nzTooltipTitle="Generate Excel" nz-tooltip nz-button
+         (click)="generateExcels()" nzType="primary"> <i nz-icon nzType="file-excel" nzTheme="outline"></i> Generate</button>
+        </div>
+      </div>
+    </form>
+</nz-tab>
+</nz-tabset>
+</div>
+</div>
+

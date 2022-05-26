@@ -1,0 +1,225 @@
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li><a (click)="details()">{{ProjectName}}</a></li>
+    <li>Issues</li>
+  </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <li class="btn2">Customer Name :<b class="cName">{{customerName}}</b></li>
+  </div>
+</ul>
+
+
+<nz-tabset>
+  <nz-tab nzTitle="Search">
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel class="header" [nzHeader]="header" [nzActive]="false">
+        <form [formGroup]="searchForm">
+          <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Title</label>
+              <input nz-input placeholder="Title" name="sTitle" formControlName="sTitle" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Status</label>
+              <nz-select nzAllowClear nzPlaceHolder="Status" formControlName='sStatus'>
+                <nz-option *ngFor="let option of status" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Priority</label>
+              <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName="sPriority">
+                <nz-option *ngFor="let option of priority" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Assigned To</label>
+              <input nz-input placeholder="Assigned To" name="sAssignedTo" formControlName="sAssignedTo" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Created By</label>
+              <input nz-input placeholder="Requested By" name="sRequestedBy" formControlName="sRequestedBy" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Start Date</label>
+              <nz-date-picker nzPlaceHolder='Start Date' name="sStartDate" formControlName="sStartDate">
+              </nz-date-picker>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>End Date</label>
+              <nz-date-picker nzPlaceHolder='End Date' name="sEndDate" formControlName="sEndDate"></nz-date-picker>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <button class="btnClass" style="float: right;" nz-button nzType="primary" (click)="reset()"><i nz-icon
+                  nzType="redo"></i>Reset</button>
+              <button class="btnClass" nz-button nzType="primary" (click)="getBySearch()"><i nz-icon
+                  nzType="search"></i>Search</button>
+            </div><br>
+          </div>
+        </form>
+
+      </nz-collapse-panel>
+    </nz-collapse><br>
+    <div class="card"><br>
+      <div class="card-body">
+        <br>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+
+              <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <h6>Number of Records : {{records}}</h6>
+              </div>
+              <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                <button style="width: 100px;margin-top:-49px;float: right;" (click)="addUpdateScreen()" nz-button
+                  nzType="primary"><i nz-icon nzType="plus"></i>Add</button>&nbsp;
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+
+            <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="allIssues" nzTableLayout="fixed"
+              [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+              [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+              (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <thead>
+                <tr>
+                  <th nzWidth=3%>Ticket Id</th>
+                  <th nzWidth=6%>Title</th>
+                  <th nzWidth=6%>Status</th>
+                  <th nzWidth=6%>Priority</th>
+                  <th nzWidth=6%>Created By</th>
+                  <th nzWidth=4%>Assigned To</th>
+                  <th nzWidth=6%>Created Date</th>
+                  <th nzWidth=3%>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data ">
+                  <td>{{data.id}}</td>
+                  <td>{{data.title}}</td>
+                  <td>{{tStatus[data.uxStatus]}}</td>
+                  <td>{{tPriority[data.uxPriority]}}</td>
+                  <td>{{data.createdBy}}</td>
+                  <td>{{data.assignedTo}}</td>
+                  <td>{{data.createdDate | date:'MM-dd-yyyy' }}</td>
+                  <td>
+                    <i nz-icon nzType="edit" nzTheme="fill" (click)="editIssue(data.id)">
+                    </i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)">
+                      <i nz-icon nzTheme="fill" nzType="delete"></i>
+
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <h6>No. of Records : {{records}}</h6>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-tab>
+  <nz-tab nzTitle="Dashboard">
+    <h4>Issue Management Dashboard</h4>
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData" [labels]="pieChartLabel"
+                [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData1" [labels]="pieChartLabel1"
+                [chartType]="pieChartType" [options]="pieChartOptions1" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData2" [labels]="pieChartLabel2"
+                [chartType]="pieChartType" [options]="pieChartOptions2" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData3" [labels]="pieChartLabel3"
+                [chartType]="pieChartType" [options]="pieChartOptions3" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData4" [labels]="pieChartLabel4"
+                [chartType]="pieChartType" [options]="pieChartOptions4" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData5" [labels]="pieChartLabel5"
+                [chartType]="pieChartType" [options]="pieChartOptions5" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart">
+
+              <canvas baseChart height="300" width="500" [data]="pieChartData6" [labels]="pieChartLabel6"
+                [chartType]="pieChartType" [options]="pieChartOptions6" [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend"></canvas>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+
+
+            <div class="chart-wrapper" style="float: left; padding: 7px;">
+              <canvas baseChart height="250" width="300" [datasets]="barChartData" [labels]="barChartLabels"
+                [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                [chartType]="barChartType">
+              </canvas>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="chart-wrapper" style="float: left; padding: 7px;">
+              <canvas baseChart height="250" width="300" [datasets]="lineChartData" [labels]="lineChartLabels"
+                [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nz-tab>
+</nz-tabset>

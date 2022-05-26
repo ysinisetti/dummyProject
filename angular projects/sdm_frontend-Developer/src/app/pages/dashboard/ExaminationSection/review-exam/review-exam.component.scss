@@ -1,0 +1,195 @@
+
+
+  .reco
+  {
+    margin-top: 7px;
+    margin-left: 24px;
+    margin-bottom: 21px;
+}
+.btn {
+  margin-top: 37px;
+  float: right;
+  margin-right: 2px;
+  margin-bottom: 3px;
+  }
+
+ul.breadcrumb {
+  margin-top: -21px;
+  padding: 1px 0px;
+  list-style: none;
+  background-color: #eee;
+  margin-top: -26px;
+}
+
+ul.breadcrumb li {
+  display: inline;
+  font-size: 14px;
+}
+
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: none;
+}
+.questions{
+  margin-left: 47px;
+}
+.answers{
+  margin-left: 5px;
+}
+
+.pre{
+    margin-left: 110px;
+}
+
+.next{
+    margin-left:40px;
+}
+.reset {
+    margin-left: 55px;
+        }
+        .radiusBtn{
+          margin-top: 25px;
+          margin-left: 13px;
+        }
+
+        .styleRadius{
+
+          margin-right: 14px;
+          margin-bottom: 15px;
+          padding: 9px 11px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          border-radius: 50%;
+          width: 46px;
+
+
+        }
+
+
+        .canAns{
+            margin-left: 48px;
+        margin-top: -21px;
+        }
+  .backBtn{
+    margin-left: 34px;
+  }
+  .qut{
+    margin-left: 30px;
+    margin-bottom: 9px;
+    margin-top: 9px;
+  }
+.page{
+  margin-left: 32px;
+}
+
+.radio1:hover {
+  background-color: #00aae7;
+}
+
+
+
+    @media (min-width: 300px) and (max-width: 500px) {
+
+
+.pre{
+  width: 88%;
+  margin-left: 18px;
+  margin-bottom: 10px;
+}
+.btn {
+  width: 100%;
+  float: right;
+  margin-top: 8px;
+}
+.next{
+  width: 88%;
+  margin-left: 18px;
+}
+.backBtn{
+  width: 88%;
+  margin-left: 18px;
+  margin-bottom: 10px;
+}
+.reset {
+  width: 100%;
+  margin-left: 2px;
+  margin-bottom: -13px;
+
+      }
+      .search{
+        width: 100%;
+        margin-left: 2px;
+        margin-bottom: 10px;
+
+
+      }
+      .reco
+      {
+        margin-top: 7px;
+        margin-left: 15px;
+        margin-bottom: 21px;
+    }
+    .questions{
+      margin-left: 1px;
+    }
+    .qut[_ngcontent-eae-c503] {
+      margin-left: -10px;
+      margin-bottom: 9px;
+      margin-top: 9px;
+  }
+
+    label[_ngcontent-hgr-c503] {
+      margin-top: -2px;
+      margin-left: -73px;
+      font-family: "Open Sans", sans-serif;
+  }
+
+
+    .cardQuestion{
+
+      margin-left: 19px;
+      margin-right: 19px;
+      margin-top: 18px;
+      margin-bottom: 3px;
+    }
+
+  .cardOptions{
+    margin-left: 19px;
+    margin-right: 19px;
+    margin-top: 18px;
+    margin-bottom: 3px;
+  }
+  .answers{
+    margin-left: 0px;
+  }
+  .card {
+    margin-bottom: 2rem;
+    background: #fff;
+    padding: 0px 20px;
+    margin-left: 1px;
+}
+    }
+
+
+
+    .questionColor{
+      background-color:#18a52b;
+    }
+
+
+
+
+
+

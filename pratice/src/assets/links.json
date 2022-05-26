@@ -1,0 +1,39 @@
+[
+    {
+        "Sno": 1,
+        "name": "Food&accomdation",
+        "link": "https://drive.google.com/file/d/1uG225Mgmtf2MqXKq6AB9oIVq7V-_uypq/view",
+        "createdOn":"29-09-2020",
+        "status":"Active"
+    },
+    {
+        "Sno": 2,
+        "name": "Register for Data and AI",
+        "link": "http://event.on24.com/wcc/r/2300454/A43D15559D896395249EF74C6D270B12?partnerref=cognos",
+        "createdOn":"29-09-2020",
+        "status":"Active"
+    },
+    {
+        "Sno": 3,
+        "name": "Register for Continous Testing with AWS",
+        "link": "https://www.miraclesoft.com/library/CaseStudy/enhanced-application-development-global-manufacturer.php",
+        "createdOn":"29-09-2020",
+        "status":"Active"
+    },
+    {
+        "Sno": 4,
+        "name": "Register for AWS Reinvent",
+        "link": "https://reinvent.awsevents.com/",
+        "createdOn":"29-09-2020",
+        "status":"Active"
+
+    },
+    {
+        "Sno": 5,
+        "name": "Register for AI SUMMIT",
+        "link": "https://www.miraclesoft.com/library/CaseStudy/enhanced-application-development-global-manufacturer.php",
+        "createdOn":"29-09-2020"  ,
+        "status":"Active"
+    }
+    
+]

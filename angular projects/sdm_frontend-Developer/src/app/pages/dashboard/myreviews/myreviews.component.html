@@ -1,0 +1,255 @@
+<!-- Bread Crumb -->
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="dashboard()">Home</a></li>
+      <li>My Reviews</li>
+    </ul>
+  </div>
+</div>
+
+<form [formGroup]="rating">
+  <nz-card>
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12 image">
+        <nz-avatar nzIcon="user" [nzShape]="'circle'" [nzSize]="'large'" class="avatar" [nzSrc]="Image"></nz-avatar>
+      </div>
+    </div> <br>
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+        <label class="heading1"> {{Name}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <label nzRequired><b>Role Played : </b> <a class="roleplay">{{role[Role]}}</a></label>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <label nzRequired><b>Project Type : </b>{{projectType}}</label>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <label nzRequired><b>Scope : </b><a class="scope"> {{scope}} </a></label>
+      </div>
+    </div>
+  </nz-card>
+
+  <!------------------------ Overall Ratings ----------------------------------->
+  <nz-card class="card2">
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+        <label class="heading">Over All Ratings <nz-rate class="overall" formControlName="ratingsoverall" nzDisabled>
+          </nz-rate> {{overAllRatingValue}}.0
+          </label>
+        <div class="row">
+          <div class="side">
+            <div class="label1">Technical</div>
+          </div>
+          <div class="middle">
+            <div>
+              <div>
+                <nz-progress nz-popover [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"
+                  nzPopoverTitle="Technical Rating" [nzPopoverContent]="technicalTemplate" nzPopoverPlacement="bottom"
+                  [nzPercent]="technic"></nz-progress>
+              </div>
+            </div>
+          </div>
+          <div class="side right">
+          </div>
+          <div class="side">
+            <div class="label1">Analytical</div>
+          </div>
+          <div class="middle">
+            <div>
+              <div>
+                <nz-progress nz-popover nzPopoverTitle="Analytical Rating"
+                  [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"
+                  [nzPopoverContent]="analyticalTemplate" nzPopoverPlacement="bottom" [nzPercent]="analytic"></nz-progress>
+              </div>
+            </div>
+          </div>
+          <div class="side right">
+          </div>
+          <div class="side">
+            <div class="label1">Communication</div>
+          </div>
+          <div class="middle">
+            <div>
+              <nz-progress nz-popover nzPopoverTitle="Communication Rating"
+                [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"
+                [nzPopoverContent]="communicationTemplate" nzPopoverPlacement="bottom" [nzPercent]="communicate"></nz-progress>
+            </div>
+          </div>
+          <div class="side right">
+          </div>
+          <div class="side">
+            <div class="label1">Documentation</div>
+          </div>
+          <div class="middle">
+            <div>
+              <nz-progress nz-popover nzPopoverTitle="Documentation Rating"
+                [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"
+                [nzPopoverContent]="documentationTemplate" nzPopoverPlacement="bottom" [nzPercent]="document"></nz-progress>
+            </div>
+          </div>
+          <div class="side right">
+          </div>
+          <div class="side">
+            <div class="label1">Testing</div>
+          </div>
+          <div class="middle">
+            <div>
+              <nz-progress nz-popover nzPopoverTitle="Testing Rating"
+                [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"
+                [nzPopoverContent]="testingTemplate" nzPopoverPlacement="bottom" [nzPercent]="test"></nz-progress>
+            </div>
+          </div>
+          <div class="side right">
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <label class="heading">Ratings Trend</label>
+        <canvas baseChart height="320" width="600" [datasets]="lineChartData" [labels]="lineChartLabels"
+          [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType">
+        </canvas>
+      </div>
+    </div>
+  </nz-card>
+
+  <!---------------------------- individual Rating ----------------------------------->
+  <nz-collapse class="card2" nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <div *ngFor="let data of individualRating">
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="reviewer">Reviewer : </b>{{data.reviewer}}</label>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="reviewerrole">Reviewer Role : </b>{{data.reviewerRole}} </label>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="date">Date of Review : </b> {{data.dateOfReview}}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+            <label><b>Ratings</b></label></div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label> <b>Average Ratings : </b></label>
+            <nz-rate class="rate" nzDisabled [ngModel]="data.averageRatings" [ngModelOptions]="{standalone: true}">
+            </nz-rate>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Technical : </label>
+            <nz-rate nzDisabled class="rate1" [ngModel]="data.technical" [ngModelOptions]="{standalone: true}">
+            </nz-rate>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Communication : </label>
+            <nz-rate class="rate2" [ngModel]="data.communication" [ngModelOptions]="{standalone: true}" nzDisabled>
+            </nz-rate>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Documentation : </label>
+            <nz-rate class="rate3" [ngModel]="data.documentation" [ngModelOptions]="{standalone: true}" nzDisabled>
+            </nz-rate>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Analytical : </label>
+            <nz-rate class="rate4" [ngModel]="data.analytical" [ngModelOptions]="{standalone: true}" nzDisabled>
+            </nz-rate>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label>Testing :</label>
+            <nz-rate class="rate5" [ngModel]="data.testing" [ngModelOptions]="{standalone: true}" nzDisabled></nz-rate>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="focus">Focus Areas To Improve : </b>{{data.focusAreasToImprove}} </label>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="strength">Strengths : </b>{{data.strengths}}</label>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="growth">Growth Areas : </b>{{data.growthAreas}}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="context">Context : </b> {{data.context}}</label>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <label nzRequired><b class="outcome">Outcome : </b> {{data.outcome}} </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <label nzRequired nzFor="name"><b class="comment">Comments : </b>{{data.comments}}</label>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+</form>
+
+<ng-template #technicalTemplate>
+  <div class="row"  *ngFor="let tech of technical">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> {{tech.technical}}</div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <p>
+        <nz-progress [nzFormat]="formatOne" [nzStrokeColor]="{ '50%': '#108ee9', '0%': '#2db7f5', '100%': '#87d068' }"
+          [nzPercent]="tech.count"></nz-progress>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #analyticalTemplate>
+  <div class="row"  *ngFor="let tech of analytical">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> {{tech.analytical}}</div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <p>
+        <nz-progress [nzFormat]="formatOne" [nzStrokeColor]="{ '50%': '#108ee9', '0%': '#2db7f5', '100%': '#87d068' }"
+          [nzPercent]="tech.count"></nz-progress>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #communicationTemplate>
+  <div class="row"  *ngFor="let tech of communication">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> {{tech.communication}}</div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <p>
+        <nz-progress [nzFormat]="formatOne" [nzStrokeColor]="{ '50%': '#108ee9', '0%': '#2db7f5', '100%': '#87d068' }"
+          [nzPercent]="tech.count"></nz-progress>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #documentationTemplate>
+  <div class="row"  *ngFor="let tech of documentation">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> {{tech.documentation}}</div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <p>
+        <nz-progress [nzFormat]="formatOne" [nzStrokeColor]="{ '50%': '#108ee9', '0%': '#2db7f5', '100%': '#87d068' }"
+          [nzPercent]="tech.count"></nz-progress>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #testingTemplate>
+  <div class="row"  *ngFor="let tech of testing">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> {{tech.testing}}</div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <p>
+        <nz-progress [nzFormat]="formatOne" [nzStrokeColor]="{ '50%': '#108ee9', '0%': '#2db7f5', '100%': '#87d068' }"
+          [nzPercent]="tech.count"></nz-progress>
+      </p>
+    </div>
+  </div>
+</ng-template>

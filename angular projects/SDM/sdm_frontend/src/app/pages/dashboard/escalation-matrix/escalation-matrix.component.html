@@ -1,0 +1,355 @@
+<nz-breadcrumb>
+    <div>
+     <a  (click)="details()"><p class="title" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+   </div>
+     <!-- <nz-breadcrumb-item>
+      <p class= "bread">Escalation</p>
+     </nz-breadcrumb-item> -->
+   </nz-breadcrumb>
+   <nz-breadcrumb>
+    <nz-breadcrumb-item>
+     <p class= "bread">Escalation Matrix</p>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <div class="card">
+    <div class="card-body">
+        <div class="row">
+           <div class="col-12">
+                <div class="card" style="margin-top: 25px;">
+                      <nz-table nzShowSizeChanger nzShowPagination #basicTable nzBordered class="tablescroll" [nzData]="tableData"
+                         (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                              <thead>
+
+                                <tr>
+                                 <th style="background-color:rgb(182, 229, 248) !important;color: black !important;">Matrix</th>
+                                 <th style="background-color: #7ac8ec !important;color: white">Project Team Lead</th>
+                                 <th style="background-color: #439ec9 !important;color: white">Project Manager</th>
+                                 <th style="background-color: #357fa1 !important;color: white">Account Manager</th>
+                                 <th style="background-color: #386980 !important;color: white">Sales Manager</th>
+                                 <th style="background-color: #244f64 !important;color: white">Project Sponser</th>
+                                 <th style="background-color: #164561 !important;color: white">Executive Level</th>
+                                 <th style="background-color: #0d3349 !important;color: white">Action</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                                 <tr *ngFor="let data of tableData">
+                                   
+                                 <td style="background-color:rgb(182, 229, 248);color: #080808;"><b>{{ data.department }}</b>
+                                 </td>
+                                 <td>
+                                     <a nzType="primary" (click)="goToProjectTeamLead(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{ data.ProjectTeamLead[0].contactid === null ? "Not available" : data.ProjectTeamLead[0].contactid }}
+                                     </a>
+                                 </td>
+                                   <td>
+                                     <a nzType="primary"  (click)="goToProjectManager(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{ data.ProjectManager[0].contactid === null ? "Not available" : data.ProjectManager[0].contactid  }}
+                                     </a>
+                                 </td>
+                                 <td>
+                                     <a nzType="primary" (click)="goToAccountManager(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{ data.AccountManager[0].contactid === null ? "Not available" : data.AccountManager[0].contactid }}
+                                     </a>
+                                 </td>
+                                 <td>
+                                     <a nzType="primary" (click)="goToSalesManager(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{  data.SalesManager[0].contactid === null  ? "Not available" : data.SalesManager[0].contactid }}
+                                     </a>
+                                 </td>
+                                 <td>
+                                     <a nzType="primary" (click)="goToProjectSponser(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{ data.ProjectSponser[0].contactid === null  ? "Not available" : data.ProjectSponser[0].contactid  }}
+                                     </a>
+                                 </td>
+                                 <td>
+                                     <a nzType="primary"  (click)="goToExecutiveLevel(data)">
+                                         <!-- <span>Jyothsna Duvvuri</span> -->
+                                         {{ data.ExecutiveLevel[0].contactid === null ? "Not available" : data.ExecutiveLevel[0].contactid }}
+                                     </a>
+                                 </td>
+                                 <td><i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)">
+                                </i></td>
+          
+                                
+                             </tr>
+                         </tbody>
+                     </nz-table>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <nz-modal nzWidth="40%" nzHeight="40%"  [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+     (nzOnCancel)="handleCancel()">
+     <ng-template #modalTitle>
+         How Would You Like To Send Notification?
+       </ng-template>
+     <ng-template #modalContent>
+         <form [formGroup]="optionForm">
+             <div class="row" *ngIf="hideRadioBtns">
+                 <div>
+
+                     <nz-radio-group style="margin-top: 30px;" formControlName='radioData'>
+                         <label nz-radio nzValue="Sms">SMS</label><br><br>
+                         <label nz-radio nzValue="Email">Email</label>
+                     </nz-radio-group>
+                 </div>
+             </div>
+
+         </form>
+     </ng-template>
+     <ng-template #modalFooter>
+
+         <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+         <button nz-button nzType="primary" (click)="handleOk()" (click)='sendData()'
+             [nzLoading]="isConfirmLoading">Ok</button>
+     </ng-template>
+ </nz-modal>
+
+
+
+
+
+
+ <nz-modal nzWidth="60%" nzHeight="40%"  [nzStyle]="{ top: '20px' }" [(nzVisible)]="isVisibleTop" nzTitle="Send Your Notification Through SMS" [nzContent]="topModalContent" [nzFooter]="modalFooterr"
+     (nzOnCancel)="handleCancelTop()" (nzOnOk)="handleOkTop()">
+     <ng-template #topModalContent>
+         <form [formGroup]="optionForm">
+             <div class="row">
+             <div class="col-6">
+                 <label nzRequired nzFor="Name">Name:</label>&nbsp;
+                 <input class= "name" nz-input placeholder="Enter name" formControlName='Name'/>
+                 <div>
+                     <span class="validationtest"
+                         *ngIf="optionForm.controls.Name.touched && optionForm.controls.Name.invalid && optionForm.controls.Name.errors.required">
+                         Please Enter Name
+                     </span>
+                 </div>
+             </div>
+
+
+             <div class="col-6">
+                 <label nzRequired nzFor="Name">Phone Number:</label>&nbsp;
+                 <input  class= "name" nz-input placeholder="Enter phone number" formControlName='phone' />
+                 <div>
+                     <span class="validationtest"
+                         *ngIf="optionForm.controls.phone.touched && optionForm.controls.phone.invalid && optionForm.controls.phone.errors.required">
+                         Please Enter Phone Number
+                     </span>
+                 </div>
+             </div>
+         </div>
+             <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+                 <label  class= "namem" nzRequired nzFor="name">Message :</label>
+                 <textarea formControlName="message" nz-input rows="3" placeholder="Enter the text"></textarea>
+
+                 <span class="validationtest"
+                     *ngIf="optionForm.controls.message.touched && optionForm.controls.message.invalid && optionForm.controls.message.errors.required">
+                     Enter Message
+                 </span>
+
+             </div>
+         </form>
+     </ng-template>
+
+     <ng-template #modalFooterr>
+
+         <button nz-button nzType="default" (click)="handleCancelTop()">Cancel</button>
+         <button nz-button nzType="primary" (click)="handleOkTop()" (click)='sendData()'
+             [nzLoading]="isConfirmLoading">Send</button>
+     </ng-template>
+
+ </nz-modal>
+
+
+
+
+ <nz-modal  nzWidth="55%" nzHeight="40%" nzWrapClassName="vertical-center-modal" [(nzVisible)]="isVisibleMiddle"
+     nzTitle="Send Your Notification Through Email" [nzContent]="middleModalContent" (nzOnCancel)="handleCancelMiddle()" [nzFooter]="modalFooterrr">
+
+     <!-- (nzOnOk)="handleOkMiddle()"> -->
+     <ng-template #middleModalContent>
+         <form [formGroup]="optionForm">
+             <div class="row">
+             <div class="col-6">
+                 <label nzRequired nzFor="Name">Name :</label>&nbsp;
+                 <input class="name1" nz-input placeholder="Enter name" formControlName='Name' />
+                 <div>
+                     <span class="validationtest"
+                         *ngIf="optionForm.controls.Name.touched && optionForm.controls.Name.invalid && optionForm.controls.Name.errors.required">
+                         Please Enter Name
+                     </span>
+                 </div>
+             </div>
+             <div class="col-6">
+                 <label nzRequired nzFor="email">Email :</label>&nbsp;
+                 <input class="name2" nz-input placeholder="Enter email address" formControlName='email' />
+                 <div>
+                     <span class="validationtest"
+                         *ngIf="optionForm.controls.email.touched && optionForm.controls.email.invalid && optionForm.controls.email.errors.required">
+                         Please Enter Email
+                     </span>
+                 </div> <br>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-6">
+                 <label nzRequired nzFor="name">Subject : </label>&nbsp;
+                 <input class="name4" nz-input placeholder="Subject" formControlName='subject' />
+                 <div>
+                 </div>
+             </div>
+
+             <div class="col-6">
+                 <label>Attachment :</label>&nbsp;
+                 <nz-upload nzAction="https://jsonplaceholder.typicode.com/posts/">
+                     <i nz-icon nzType="upload"></i>
+                 </nz-upload>
+             </div>
+         </div><br>
+             <div class="col-12">
+                 <label class="namee" nzRequired nzFor="name">Body :</label>
+                 <textarea formControlName="message" nz-input rows="4" placeholder="Enter the text"></textarea>
+
+                 <span class="validationtest"
+                     *ngIf="optionForm.controls.message.touched && optionForm.controls.message.invalid && optionForm.controls.message.errors.required">
+                     Enter Message
+                 </span>
+
+             </div>
+         </form>
+     </ng-template>
+     <ng-template #modalFooterrr>
+
+         <button nz-button nzType="default" (click)="handleCancelMiddle()">Cancel</button>
+         <button nz-button nzType="primary" (click)=" handleOkMiddle()" (click)='sendData()'
+             [nzLoading]="isConfirmLoading">Send</button>
+     </ng-template>
+
+
+ </nz-modal>
+
+
+
+
+ <nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="isVisible1" nzTitle="Edit An Issue" (nzOnCancel)="handleCancel()"
+  [nzFooter]="modalFooterr1">
+  <form [formGroup]="editTable">
+      <div class="row">
+          <div class="col-4">
+            <nz-form-item>
+                <label Required>Project Team Lead : </label>&nbsp;&nbsp;
+                <input class="PTL" nz-input nzLabel="Task Name" placeholder="Issue Title" required
+                    name="taskName1" formControlName="PTL" />
+                <div>
+                    <small class="validationtest"
+                        *ngIf="editTable.controls.PTL.touched && editTable.controls.PTL.invalid && editTable.controls.PTL.errors.required">
+                        Please enter name
+                    </small>
+                </div>
+                <div *ngIf="this.editTable.get('PTL').errors?.pattern && this.editTable.get('PTL').invalid">
+                    <small class="text-danger">Only Alphabets Are Allowed</small></div>
+            </nz-form-item>
+          </div>
+          <div class="col-4">
+              <nz-form-item>
+                  <label Required>Project Manager : </label>&nbsp;&nbsp;
+                  <input class="PM" nz-input nzLabel="Task Name" placeholder="Issue Title" required
+                      name="taskName1" formControlName="PM" />
+                  <div>
+                      <small class="validationtest"
+                          *ngIf="editTable.controls.PM.touched && editTable.controls.PM.invalid && editTable.controls.PM.errors.required">
+                          Please enter name
+                      </small>
+                  </div>
+                  <div *ngIf="this.editTable.get('PM').errors?.pattern && this.editTable.get('PM').invalid">
+                      <small class="text-danger">Only Alphabets Are Allowed</small></div>
+              </nz-form-item>
+          </div>
+     
+          <div class="col-4">
+
+            <nz-form-item>
+                <label Required>Account Manager : </label>&nbsp;&nbsp;
+                <input class="AM" nz-input nzLabel="Task Name" placeholder="Issue Title" required
+                    name="taskName1" formControlName="AM" />
+                <div>
+                    <small class="validationtest"
+                        *ngIf="editTable.controls.AM.touched && editTable.controls.AM.invalid && editTable.controls.AM.errors.required">
+                        Please enter name
+                    </small>
+                </div>
+                <div *ngIf="this.editTable.get('AM').errors?.pattern && this.editTable.get('AM').invalid">
+                    <small class="text-danger">Only Alphabets Are Allowed</small></div>
+            </nz-form-item>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-4">
+              <nz-form-item>
+                  <label Required>Sales Manager : </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input class="SM" nz-input nzLabel="Task Name" placeholder="Assigned To" required
+                      name="taskName1" formControlName="SM" />
+                  <div>
+                      <small class="validationtest"
+                          *ngIf="editTable.controls.SM.touched && editTable.controls.SM.invalid && editTable.controls.SM.errors.required">
+                          Please enter name
+                      </small>
+                  </div>
+                  <div
+                      *ngIf="this.editTable.get('SM').errors?.pattern && this.editTable.get('SM').invalid">
+                      <small class="text-danger">Only Alphabets Are Allowed</small></div>
+              </nz-form-item>
+         
+
+          </div>
+
+     <div class="col-4">
+        <nz-form-item>
+            <label Required>Project Sponser : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input class="PS" nz-input nzLabel="Task Name" placeholder="Issue Title" required
+                name="taskName1" formControlName="PS" />
+            <div>
+                <small class="validationtest"
+                    *ngIf="editTable.controls.PS.touched && editTable.controls.PS.invalid && editTable.controls.PS.errors.required">
+                    Please enter name
+                </small>
+            </div>
+            <div *ngIf="this.editTable.get('PS').errors?.pattern && this.editTable.get('PS').invalid">
+                <small class="text-danger">Only Alphabets Are Allowed</small></div>
+        </nz-form-item>
+
+          </div>
+          <div class="col-4">
+            <nz-form-item>
+                <label Required>Executive Level : </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="EL" nz-input nzLabel="Task Name" placeholder="Issue Title" required
+                    name="taskName1" formControlName="EL" />
+                <div>
+                    <small class="validationtest"
+                        *ngIf="editTable.controls.EL.touched && editTable.controls.EL.invalid && editTable.controls.EL.errors.required">
+                        Please enter name
+                    </small>
+                </div>
+                <div *ngIf="this.editTable.get('EL').errors?.pattern && this.editTable.get('EL').invalid">
+                    <small class="text-danger">Only Alphabets Are Allowed</small></div>
+            </nz-form-item>
+        </div>
+   
+    </div>
+
+
+      <ng-template #modalFooterr1>
+          <button nz-button nzType="primary" (click)="updateTask()">Save</button>
+          <button nz-button nzType="primary" (click)="handleCancel()">Cancel</button>
+      </ng-template>
+  </form>
+</nz-modal>
+
+

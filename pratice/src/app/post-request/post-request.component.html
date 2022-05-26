@@ -1,0 +1,92 @@
+<div class="width">
+    <div class="one"></div>
+    <div class="two">
+        <mat-toolbar color="primary" class="toolBar">{{Title}}</mat-toolbar>
+        <p class="cardSpace">
+            <mat-expansion-panel class="panel">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <b>Search</b>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <form [formGroup]="searchApprovePost" fxLayoutAlign="stretch" fxLayout="column" class="form">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="userName"> Title </mat-label>
+                            <input matInput id="userName" autocomplete="off" type="text"
+                                placeholder="Search by FirstName / Title" formControlName="title" maxlength="20">
+                            <mat-error *ngIf="searchApprovePost.get('title').errors?.minlength">Title must have 3
+                                characters</mat-error>
+                            <mat-error *ngIf="searchApprovePost.get('title').errors?.pattern">Please enter valid Title
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="name" appearance="outline">
+                            <mat-label for="firstName"> First Name </mat-label>
+                            <input matInput id="firstName" autocomplete="off" type="text" placeholder="First Name "
+                                formControlName="firstName" maxlength=20>
+                            <mat-error *ngIf="searchApprovePost.get('firstName').errors?.minlength">First Name Must have
+                                atleast 3 characters</mat-error>
+                            <mat-error *ngIf="searchApprovePost.get('firstName').errors?.pattern"> First Name should be
+                                Alphabets format
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </form>
+
+                <button mat-raised-button color="primary" (click)="search()" matTooltip="Do u want to submit post"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    style="float:right;width:80px;margin:10px;margin-right: 20px;">Submit</button>
+                <button mat-raised-button color="primary" (click)="reset()" matTooltip="Do u want to submit post"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    style="float:right;width:80px;margin:10px;margin-right: 20px;">reset</button>
+
+            </mat-expansion-panel>
+            <mat-card class="example-card" *ngFor="let option of data| slice: lowValue : highValue">
+
+
+                <p class="headers">
+                    <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{option.FirstName}}&nbsp;{{option.LastName}}
+                        </mat-card-title>
+                        <mat-card-subtitle>{{option.role}}<p>posted-on:{{option.postedOn | date:'medium' }}</p>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content> <b>{{option.title}}</b>
+                    </mat-card-content>
+                    <mat-card-content>
+
+                        <p>{{option.post}}</p>
+                    </mat-card-content>
+                </p>
+                <div class="buttons">
+                    <div class="like">
+                        <button mat-button (click)="like()">
+                            <mat-icon>thumb_up</mat-icon>&nbsp;
+                            <span>Like</span>
+                        </button></div>
+                    <div class="disLike">
+
+                        <button mat-button (click)="disLike()">
+                            <mat-icon>thumb_down</mat-icon>&nbsp;
+                            <span>Dislike</span>
+                        </button></div>
+                    <div class="space"></div>
+                    <div class="approve"> <button mat-raised-button color="primary" (click)="approve(option.pid)"
+                            matTooltip="Do u want to approve"
+                            aria-label="Button that displays a tooltip when focused or hovered over">Approve</button>
+                    </div>
+                    <div class="reject"> <button mat-raised-button color="warn" (click)="reject(option.pid)"
+                            matTooltip="Do u want to reject"
+                            aria-label="Button that displays a tooltip when focused or hovered over">Reject</button>
+                    </div>
+
+                </div>
+            </mat-card>
+        </p>
+        <mat-paginator [length]="length" [pageSize]="pageSize" (page)="getPaginatorData($event)">
+        </mat-paginator>
+    </div>
+</div>

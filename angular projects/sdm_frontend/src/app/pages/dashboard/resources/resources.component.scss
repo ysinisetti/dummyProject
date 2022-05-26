@@ -1,0 +1,151 @@
+::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  position: relative;
+  padding: 15px 16px;
+  padding-left: 40px;
+  color: black !important;
+  line-height: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 17px;
+  font-weight: bold;
+}
+.b {
+  color: #00aae7;
+}
+// .button {
+//   margin-top: 39px;
+//   width: 100px;
+//   float: right;
+//   margin-right: 20px;
+//   margin-bottom: 10px;
+// }
+.projectname {
+  float: right;
+  margin-bottom: 10px;
+  margin-top: -5px;
+  margin-right: -20px;
+  font-size: 18px !important;
+  // padding-left: 63%;
+  // margin-bottom: 1%;
+}
+.ant-select.ng-invalid.ng-touched,
+.ant-picker.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+.ant-input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+.rec {
+  margin-top: 2px;
+  color: black;
+}
+.btn1 {
+  margin-top: 29px;
+  width: 100px;
+  margin-left: 8px;
+  float: right;
+}
+.btn2 {
+  margin-top: 29px;
+  width: 100px;
+  margin-right: 8px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .button {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .button {
+    width: 100%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 767px) {
+  .ant-table {
+    overflow-x: auto;
+  }
+}
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: -3px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+
+.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  margin-left: -22px;
+}
+// h6 {
+//   margin-top: -5px;
+// }
+.table {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.home {
+  margin-top: -30px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -23px;
+}
+.comName {
+  font-weight: bold;
+  margin-left: 170px;
+  margin-top: -22px;
+}
+.add {
+  font-size: 15px;
+  // float: right;
+  margin-top: 2px;
+  // margin-left: 1222px;
+}
+ul.breadcrumb {
+  padding: 1px 8px;
+  list-style: none;
+  background-color: #eee;
+  // margin-bottom: -1rem;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+  // margin-bottom: -1rem;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

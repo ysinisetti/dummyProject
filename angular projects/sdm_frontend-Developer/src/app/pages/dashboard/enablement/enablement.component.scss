@@ -1,0 +1,47 @@
+.but1{
+  margin-left: 48px;
+}
+.redord{
+  margin-left: 35px;
+}
+
+
+.btn {
+  margin-top: 10px;
+  width: 100px;
+  float: right;
+  margin-right: 2px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-weight: bold;
+  }
+
+  @media (min-width: 501px) and (max-width: 767px) {
+    .btn {
+    width: 100px;
+    float: right;
+    }
+  }
+
+  @media (min-width: 300px) and (max-width: 500px) {
+    .btn {
+    width: 100%;
+    float: right;
+    }
+    .add{       width: 84%;
+    margin-left: 18px;
+    margin-bottom: 10px;
+  }
+ 
+  }
+  .star{
+    color: red;
+    margin-left: 3px;
+  }
+  .cancel {
+    font-weight: bold;
+    
+    width: 100px;
+    color: black !important;
+    background-color: #f0f0f0 !important;
+  }

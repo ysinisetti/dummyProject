@@ -1,0 +1,111 @@
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+  width: 100px;
+  float: right;
+  margin-left: 8px;
+  }
+  .btn1 {
+  width: 100px;
+  float: right;
+  margin-right: 8px;
+  }
+ }
+ @media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+  width: 100%;
+  }
+  .btn1 {
+  width: 100%;
+  }
+ }
+
+ nz-select {
+  width: 100%;
+ }
+ .btn {
+  margin-top: 29px;
+  width: 100px;
+  margin-left: 8px;
+  float: right;
+  font-weight: bold;
+ }
+ .btn1 {
+  margin-top: 29px;
+  width: 100px;
+  float: right;
+  font-weight: bold;
+ }
+ .ant-select.ng-invalid.ng-touched,
+ .ant-picker.ng-invalid.ng-touched,
+ textarea.ng-invalid.ng-touched,
+ .ant-input.ng-invalid.ng-touched {
+  border: 1px solid red;
+ }
+ ::ng-deep .ant-picker {
+  width: 100%;
+ }
+ .home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+ }
+ .proName {
+  margin-left: 60px;
+  margin-top: -23px;
+ }
+ .comName {
+  margin-left: 150px;
+  margin-top: -22px;
+ }
+ ///////////////BreadCrumb///
+ ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: 10px;
+  margin-top: -22px;
+  margin-left: -20px;
+ }
+ ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+ }
+ ul.breadcrumb li + li:before {
+  padding: 2px;
+  color: black;
+  content: '/\00a0';
+ }
+ ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+ }
+ ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+ }
+ small{
+  color: red;
+ }
+ //////custometr Name
+
+ .btn2 {
+  margin-right: -22px;
+  float: right;
+ }
+ @media (min-width: 501px) and (max-width: 767px) {
+  .btn2 {
+  width: 100px;
+  float: right;
+  }
+ }
+ @media (min-width: 300px) and (max-width: 500px) {
+  .btn2 {
+  width: 100%;
+  margin-right: -114px;
+float: right;
+  }
+ }
+ .cName {
+  color: #0275d8;
+  margin-left: 5px;
+ }

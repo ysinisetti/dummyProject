@@ -1,0 +1,368 @@
+
+<nz-breadcrumb>
+  <div>
+    <a (click)="details()">
+      <p class="title">{{ProjectName}} <span class="arrow"></span></p>
+    </a>
+  </div>
+  <nz-breadcrumb-item>
+    <p class="bread">Issues</p>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+<form [formGroup]="prjForm">
+<div class="card">
+
+  <nz-page-header class="site-page-header" nzTitle="Issues" style="padding-bottom: 0px;">
+  </nz-page-header>
+  <div class="card-body" style="padding-top: 0px;">
+    <!-- <form [formGroup]="prjForm"> -->
+    <div class="row">
+      <div class="col-4">
+        <!-- <label nzRequired nzFor="Name">Customer Name:&nbsp; {{cusName}}</label>&nbsp; -->
+
+      </div>
+      <div class="col-4">
+        <!-- <label>Project Name :&nbsp;{{proName}}</label>&nbsp; -->
+
+      </div>
+      <div class="col-4" style="padding-left: 170px;">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input type="text"[(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" nz-input placeholder="Search Here" />
+          <!-- <input type="text"  (input)="onSearch($event.target.value)" nz-input placeholder="Search Here" /> -->
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" (click)="search1()" nzSearch><i nz-icon nzType="search"></i></button>
+        </ng-template>
+      </div>
+    </div>
+    <!-- </form> -->
+  </div>
+
+</div>
+</form>
+
+<div class="card">
+  <div class="card-body">
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <!-- <button nz-button (click)="addRow()" nzType="primary"><i nz-icon nzType="plus"
+            nzTheme="outline"></i>Add</button> -->
+            <button nz-button [nzType]="'primary'" class="add" (click)="addRow()" style="float: right; margin-top:-8px; margin-bottom: 7px; "><i nz-icon nzType="plus"></i>Add</button>
+        <!-- <div class="card-header">
+        <h5>
+            <strong class="mr-3">All Projects</strong>
+        </h5>
+    </div> -->
+
+        <nz-table nzShowSizeChanger nzShowPagination #basicTable class="tablescroll" [nzData]="tableData"
+          (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+          <!-- (nzCurrentPageDataChange)="onCurrentPageDataChange($event)" -->
+          <thead>
+            <tr>
+              <th nzWidth=1%>ReleaseId</th>
+              <th nzWidth=1%>Type</th>
+              <th nzWidth=6%>Issue Title</th>
+              <th nzWidth=2%>Priority</th>
+              <th nzWidth=6%>Created Date</th>
+              <th nzWidth=6%>Assigned Date</th>
+              <th nzWidth=4%>Assigned To</th>
+              <th nzWidth=2%>Status</th>
+              <th nzWidth=2%>Severity</th>
+              <th nzWidth=6%>Target Date</th>
+              <th nzWidth=2%>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data | filter:searchTerm">
+              <td>{{ data.releaseId}}</td>
+              <td>{{ myType[data.type]}}</td>
+              <td>{{ data.title }}</td>
+              <td>{{ myPriority[data.priority] }}</td>
+              <td>{{ data.createdDate | date:'MM-dd-yyyy' }}</td>
+              <td>{{ data.assignedDate | date:'MM-dd-yyyy' }}</td>
+              <td>{{data.assignedTo}}</td>
+              <td>{{data.status}}</td>
+              <td>{{ mySeverity[data.severity]}}</td>
+              <td>{{data.targetDate | date:'MM-dd-yyyy' }}</td>
+              <td>
+                <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)">
+                </i>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data)">
+                  <i nz-icon nzTheme="fill" nzType="delete"></i>
+
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+      </div>
+    </div>
+  </div>
+</div>
+<nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="addForm" nzTitle="Add An Issue " (nzOnCancel)="handleCancel()"
+  [nzFooter]="modalFooter">
+  <form [formGroup]="addData" (ngSubmit)="addIssue()">
+    <div class="row">
+      <div class="col-4">
+        <label>Type :</label>
+        <nz-select class="type1" nzAllowClear nzPlaceHolder="select Type" formControlName="type">
+          <nz-option *ngFor="let option of optionList2" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+
+        </nz-select>
+        <div *ngIf="this.addData.get('type').errors?.required && this.addData.get('type').touched">
+          <small class="text-danger">Please Select Type</small></div>
+
+      </div>
+      <div class="col-4">
+        <nz-form-item>
+          <label Required>Issue Title : </label>
+          <input class="issue" nz-input nzLabel="Task Name" placeholder="Issue Title" required name="taskName1"
+            formControlName="title" />
+          <div>
+            <small class="validationtest"
+              *ngIf="addData.controls.title.touched && addData.controls.title.invalid && addData.controls.title.errors.required">
+              Please enter name
+            </small>
+          </div>
+          <div *ngIf="this.addData.get('title').errors?.pattern && this.addData.get('title').invalid">
+            <small class="text-danger">Only Alphabets Are Allowed</small></div>
+        </nz-form-item>
+      </div>
+      <div class="col-4">
+        <label>Priority :</label>
+        <nz-select class="priority" nzAllowClear nzPlaceHolder="select Priority" formControlName="priority">
+          <nz-option *ngFor="let option of optionList1" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.addData.get('priority').errors?.required && this.addData.get('priority').touched">
+          <small class="text-danger">Please Select Priority</small></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <label>Severity :</label>
+        <nz-select class="severity1" nzAllowClear nzPlaceHolder="select Severity" formControlName="severity">
+          <nz-option *ngFor="let option of optionList3" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.addData.get('severity').errors?.required && this.addData.get('severity').touched">
+          <small class="text-danger">Please Select Severity</small></div>
+      </div>
+      <div class="col-4">
+        <nz-form-item>
+          <label Required>Assigned To : </label>
+          <input class="assigned" nz-input nzLabel="Task Name" placeholder="Assigned To" required name="taskName1"
+            formControlName="assignedTo" />
+          <div>
+            <small class="validationtest"
+              *ngIf="addData.controls.assignedTo.touched && addData.controls.assignedTo.invalid && addData.controls.assignedTo.errors.required">
+              Please enter name
+            </small>
+          </div>
+          <div *ngIf="this.addData.get('assignedTo').errors?.pattern && this.addData.get('assignedTo').invalid">
+            <small class="text-danger">Only Alphabets Are Allowed</small></div>
+
+        </nz-form-item>
+      </div>
+      <div class="col-4">
+        <label Required>Status : </label>
+        <nz-select class="status" nzAllowClear nzPlaceHolder="select Status" formControlName="status">
+          <nz-option *ngFor="let option of optionList" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.addData.get('status').errors?.required && this.addData.get('status').touched">
+          <small class="text-danger">Please Select Status</small></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+
+        <nz-form-label id="label" nz-col>Assign Date </nz-form-label>
+
+        <nz-date-picker nzFormat="MM-dd-yyyy" name="startDate" (ngModelChange)="onAssignedChange($event)"
+          (nzOnOpenChange)="handleAssignedOpenChange($event)" formControlName="AssignedDate" class="assignedDate">
+        </nz-date-picker>
+      </div>
+
+      <!-- </div> -->
+
+      <div class="col-4">
+        <nz-form-label id="det" nz-col>Target Date </nz-form-label>
+
+
+
+        <!-- <nz-form-control nzErrorTip="Please Input The End Date!"> -->
+        <nz-date-picker [nzDisabledDate]="disabledTargetDate" nzFormat="MM-dd-yyyy" class="target"
+          (ngModelChange)="onTargetChange($event)" (nzOnOpenChange)="handleTargetOpenChange($event)" [nzOpen]="endOpen"
+          name="endDate" placeholder="End Date" formControlName="targetDate"></nz-date-picker>
+        <!-- </nz-form-control>
+                  -->
+
+      </div>
+
+      <div class="col-4">
+        <label Required>Release Id: </label>
+        <input nz-input placeholder="Release Id" class="releaseId" formControlName="releaseId" />
+        <div *ngIf="this.addData.get('releaseId').errors?.required && this.addData.get('releaseId').touched">
+          <small class="text-danger">Seq No: Is Required</small></div>
+        <div *ngIf="this.addData.get('releaseId').errors?.maxlength && this.addData.get('releaseId').invalid">
+          <small class="text-danger">Only 10 Digits are allowed</small>
+        </div>
+        <div *ngIf="this.addData.get('releaseId').errors?.pattern && this.addData.get('releaseId').invalid">
+          <small class="text-danger">Only Numbers Are Allowed</small></div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <label class="textareaAdd" Required>Description : </label><br>
+      <textarea nz-input rows="4" class="textarea1Add" placeholder="write a description"
+        formControlName="description"></textarea>
+      <div *ngIf="this.addData.get('description').errors?.required && this.addData.get('description').touched">
+        <small class="text-danger">Write Something</small></div>
+      <div *ngIf="this.addData.get('description').errors?.maxlength && this.addData.get('description').invalid">
+        <small class="text-danger">Only 500 Characters are allowed</small>
+      </div>
+      <div *ngIf="this.addData.get('description').errors?.pattern && this.addData.get('description').invalid">
+        <small class="text-danger">Only 500 Characters are allowed</small>
+      </div>
+
+    </div>
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" [disabled]="!addData.valid" (click)="addIssue()"> <i nz-icon
+          nzType="save"></i>Save</button>
+      <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+    </ng-template>
+  </form>
+</nz-modal>
+
+<nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="editForm" nzTitle="Edit An Issue" (nzOnCancel)="handleCancel()"
+  [nzFooter]="modalFooterr">
+  <form [formGroup]="editData" (ngSubmit)="updateIssue()">
+    <div class="row">
+      <div class="col-4">
+        <label>Type :</label>
+        <nz-select class="type" nzAllowClear nzPlaceHolder="select Type" formControlName="type">
+          <nz-option *ngFor="let option of optionList2" [nzValue]="option" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.editData.get('type').errors?.required && this.editData.get('type').touched">
+          <small class="text-danger">Please Select Type</small></div>
+      </div>
+      <div class="col-4">
+        <nz-form-item>
+          <label Required>Issue Title : </label>
+          <input class="issue" nz-input nzLabel="Task Name" placeholder="Issue Title" required name="taskName1"
+            formControlName="title" />
+          <div>
+            <small class="validationtest"
+              *ngIf="editData.controls.title.touched && editData.controls.title.invalid && editData.controls.title.errors.required">
+              Please enter name
+            </small>
+          </div>
+          <div *ngIf="this.editData.get('title').errors?.pattern && this.editData.get('title').invalid">
+            <small class="text-danger">Only Alphabets Are Allowed</small></div>
+        </nz-form-item>
+      </div>
+      <div class="col-4">
+        <label>Priority :</label>
+        <nz-select class="priority" nzAllowClear nzPlaceHolder="select Priority" formControlName="priority">
+          <nz-option *ngFor="let option of optionList1" [nzValue]="option" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.editData.get('priority').errors?.required && this.editData.get('priority').touched">
+          <small class="text-danger">Please Select Priority</small></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <label>Severity :</label>
+        <nz-select class="severity" nzAllowClear nzPlaceHolder="select Severity" formControlName="severity">
+          <nz-option *ngFor="let option of optionList3" [nzValue]="option" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.editData.get('severity').errors?.required && this.editData.get('severity').touched">
+          <small class="text-danger">Please Select Severity</small></div>
+      </div>
+      <div class="col-4">
+        <nz-form-item>
+          <label Required>Assigned To : </label>
+          <input class="assigned" nz-input nzLabel="Task Name" placeholder="Assigned To" required name="taskName1"
+            formControlName="assignedTo" />
+          <div>
+            <small class="validationtest"
+              *ngIf="editData.controls.assignedTo.touched && editData.controls.assignedTo.invalid && editData.controls.assignedTo.errors.required">
+              Please enter name
+            </small>
+          </div>
+          <div *ngIf="this.editData.get('assignedTo').errors?.pattern && this.editData.get('assignedTo').invalid">
+            <small class="text-danger">Only Alphabets Are Allowed</small></div>
+        </nz-form-item>
+      </div>
+      <div class="col-4">
+        <label Required>Status : </label>
+        <nz-select class="status" nzAllowClear nzPlaceHolder="select Status" formControlName="status">
+          <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+        <div *ngIf="this.editData.get('status').errors?.required && this.editData.get('status').touched">
+          <small class="text-danger">Please Select Status</small></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <nz-form-item>
+          <label>Assigned Date :</label>
+          <nz-date-picker class="assignedDateEdit" [nzDisabledDate]="disabledStartDate1"
+            (ngModelChange)="onStartChange1($event)" (nzOnOpenChange)="handleStartOpenChange1($event)"
+            nzPlaceHolder='Assigned Date' Required formControlName="assignedDate">
+          </nz-date-picker>
+          <div *ngIf="this.editData.get('assignedDate').errors?.required && this.editData.get('assignedDate').touched">
+            <small class="text-danger">Please Select Date</small></div>
+        </nz-form-item>
+      </div>
+
+      <div class="col-4">
+        <nz-form-item>
+          <label>Resolved Date :</label>
+          <nz-date-picker class="resolved" [nzOpen]="endOpen1" (ngModelChange)="onEndChange1($event)"
+            (nzOnOpenChange)="handleEndOpenChange1($event)" [nzDisabledDate]="disabledEndDate1"
+            nzPlaceHolder='Resolved Date' Required formControlName="resolvedDate">
+          </nz-date-picker>
+          <div *ngIf="this.editData.get('resolvedDate').errors?.required && this.editData.get('resolvedDate').touched">
+            <small class="text-danger">Please Select Date</small></div>
+        </nz-form-item>
+
+      </div>
+      <div class="col-4">
+        <label Required>Release Id: </label>
+        <input nz-input placeholder="Release Id" class="releaseId" formControlName="releaseId" />
+        <div *ngIf="this.editData.get('releaseId').errors?.required && this.editData.get('releaseId').touched">
+          <small class="text-danger">Seq No: Is Required</small></div>
+        <div *ngIf="this.editData.get('releaseId').errors?.maxlength && this.editData.get('releaseId').invalid">
+          <small class="text-danger">Only 10 Digits are allowed</small>
+        </div>
+        <div *ngIf="this.editData.get('releaseId').errors?.pattern && this.editData.get('releaseId').invalid">
+          <small class="text-danger">Only Numbers Are Allowed</small></div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="textarea">Description : </label><br>
+      <textarea nz-input rows="4" class="textarea1" placeholder="write a description"
+        formControlName="textArea"></textarea>
+      <div *ngIf="this.editData.get('textArea').errors?.required && this.editData.get('textArea').touched">
+        <small class="text-danger">Write Something</small></div>
+      <div *ngIf="this.editData.get('textArea').errors?.maxlength && this.editData.get('textArea').invalid">
+        <small class="text-danger">Only 500 Characters are allowed</small>
+      </div>
+    </div>
+
+
+    <ng-template #modalFooterr>
+      <button nz-button nzType="primary" (click)="updateIssue()"><i nz-icon nzType="edit"></i>Update</button>
+      <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+    </ng-template>
+  </form>
+</nz-modal>

@@ -1,0 +1,57 @@
+<nz-card>
+  <h3>Editable table with auto form by clicking tab</h3>
+  <!-- <input type="text" nz-input [(ngModel)]='recordCount'>
+  {{recordCount}} -->
+  <!-- <div cdkDropList [cdkDropListData]="listOfData" (cdkDropListDropped)="onDrop($event)"> -->
+  <nz-table #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed" cdkDropList
+    (cdkDropListDropped)="onDrop($event)">
+    <!-- <nz-table #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed"> -->
+    <thead>
+      <tr>
+        <th nzWidth="7%">Level</th>
+        <th nzWidth="6%">No</th>
+        <th nzWidth="30%">Task</th>
+        <th nzWidth="7%">Duration</th>
+        <th nzWidth="11%">Start Date</th>
+        <th nzWidth="11%">End date</th>
+        <th nzWidth="8%">Depends</th>
+        <th nzWidth="10%">Resources</th>
+        <th nzWidth="10%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d1 of editRowTable.data; let i = index" (click)="onTrClick(d1,i)" cdkDrag>
+        <td>
+          <i nz-icon nzType="left-circle" nzTheme="outline" [disabled]="disable"
+            (click)="decrement(d1)"></i>&nbsp;{{d1.level}}&nbsp;
+          <i nz-icon nzType="right-circle" nzTheme="outline" (click)="increment(d1)"></i>
+        </td>
+        <ng-container *ngIf="!(currentIndex == i); else editTemplate">
+          <!-- // has to change in condition  if 2==2 edit else normal-->
+          <!-- changed the condition as per our requirment .....[ngClass]="backgroundstatus(d1)"  -->
+          <td>{{ d1.no }}</td>
+          <td [ngClass]="backgroundstatus(d1)" [style.padding-left.px]="[ 20 * d1.level]">{{ d1.task }}</td>
+          <td>{{ d1.duration }}</td>
+          <td>{{ d1.startDate }}</td>
+          <td>{{ d1.endDate }}</td>
+          <td>{{ d1.depends }}</td>
+          <td>{{ d1.resources }}</td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td><input type="text" placeholder="Enter no" name='no' nz-input [(ngModel)]="d1.no" /></td>
+          <td><input type="text" placeholder="Enter task" name='task' nz-input [(ngModel)]="d1.task" /></td>
+          <td><input type="text" placeholder="Enter duration" name='duration' nz-input [(ngModel)]="d1.duration" />
+          </td>
+          <td><input type="text" placeholder="mmm dd,yyyy" name='startDate' nz-input [(ngModel)]="d1.startDate" /></td>
+          <td><input type="text" placeholder="Enter endDate" name='endDate' nz-input [(ngModel)]="d1.endDate" /></td>
+          <td><input type="text" placeholder="Enter depends" name='depends' nz-input [(ngModel)]="d1.depends" /></td>
+          <td><input type="text" placeholder="Enter resources" name='resources' nz-input [(ngModel)]="d1.resources" />
+          </td>
+        </ng-template>
+        <td>
+          <i nz-icon nzType="plus-circle" nzTheme="outline" (click)="add()"></i>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>

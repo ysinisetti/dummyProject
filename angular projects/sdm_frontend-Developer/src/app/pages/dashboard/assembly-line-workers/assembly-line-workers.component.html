@@ -1,0 +1,84 @@
+<!-- BreadCrumb -->
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a (click)="assemblyLine()">Assembly Lines</a></li>
+      <li><a (click)="assemblyRoles()">Assembly Line Roles</a></li>
+      <li>Assembly Line Workers</li>
+    </ul>
+  </div>
+</div>
+<!-- Assembly Line Workers Search -->
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <form [formGroup]="searchForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Assembly Line</label>
+            <nz-select nzAllowClear nzPlaceHolder="Assembly Line" formControlName='skillset'>
+              <nz-option *ngFor="let option of skillSet" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Status</label>
+            <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+              <nz-option *ngFor="let option of statusType" [nzValue]="option.Values" [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Role</label>
+            <nz-select  nzAllowClear nzPlaceHolder="Role Name" formControlName="role">
+              <nz-option *ngFor="let option of roleDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+              </nz-option>
+            </nz-select> 
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="reset" nz-button nzType="primary" (click)="resetSearch()"><i nz-icon
+                nzType="redo"></i>Reset</button>
+            <button class="search" nz-button nzType="primary" (click)="getAssembly()"><i nz-icon
+                nzType="search"></i>Search</button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<!-- Assembly Line Workers Grid -->
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="records">No. of Records: {{records}}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table #basicTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+      nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+      [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+      <thead>
+        <tr>                         
+          <th *ngFor="let column of listOfColumns"
+               [nzWidth]="column.width">
+          {{ column.name }}
+           </th>
+        </tr>
+      </thead>      
+      <tbody>
+        <tr *ngFor="let data of listOfData ">
+          <td>{{data.resourceName}}</td>
+          <td>{{ctype[data.objectType]}}</td>
+          <td>{{data.dateSkillAttained | date:'MMM d, yyyy' }}</td>
+          <td>{{data.dateCertified  | date:'MMM d, yyyy' }}</td>
+          <td>{{status[data.status]}}</td>   
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+

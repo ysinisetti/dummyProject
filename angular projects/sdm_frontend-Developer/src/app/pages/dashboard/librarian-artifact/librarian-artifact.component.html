@@ -1,0 +1,221 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a (click)="gotolibrarian()">Librarian Assets</a></li>
+      <li>Librarian Artifacts</li>
+    </ul>
+  </div>
+</div>
+<!-------------------------------edit asset----------------------------------->
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="editAssetForm">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Skill Set <span class="validationtest"></span></label>
+          <nz-select nzAllowClear nzPlaceHolder="Choose SkillSet" formControlName="skillSet">
+            <nz-option *ngFor="let options of assetSkillSet" [nzValue]="options.optionKey"
+              [nzLabel]="options.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Asset Title <span class="validationtest">*</span></label>
+          <input nz-input nzLabel="Title" placeholder="Asset Title" formControlName="title" />
+          <div *ngIf="this.editAssetForm.get('title').errors?.required && this.editAssetForm.get('title').touched">
+            <small class="text-danger">Asset Title Is Required</small></div>
+          <div *ngIf="this.editAssetForm.get('title').errors?.maxlength && this.editAssetForm.get('title').invalid">
+            <small class="text-danger">Only 75 Characters are allowed</small>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Asset Type <span class="validationtest"></span></label><br>
+          <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="assetType">
+            <nz-option *ngFor="let options of assetType" [nzValue]="options.optionKey" [nzLabel]="options.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Asset Status <span class="validationtest"></span></label><br>
+          <nz-select nzAllowClear nzPlaceHolder="Choose Asset Status" formControlName="assetStatus">
+            <nz-option *ngFor="let options of assetStatus" [nzValue]="options.optionKey"
+              [nzLabel]="options.optionValue"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label>Description <span class="validationtest"></span></label><br>
+          <textarea nz-input nzLabel="Description" PlaceHolder='Write description' formControlName="description"
+            nzAutosize></textarea>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <button nz-button nzType="primary" class="update" (click)="updateAsset()"> <i nz-icon
+              nzType="edit"></i>Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label class="rec">No. of Records : {{totalPages}}</label>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <button class="add" nz-button nzType="primary" (click)="addRow()"><i nz-icon nzType="plus"></i>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card-body" id="gridBody">
+        <nz-table nzShowPagination #basicTable [nzData]="allartifactsData" nzTableLayout="fixed" [nzPaginationPosition]
+          nzShowSizeChanger nzShowPagination [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+          (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+          <thead>
+            <tr>
+              <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+                {{ column.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of allartifactsData; let i=index">
+              <td>{{pageSize *(pageNum-1)+i+1}}</td>
+              <td nzEllipsis nzTooltipTitle="{{data.title}}" nz-tooltip>{{data.title}}</td>
+              <td nzEllipsis nzTooltipTitle="{{artifactType[data.artifactType]}}" nz-tooltip>
+                {{artifactType[data.artifactType]}}<span *ngIf="data.artifactType===''">NA</span></td>
+              <td nzEllipsis nzTooltipTitle="{{data.fileName}}" nz-tooltip>{{data.fileName}}</td>
+              <td>
+                {{data.size}} KB
+              </td>
+              <td>{{data.modifiedDate | date: 'MMM d,yyyy'}}</td>
+              <td>{{dStatus[data.artifactStatus]}}<span *ngIf="data.artifactStatus===''">NA</span></td>
+              <td>{{data.author}}</td>
+              <td>
+                <i nz-icon nzType="edit" nzTheme="outline" (click)="editRow(data)"></i>&nbsp;
+                <i nz-icon nzType="download" nzTheme="outline" class="download"
+                  (click)="downloadFile(data.path,data.fileName)"></i>&nbsp;
+                <i nz-icon nzType="delete" nz-popconfirm nzPopconfirmTitle="Sure to Delete?"
+                  (nzOnConfirm)="deleteRow(data.id)" nzTheme="outline"></i>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------------------add artifact-------------------------------->
+<nz-modal [(nzVisible)]="isVisibleAddform" nzTitle="Add Librarian Artifact" (nzOnCancel)="cancelArtifact()"
+  [nzFooter]="modalFooter">
+  <form [formGroup]="addArtifactform">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Artifact Title <span class="validationtest">*</span></label>
+        <input nz-input nzLabel="Title" placeholder="Artifact Title" formControlName="title" maxlength="76">
+        <div *ngIf="this.addArtifactform.get('title').errors?.required && this.addArtifactform.get('title').touched">
+          <span class="text-danger">Artifact Title Is Required</span></div>
+        <div *ngIf="this.addArtifactform.get('title').errors?.maxlength && this.addArtifactform.get('title').invalid">
+          <span class="text-danger">Only 75 Characters are allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Artifact Type</label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Artifact Type" formControlName="artifactType">
+          <nz-option *ngFor="let options of artifactTypedrop" [nzValue]="options.optionKey"
+            [nzLabel]="options.optionValue"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of assetStatus" [nzValue]="options.optionKey" [nzLabel]="options.optionValue">
+          </nz-option>
+        </nz-select>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Upload Artifacts <span class="validationtest">*</span></label><br>
+        <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          [nzHeaders]="{ authorization: 'authorization-text' }" [(nzFileList)]="fileList"
+          (nzChange)="onFileChange($event)">
+          <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
+        </nz-upload>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label>
+        <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....' formControlName="description"
+          nzAutosize></textarea>
+      </div>
+    </div>
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" class="cancel" (click)="cancelArtifact()"> <i nz-icon
+          nzType="close"></i>Cancel</button>
+      <button nz-button nzType="primary" class="save" (click)="addArtifact()"> <i nz-icon
+          nzType="save"></i>Save</button>
+    </ng-template>
+  </form>
+</nz-modal>
+
+<!------------------edit artifacts-------------------------->
+<nz-modal [(nzVisible)]="isVisibleEditform" nzTitle="Edit Librarian Artifact" (nzOnCancel)="cancelArtifact()"
+  [nzFooter]="modalFooter1">
+  <form [formGroup]="editArtifactform">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Artifact Title <span class="validationtest">*</span></label>
+        <input nz-input nzLabel="Title" placeholder="Asset Title" formControlName="title" maxlength="76">
+        <div *ngIf="this.editArtifactform.get('title').errors?.required && this.editArtifactform.get('title').touched">
+          <span class="text-danger">Artifact Title Is Required</span></div>
+        <div *ngIf="this.editArtifactform.get('title').errors?.maxlength && this.editArtifactform.get('title').invalid">
+          <span class="text-danger">Only 75 Characters are allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Artifact Type</label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Asset Skillset" formControlName="artifactType">
+          <nz-option *ngFor="let options of artifactTypedrop" [nzValue]="options.optionKey"
+            [nzLabel]="options.optionValue"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of assetStatus" [nzValue]="options.optionKey" [nzLabel]="options.optionValue">
+          </nz-option>
+        </nz-select>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Replace Artifact</label><br>
+        <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          [nzHeaders]="{ authorization: 'authorization-text' }" (nzChange)="onFileReplace($event)"
+          [(nzFileList)]="fileListedit">
+          <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
+        </nz-upload>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label><br>
+        <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....' formControlName="description"
+          nzAutosize></textarea>
+      </div>
+    </div>
+    <ng-template #modalFooter1>
+      <button nz-button nzType="primary" class="cancel" (click)="cancelArtifact()"> <i nz-icon
+          nzType="close"></i>Cancel</button>
+      <button nz-button nzType="primary" class="save" (click)="editArtifact()"> <i nz-icon
+          nzType="edit"></i>Update</button>
+    </ng-template>
+  </form>
+</nz-modal>

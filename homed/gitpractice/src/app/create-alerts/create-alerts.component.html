@@ -1,0 +1,54 @@
+<div fxLayoutAlign="center center"  class="card" >
+    
+       
+    <mat-card style="padding-bottom: 10px;">
+        <mat-toolbar color="primary" >{{Title}}</mat-toolbar>
+        <form [formGroup]="createAlert" fxLayoutAlign="stretch" fxLayout="column"  class="form">
+          
+                <mat-form-field style="height: 58px;margin-top:20px" appearance="outline">
+                    <mat-label for="Name"> Name </mat-label>
+                    <input matInput id="Name" autocomplete="off" type="text" placeholder="Name"
+                    formControlName="name">
+                    <mat-error *ngIf="createAlert.get('name').errors?.required">Name is Required
+                    </mat-error>
+                    <mat-error *ngIf="createAlert.get('name').errors?.minlength">Name must have 3
+                        characters</mat-error>
+                    <mat-error *ngIf="createAlert.get('name').errors?.maxlength">Name Must have less than
+                        30 Characters</mat-error>
+                    <mat-error *ngIf="createAlert.get('name').errors?.pattern">Please enter valid Name 
+                    </mat-error>
+                </mat-form-field>
+    
+    
+                <mat-form-field style="width: 400px;height: 58px;margin-top:20px" appearance="outline">
+                    <mat-label for="link"> Link </mat-label>
+                    <textarea formControlName='link' placeholder="Link" matInput></textarea>
+                    <mat-error *ngIf="createAlert.get('link').errors?.required">Link is Required
+                    </mat-error>
+                    <mat-error *ngIf="createAlert.get('link').errors?.minlength">Link must have 3
+                        characters</mat-error>
+                    <mat-error *ngIf="createAlert.get('link').errors?.maxlength">Link Must have less than
+                        30 Characters</mat-error>
+                    <mat-error *ngIf="createAlert.get('link').errors?.pattern">Please enter valid Link 
+                    </mat-error>
+                </mat-form-field>
+    
+                <div>
+                    <button  *ngIf="button" mat-raised-button color="primary" (click)="post()" matTooltip="Do u want to submit alert"  
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                        style="float:right;width:80px;margin-top:30px">Submit</button>
+
+                        <button  *ngIf="button1"  mat-raised-button color="primary" (click)="edit()" matTooltip="Do u want to submit alert"  
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                        style="float:right;width:80px;margin-top:30px">Update</button>
+
+                    <button mat-raised-button color="primary" (click)="reset()" matTooltip="Do u want to cancel alert"  
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                        style="margin-right:20px;width:80px;float:right;margin-top:30px">Cancel</button>
+                </div>
+            
+    
+    
+    
+        </form>
+    </mat-card>

@@ -1,0 +1,68 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.search {
+  width: 200px;
+  margin-left: 985px;
+  margin-top: -42px;
+}
+.add {
+  width: 100px;
+  margin-left: 1085px;
+  margin-top: 5px;
+}
+.label {
+  width: 200px;
+  margin-left: 35px;
+}
+.label1 {
+  width: 200px;
+
+  margin-left: 2px;
+}
+.card-body {
+  margin-top: -30px;
+}
+.head {
+  margin-top: -40px;
+}
+.sla {
+  margin-left: -25px;
+  // width: 300px;
+}
+
+.bread {
+  margin-top: -35px;
+  font-size: 16px;
+  margin-left: 160px;
+}
+.title {
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  margin-left: 65px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}
+.site-page-header {
+  margin-bottom: -30px;
+}

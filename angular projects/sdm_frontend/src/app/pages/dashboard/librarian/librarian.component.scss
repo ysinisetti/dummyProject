@@ -1,0 +1,205 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+
+.search {
+  width: 200px;
+  margin-left: 963px;
+  margin-top: -10px;
+}
+h6 {
+  margin-top: -50px;
+}
+.add {
+  width: 70px;
+  margin-left: 1112px;
+  margin-bottom: 15px;
+  margin-top: -10px;
+}
+.type {
+  width: 200px;
+  margin-left: 60px;
+}
+.type1 {
+  width: 200px;
+  margin-left: 48px;
+}
+
+.issue {
+  width: 203px;
+  height: 33px;
+  margin-left: 22px;
+}
+.priority {
+  margin-left: 17px;
+  margin-top: 5px;
+  width: 200px;
+}
+.severity {
+  width: 200px;
+  margin-left: 40px;
+}
+.severity1 {
+  width: 200px;
+  margin-left: 28px;
+}
+.assigned {
+  width: 203px;
+  height: 33px;
+  margin-left: 12px;
+}
+.status {
+  width: 200px;
+  margin-left: 23px;
+}
+.assignedDate {
+  width: 200px;
+  // height: 33px;
+  // margin-left: 50px;
+  margin-top: -85px;
+}
+.target {
+  width: 203px;
+  //height: 33px;
+  margin-left: 5px;
+  margin-top: -85px;
+}
+
+.releaseId {
+  margin-left: 5px;
+  width: 200px;
+  margin-top: -85px;
+}
+
+.textarea {
+  margin-left: -13px;
+  //margin-top: 10px;
+}
+.textarea1 {
+  width: 720px;
+  margin-left: 67px;
+  margin-top: -35px;
+}
+.textareaAdd {
+  margin-left: -13px;
+  margin-top: 25px;
+}
+.textarea1Add {
+  width: 720px;
+  margin-left: 67px;
+  margin-top: -30px;
+}
+
+.assignedDateEdit {
+  margin-left: 8px;
+  width: 200px;
+  // margin-top: -85px;
+}
+.resolved {
+  width: 200px;
+
+  margin-left: 2px;
+}
+.head {
+  margin-top: -40px;
+}
+.tablescroll {
+  margin-top: -26px;
+}
+.bread {
+  margin-top: -35px;
+  font-size: 16px;
+  margin-left: 160px;
+}
+.site-page-header {
+  margin-bottom: -40px;
+}
+.home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -23px;
+}
+.comName {
+  margin-left: 150px;
+  margin-top: -22px;
+}
+.header {
+  font-weight: bold;
+}
+.buttons {
+  // float: right;
+  margin-top: 37px;
+}
+.btnClass {
+  margin-top: 37px;
+  width: 120px;
+  // float: right;
+}
+///////////////BreadCrumb///
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: 2px;
+  margin-top: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 2px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+//////custometr Name
+
+.btn2 {
+  margin-right: -22px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn2 {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn2 {
+    width: 100%;
+    float: right;
+  }
+}

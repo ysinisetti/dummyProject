@@ -1,0 +1,213 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+.nz-select {
+  width: 100%;
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+    //margin-bottom: -50px;
+    //  margin-top:-50px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+
+nz-select {
+  width: 200px;
+}
+.name {
+  width: 180px;
+  margin-left: 15px;
+}
+.name1 {
+  width: 220px;
+}
+.name2 {
+  width: 220px;
+}
+.name4 {
+  width: 250px;
+}
+
+#nzTitle {
+  font-weight: bold;
+}
+
+.bread {
+  margin-top: -35px;
+  font-size: 16px;
+  margin-left: 160px;
+}
+.title {
+  //text-align: center;
+  //font-weight: bold;
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  // float:right;
+  margin-left: 65px;
+  //margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}
+.MATad {
+  // margin-top: -15px;
+  margin-left: -9px;
+}
+.MATa {
+  width: 200px;
+  height: 33px;
+  margin-top: 45px;
+  margin-left: -52px;
+}
+.PMa {
+  width: 200px;
+  height: 33px;
+}
+.PTLa {
+  width: 200px;
+  height: 33px;
+}
+.SMa {
+  width: 200px;
+  height: 33px;
+}
+.AMa {
+  width: 200px;
+  height: 33px;
+}
+.ELa {
+  width: 200px;
+  height: 33px;
+}
+.PSa {
+  width: 200px;
+  height: 33px;
+}
+.PM {
+  width: 200px;
+  height: 33px;
+}
+.PTL {
+  width: 200px;
+  height: 33px;
+}
+.SM {
+  width: 200px;
+  height: 33px;
+}
+.AM {
+  width: 200px;
+  height: 33px;
+}
+.EL {
+  width: 200px;
+  height: 33px;
+}
+.PS {
+  width: 200px;
+  height: 33px;
+}
+.home {
+  font-weight: bold;
+  margin-top: -16px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -26px;
+}
+.comName {
+  margin-left: 150px;
+  margin-top: -22px;
+}
+.btn {
+  width: 100px;
+  float: right;
+  margin-top: -10px;
+  margin-bottom: -3px;
+}
+.btn1 {
+  margin-top: 29px;
+  width: 90px;
+  margin-left: -50px;
+  float: right;
+}
+.btn2 {
+  margin-top: 29px;
+  width: 90px;
+  margin-right: 8px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+    margin-right: 8px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .btn1 {
+    width: 100%;
+  }
+  .btn2 {
+    width: 100%;
+  }
+}
+
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -5px;
+  margin-top: -22px;
+  margin-left: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+.project {
+  margin-left: 8px;
+}
+.MATae {
+  margin-left: -12px;
+}
+#cust {
+  font-size: 18px;
+  float: right;
+  margin-top: -21px;
+}

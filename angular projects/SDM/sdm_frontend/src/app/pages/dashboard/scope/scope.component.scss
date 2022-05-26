@@ -1,0 +1,181 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select,
+.search {
+  width: 250px;
+  margin-left: 980px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+nz-table[nzPaginationPosition] {
+  padding-right: 320px;
+}
+
+.name {
+  width: 200px;
+}
+.add {
+  font-size: 15px;
+  margin-left: 93%;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+//  .title {
+//   margin-left: 3%;
+//   width: 215px;
+//   margin-top: 4%;
+//  }
+.titletas {
+  margin-left: 10px;
+}
+// .title1 {
+//   margin-left: 1%;
+//   width: 213px;
+// }
+.title1 {
+  margin-left: 35px;
+  width: 200px;
+  margin-top: 10px;
+}
+.title2 {
+  margin-left: 16%;
+}
+.site-page-header {
+  margin-bottom: -30px;
+}
+
+.title4 {
+  //text-align: center;
+  //font-weight: bold;
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  // float:right;
+  margin-left: 65px;
+  //margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}
+.txt1 {
+  margin-left: 78px;
+  margin-top: -26px;
+}
+.txd {
+  margin-top: -50px;
+}
+.tag {
+  width: 220px;
+}
+.edittitle {
+  margin-left: 13px;
+}
+.edittag {
+  margin-top: -50px;
+}
+
+.txt2 {
+  margin-left: 10px;
+  margin-top: 16px;
+}
+
+.tx2 {
+  margin-top: 18px;
+}
+.titlet {
+  margin-left: -20px;
+  margin-top: 18px;
+}
+#titlelabel {
+  width: 220px;
+  margin-left: 30px;
+  margin-top: -20px;
+}
+.atag {
+  width: 190px;
+  margin-left: 38px;
+}
+.acre {
+  width: 200px;
+}
+.adoc {
+  width: 195px;
+}
+.asto {
+  width: 200px;
+}
+.astot {
+  width: 200px;
+}
+.aart {
+  width: 190px;
+}
+.atitle {
+  width: 195px;
+  margin-left: 58px;
+}
+.txt3 {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.task {
+  width: 200px;
+}
+#label {
+  width: 200px;
+}
+#label1 {
+  width: 205px;
+  margin-left: 80px;
+}
+#labelt {
+  width: 200px;
+  margin-left: 40px;
+}
+
+.title {
+  margin-left: 10px;
+  width: 200px;
+  margin-top: 10px;
+}
+
+.date {
+  margin-left: 5px;
+  width: 200px;
+  margin-top: 10px;
+}
+
+.seq {
+  margin-left: 15px;
+  width: 200px;
+  margin-top: 10px;
+}
+.txtdes {
+  margin-left: 80px;
+  width: 620px;
+  margin-top: -30px;
+}

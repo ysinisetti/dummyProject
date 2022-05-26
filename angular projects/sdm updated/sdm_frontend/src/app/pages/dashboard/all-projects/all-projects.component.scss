@@ -1,0 +1,299 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 10px;
+  width: 100px;
+  float: right;
+  margin-right: 12px;
+  margin-bottom: 10px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+p {
+  margin-left: 775px;
+}
+
+.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: 10px;
+  margin-top: -22px;
+  margin-left: -20px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+.heading {
+  height: 80px;
+  width: 1220px;
+  background-color: white;
+}
+.txt {
+  margin-left: 130px;
+  margin-top: -35px;
+}
+.add {
+  width: 100px;
+  margin-top: 10px;
+  padding-left: 90.5%;
+}
+nz-table {
+  margin-top: -2px;
+}
+.field {
+  width: 200px;
+  margin-left: 10px;
+}
+.field1 {
+  margin-left: 30px;
+  width: 200px;
+}
+.field2 {
+  margin-left: 50px;
+  width: 200px;
+}
+.card-body {
+  margin-top: -10px;
+}
+h6 {
+  margin-top: -40px;
+  margin-left: 20px;
+}
+.adj {
+  width: 250px;
+  margin-left: 50px;
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btadd {
+    width: 50%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btadd {
+    width: 50%;
+    float: right;
+  }
+}
+.btadd {
+  // margin-top: 6px;
+  // margin-left: 60px;
+  float: right;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btadd {
+    width: 50%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btadd {
+    width: 50%;
+    float: right;
+  }
+}
+.bta {
+  // margin-top: 6px;
+  // margin-left: 60px;
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  // margin-top: -px;
+}
+#card {
+  margin-top: 5px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .bta {
+    width: 50%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .bta {
+    width: 50%;
+    float: right;
+  }
+}
+b {
+  color: #00aae7;
+}
+.sdj {
+  width: 250px;
+  margin-left: 15px;
+  height: 35px;
+  margin-top: 10px;
+}
+.pdj {
+  width: 250px;
+  margin-left: 30px;
+}
+.adj1 {
+  width: 250px;
+  margin-left: 55px;
+}
+.adj2 {
+  width: 250px;
+  margin-left: 76px;
+}
+
+.Pdj {
+  margin-left: 10px;
+  width: 250px;
+}
+
+.iT {
+  margin-left: 20px;
+}
+.bsearch {
+  margin-top: 30px;
+}
+.practice {
+  width: 250px;
+  margin-left: 55px;
+}
+.pType {
+  width: 250px;
+  margin-left: 43px;
+}
+.ldes {
+  margin-left: -14px;
+}
+.project {
+  margin-left: -20px;
+}
+.edj {
+  margin-left: 115px;
+  width: 380px;
+  margin-top: -35px;
+  height: 35px;
+  margin-right: -45px;
+}
+.edjp {
+  margin-left: 30px;
+  // margin-top: -35px;
+  margin-right: -112px;
+  height: 35px;
+  width: 247px;
+}
+
+.stdj {
+  margin-left: 5px;
+  width: 250px;
+}
+
+.stdp {
+  margin-left: 5px;
+  width: 250px;
+}
+.sedj {
+  margin-left: 30px;
+  width: 250px;
+}
+.ldj {
+  margin-left: 60px;
+}
+
+.end {
+  margin-left: 10px;
+  width: 250px;
+}
+.End {
+  width: 250px;
+  margin-left: 22px;
+  margin-top: -35px;
+  height: 35px;
+}
+.Start {
+  width: 250px;
+  margin-left: 20px;
+}
+.start {
+  width: 250px;
+  margin-left: 10px;
+}
+
+.Star {
+  width: 250px;
+  margin-left: 123px;
+  margin-top: -35px;
+  height: 35px;
+}
+.plabel {
+  margin-left: -10px;
+}
+.pid {
+  margin-left: 30px;
+  width: 250px;
+}
+.site-page-header {
+  margin-bottom: -20px;
+}
+
+.search {
+  width: 250px;
+  // float: right;
+  margin-left: 89.5%;
+  margin-right: 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.fRow {
+  margin-left: 30px;
+}
+.sForm {
+  width: 250px;
+  position: relative;
+  margin-top: 10px;
+}
+.sName {
+  margin-left: -25px;
+  margin-top: 18px;
+  position: absolute;
+}
+.home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+}
+// .proName{
+// margin-left: 60px;
+// margin-top: -23px;
+// }
+.comName {
+  margin-left: 60px;
+  margin-top: -23px;
+}

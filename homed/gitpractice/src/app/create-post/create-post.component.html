@@ -1,0 +1,53 @@
+<!-- <p>create-post works!</p> -->
+<div fxLayoutAlign="center center" class="card">
+
+
+    <mat-card style="padding-bottom: 10px;">
+        <mat-toolbar color="primary">{{Title}}</mat-toolbar>
+        <form [formGroup]="createPost" fxLayoutAlign="stretch" fxLayout="column" class="form">
+
+            <mat-form-field style="height: 58px;margin-top:20px" appearance="outline">
+                <mat-label for="userName"> Title </mat-label>
+                <input matInput id="userName" autocomplete="off" type="text" placeholder="Title"
+                    formControlName="title">
+                <mat-error *ngIf="createPost.get('title').errors?.required">Title is Required
+                </mat-error>
+                <mat-error *ngIf="createPost.get('title').errors?.minlength">Title must have 3
+                    characters</mat-error>
+                <mat-error *ngIf="createPost.get('title').errors?.maxlength">Title Must have less than
+                    30 Characters</mat-error>
+                <mat-error *ngIf="createPost.get('title').errors?.pattern">Please enter valid Title
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field style="width: 400px;height: 58px;margin-top:20px" appearance="outline">
+                <mat-label for="userName"> Description </mat-label>
+                <textarea formControlName='Description' placeholder="Description" matInput></textarea>
+                <mat-error *ngIf="createPost.get('Description').errors?.required">Description is Required
+                </mat-error>
+                <mat-error *ngIf="createPost.get('Description').errors?.minlength">Description must have 3
+                    characters</mat-error>
+                <mat-error *ngIf="createPost.get('Description').errors?.maxlength">Description Must have less than
+                    30 Characters</mat-error>
+                <mat-error *ngIf="createPost.get('Description').errors?.pattern">Please enter valid Description
+                </mat-error>
+            </mat-form-field>
+
+            <div>
+                <button *ngIf="button" mat-raised-button color="primary" (click)="post()" matTooltip="Do u want to submit post"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    style="float:right;width:80px;margin-top:30px">Submit</button>
+                <button  *ngIf="button1" mat-raised-button color="primary" (click)="update()" matTooltip="Do u want to submit post"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    style="float:right;width:80px;margin-top:30px">Update</button>
+                <button mat-raised-button color="primary" (click)="reset()" matTooltip="Do u want to Cancel post"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    style="margin-right:20px;width:80px;float:right;margin-top:30px">Cancel</button>
+            </div>
+
+
+
+
+        </form>
+    </mat-card>

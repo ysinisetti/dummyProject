@@ -1,0 +1,255 @@
+<nz-breadcrumb>
+  <div>
+   <a  (click)="details()"><p class="title" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+ </div>
+   <nz-breadcrumb-item>
+    <p class= "bread">Releases</p>
+   </nz-breadcrumb-item>
+ </nz-breadcrumb><br>
+ <div class="card">
+  <nz-page-header class="site-page-header" nzTitle="RELEASES">
+  </nz-page-header>
+  <div class="card-body">
+    <!-- <form [formGroup]="prjForm"> -->
+      <div class="row">
+        <div class="col-4">
+          <!-- <label nzRequired nzFor="Name">Customer Name:&nbsp; {{cusName}}</label>&nbsp; -->
+
+        </div>
+        <div class="col-4">
+          <!-- <label>Project Name :&nbsp;{{proName}}</label>&nbsp; -->
+
+        </div>
+        <div class="col-4" style="padding-left: 180px;">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="Search Here" />
+            <!-- <input type="text"  (input)="onSearch($event.target.value)" nz-input placeholder="Search Here" /> -->
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary"  nzSearch><i nz-icon nzType="search"></i></button>
+          </ng-template>
+        </div>
+      </div>
+    <!-- </form> -->
+  </div>
+    </div>
+    <div class="card" id="tableCard">
+      <div class="row">
+        <div class="col-12 justify-content-end" class="add">
+      <button nz-button (click)="addRow()" nzType="primary">
+        <i nz-icon nzType="plus"></i>  Add</button>
+      </div>
+    </div>
+    <div class="card-body" >
+      <nz-table  nzShowSizeChanger nzShowPagination #basicTable [nzData]="allResoursesDetails"  id="tableCard"  [nzPageSize]="8" [nzPageIndex]="pageIndex">
+        <thead>
+          <tr>
+    <tr>
+      <th nzWidth="12%">VERSION</th>
+      <th nzWidth="12%"  >STATUS</th>
+      <!-- nzColumnKey="status" [nzFilters]="filterStatus" [nzFilterFn]="true" -->
+      <th nzWidth="6%">RELEASE START DATE</th>
+      <th nzWidth="6%">RELEASE END DATE</th>
+      <th nzWidth="3%">DESCRIPTION</th>
+      <th nzWidth="2%">ACTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of allResoursesDetails">
+      <td >{{ data.Version }}</td>
+      <td [ngStyle]="{'color':getColor(data.Status)}"> {{data.Status}}</td>
+          <td>{{data.ReleaseStartDate | date: 'MM/dd/yyyy'}}</td>
+          <td>{{data.ReleaseEndDate | date: 'MM/dd/yyyy'}}</td>
+          <td>{{data.Description}}</td>
+          <td>
+            <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)"> </i>&nbsp;&nbsp;
+               <a nz-popconfirm nzPopconfirmTitle="Sure to delete?"(nzOnConfirm)="deleteRow(data.Id)">
+                <i nz-icon nzTheme="fill"   nzType="delete"></i>&nbsp;&nbsp;</a>
+          </td>
+  </tbody>
+</nz-table>
+<h6>No. Of Records : {{records}} </h6>
+</div>
+</div>
+
+     <!-- POPUP FOR ADD RESOURCE -->
+     <nz-modal nzWidth="55%" nzHeight="60%" [(nzVisible)]="isVisible" nzTitle="Add Release"
+     (nzOnCancel)="handleCancel()"  [nzFooter]="modalFooter">
+     <form [formGroup]="addResourceForm" (ngSubmit)="submitForm()">
+      <div class="row">
+        <div class="col-6">
+        <label Required>Version :  </label>
+          <input class="sdj" nz-input nzLabel="Version" placeholder="* * " required  formControlName="version"/>
+          <!-- <div>
+            <span class="validationtest"
+                *ngIf="addResourceForm.controls.version.touched && addResourceForm.controls.version.invalid && addResourceForm.controls.version.errors.required">
+                Please enter Version Number
+            </span>
+        </div> -->
+        <div *ngIf="this.addResourceForm.get('version').errors?.required && this.addResourceForm.get('version').touched">
+          <small class="text-danger">Version Number is Required</small></div>
+        <!-- <div *ngIf="this.addResourceForm.get('version').errors?.maxlength && this.addResourceForm.get('version').invalid">
+          <small class="text-danger">Not allowed</small>
+        </div> -->
+        <div *ngIf="this.addResourceForm.get('version').errors?.maxlength && this.addResourceForm.get('version').invalid"><br>
+          <small class="text-danger">Enter only 2 digits</small></div>
+          <div *ngIf="this.addResourceForm.get('version').errors?.pattern && this.addResourceForm.get('version').invalid">
+            <small class="text-danger">Only Numbers Are Allowed</small></div>
+              </div>
+      <div class="col-6">
+        <label>Status : </label>
+        <!-- <input class="adj" nz-input nzLabel="Status" placeholder="Status" Required  formControlName="status" /> -->
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status" style="width: 200px;margin-left: 30px;">
+          <nz-option nzValue="IN PROGRESS" nzLabel="IN PROGRESS"></nz-option>
+          <nz-option nzValue="UNRELEASED" nzLabel="UNRELEASED"></nz-option>
+          <nz-option nzValue="RELEASED" nzLabel="RELEASED"></nz-option>
+        </nz-select>
+        <div *ngIf="this.addResourceForm.get('status').errors?.required && this.addResourceForm.get('status').touched">
+          <small class="text-danger">Please Select Status</small></div>
+    </div>
+      </div><br>
+      <div class="row">
+        <div  class="col-6">
+          <label>Start Date :</label>
+                  <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+                    (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+                    formControlName="startDate" class="date"></nz-date-picker>
+                    <div *ngIf="this.addResourceForm.get('startDate').errors?.required && this.addResourceForm.get('startDate').touched">
+                      <small class="text-danger">Please Select Date</small></div>
+        </div>
+      <div  class="col-6">
+          <label >End Date :</label>
+                  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" class="date"
+                    (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)"
+                    [nzOpen]="endOpen" name="endDate" placeholder="End Date"
+                    formControlName="endDate"></nz-date-picker>
+                    <div *ngIf="this.addResourceForm.get('endDate').errors?.required && this.addResourceForm.get('endDate').touched">
+                      <small class="text-danger">Please Select Date</small></div>
+          </div>
+       </div><br>
+      <div class ="row">
+        <div class="col-12">
+         <label>Description : </label><br>
+         <textarea  class="txt" PlaceHolder='Write something on me .....' rows="3" cols="69" Required  formControlName="description"></textarea>
+         <!-- <div>
+          <span class="validationtest"
+              *ngIf="addResourceForm.controls.description.touched && addResourceForm.controls.description.invalid && addResourceForm.controls.description.errors.required">
+        Add Description...
+          </span>
+      </div> -->
+      <div *ngIf="this.addResourceForm.get('description').errors?.required && this.addResourceForm.get('description').touched">
+        <small class="text-danger">Description is Required</small></div>
+      <div *ngIf="this.addResourceForm.get('description').errors?.maxlength && this.addResourceForm.get('description').invalid">
+        <small class="text-danger">Only 225 Characters are allowed</small>
+      </div>
+      <!-- <div *ngIf="this.addResourceForm.get('description').errors?.pattern && this.addResourceForm.get('description').invalid">
+        <small class="text-danger">Only Numerics Are Allowed</small></div> -->
+       </div>
+      </div>
+
+      <ng-template #modalFooter>
+        <button type="submit" nz-button nzType="primary" (click)="handleSubmit1()" [disabled]="!addResourceForm.valid"> <i nz-icon nzType="save"></i>Save</button>
+        <button nz-button nzType="primary" (click)="handleCancel()">Cancel</button>
+      </ng-template>
+      </form>
+    </nz-modal>
+
+    <!-- POPUP FOR EDIT RESOURCE -->
+    <nz-modal nzWidth="55%" nzHeight="60%" [(nzVisible)]="isVisible1" nzTitle="Edit Release"
+    (nzOnCancel)="handleCancel()"  [nzFooter]="Footer1">
+    <form [formGroup]="editResourceForm">
+     <div class="row">
+       <div class="col-6">
+       <label Required>Version : </label>
+         <input class="sdj" nz-input nzLabel="Version" placeholder="* * " required  formControlName="version"/>
+         <!-- <div>
+          <span class="validationtest"
+              *ngIf="editResourceForm.controls.version.touched && editResourceForm.controls.version.invalid && editResourceForm.controls.version.errors.required">
+              Please enter Version Number
+          </span>
+      </div> -->
+      <div *ngIf="this.editResourceForm.get('version').errors?.required && this.editResourceForm.get('version').touched">
+        <small class="text-danger">Version Number is Required</small></div>
+      <!-- <div *ngIf="this.editResourceForm.get('version').errors?.maxlength && this.editResourceForm.get('version').invalid">
+        <small class="text-danger">Not allowed</small>
+      </div> -->
+      <div *ngIf="this.editResourceForm.get('version').errors?.pattern && this.editResourceForm.get('version').invalid">
+        <small class="text-danger">Enter only 2 digits</small></div>
+             </div>
+             <div class="col-6">
+              <label>Status : </label>
+              <!-- <input class="adj" nz-input nzLabel="Status" placeholder="Status" Required  formControlName="status" /> -->
+              <nz-select  nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status" style="width: 200px;margin-left: 30px;">
+                <nz-option nzValue="IN PROGRESS" nzLabel="IN PROGRESS"></nz-option>
+                <nz-option nzValue="UNRELEASED" nzLabel="UNRELEASED"></nz-option>
+                <nz-option nzValue="RELEASED" nzLabel="RELEASED"></nz-option>
+              </nz-select>
+              <div *ngIf="this.editResourceForm.get('status').errors?.required && this.editResourceForm.get('status').touched">
+                <small class="text-danger">Please Select Status</small></div>
+          </div>
+          </div><br>
+     <!-- </div><br>
+ <div class="row"> -->
+ <!-- <div class="col-4">
+   <nz-form-item>
+   <label>Start Date :</label>
+ <nz-date-picker class="adj" nzPlaceHolder='Start Date' Required  formControlName="startDate"></nz-date-picker>
+</nz-form-item>
+ </div> -->
+<div class="row">
+
+  <div class="col-6">
+    <label>Start Date :</label>
+  <nz-date-picker class="edate" nzPlaceHolder='yyyy-mm-dd' Required [nzDisabled]="true" formControlName="startDate"></nz-date-picker>
+  <div *ngIf="this.editResourceForm.get('startDate').errors?.required && this.editResourceForm.get('startDate').touched">
+    <small class="text-danger">Please Select Date</small></div>
+  </div>
+   <div class="col-6">
+     <label>End Date : </label>
+     <nz-date-picker class="edate" nzPlaceHolder='yyyy-mm-dd' Required  formControlName="releaseDate"></nz-date-picker>
+     <div *ngIf="this.editResourceForm.get('releaseDate').errors?.required && this.editResourceForm.get('releaseDate').touched">
+      <small class="text-danger">Please Select Date</small></div>
+     <!-- <div>
+      <span class="validationtest"
+          *ngIf="editResourceForm.controls.releaseDate.touched && editResourceForm.controls.releaseDate.invalid && editResourceForm.controls.releaseDate.errors.required">
+          Please Enter Date
+      </span>
+  </div> -->
+     </div>
+     </div><br>
+     <div class ="row">
+       <div class="col-12">
+        <label class="tx">Description : </label><br>
+        <textarea  class="txt" PlaceHolder='Write something on me .....' rows="3" cols="69" Required  formControlName="description"></textarea>
+        <!-- <div>
+          <span class="validationtest"
+              *ngIf="editResourceForm.controls.description.touched && editResourceForm.controls.description.invalid && editResourceForm.controls.description.errors.required">
+              Add Description .....
+          </span>
+      </div> -->
+      <div *ngIf="this.editResourceForm.get('description').errors?.required && this.editResourceForm.get('description').touched">
+        <small class="text-danger">Description is Required</small></div>
+      <div *ngIf="this.editResourceForm.get('description').errors?.maxlength && this.editResourceForm.get('description').invalid">
+        <small class="text-primary">Only 225 Characters are allowed</small>
+      </div>
+      <!-- <div *ngIf="this.editResourceForm.get('description').errors?.pattern && this.editResourceForm.get('description').invalid">
+        <small class="text-danger">Only Numerics Are Allowed</small></div> -->
+      </div>
+     </div>
+
+     <ng-template #Footer1>
+      <nz-form-control>
+        <button type="submit" nz-button nzType="primary" (click)="updateTask()" [disabled]="!editResourceForm.valid"><i nz-icon
+          nzType="edit"></i>Update</button>
+        <button nz-button nzType="primary" (click)="handleCancel()">Cancel</button>
+      </nz-form-control>
+     </ng-template>
+     </form>
+   </nz-modal>
+
+
+
+<!------------------------------------------------------------------------------------------------------>
+
+
+

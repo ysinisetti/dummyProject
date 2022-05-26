@@ -1,0 +1,28 @@
+<ul class="breadcrumb">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <li><a (click)="gotoHome()">Home</a></li>
+  <li><a (click)="details()">{{ProjectName}}</a></li>
+</div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+  <p class="cust">Customer Name : <b style="color:  #0275d8;"> {{customerName}}</b></p>
+</div>
+
+</ul>
+<div class="main">
+<div class="row">
+  <div  *ngFor="let data of tableData"  class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+<div (click)="desc(data.url)" class="card"   >
+      <i nz-icon nzType="info-circle" nzTheme="outline" nz-tooltip nzTooltipTitle="{{data.tool}}" class="icon"></i>
+    <div class="card-body">
+     <h5 style="margin-top: 0px; margin-bottom: 0px;">{{data.listName}}</h5>
+     <img src={{data.src}} class="src">
+     <p>
+       {{data.details}}
+     </p>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+

@@ -1,0 +1,232 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li>E Certification</li>
+      </ul>
+  </div>
+</div>
+<form [formGroup]="topicForm">
+  <div class="card" *ngIf="topicCard">
+  <div class="card-body">
+      <div class="row">
+          <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+              <label>Practice</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Practice Name" (ngModelChange)="selectTopic($event)" formControlName="practice">
+                  <nz-option *ngFor="let option of practice" [nzValue]="option.id" [nzLabel]="option.DomainName">
+                  </nz-option>
+              </nz-select>
+              <div *ngIf="this.topicForm.get('practice').errors?.required && this.topicForm.get('practice').touched">
+                  <span class="text-danger validate" >Practice Name Is Required</span></div>
+          </div>
+          <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+              <label>Topic</label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Topic Name" formControlName="topic">
+                  <nz-option *ngFor="let option of topic" [nzValue]="option.id" [nzLabel]="option.TopicName">
+                  </nz-option>
+              </nz-select>
+              <div *ngIf="this.topicForm.get('topic').errors?.required && this.topicForm.get('topic').touched">
+                  <span class="text-danger validate">Topic Name Is Required</span></div>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+              <button class="btn" (click)="startExam()" nz-button nzType="primary">Enter Key</button>
+          </div>
+      </div>
+  </div>
+</div>
+</form>
+<!-- *********INSTRUCTIONS CARD********** -->
+      <div *ngIf="instructions" class="card">
+          <div class="card-body">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <label class="questions">Practice : {{practiceName}}</label>
+              <label class="tc">Topic : {{topicName}}</label><br>
+              <label class="questions">Total Questions : {{ keyvalid['noOfQuestions'] }}</label>
+              <label class="duration">Duration : {{keyvalid['duration']}} &nbsp; Min</label>
+          </div><br>
+
+      <h3><b class="b9">E Certification
+              Instructions</b></h3>
+      <div >
+          <i nz-icon nzType="double-right" nzTheme="outline"></i>&nbsp;<b>Don't Change your Role in the middle of the Exam. !</b><br><br>
+          <i nz-icon nzType="double-right" nzTheme="outline"></i>&nbsp;<b>Don't Refresh the Page. !</b><br><br>
+          <i nz-icon nzType="double-right" nzTheme="outline"></i>&nbsp;<b>Each Question carry 1 mark, no negative marks. !</b><br><br>
+          <i nz-icon nzType="double-right" nzTheme="outline"></i>&nbsp;<b>Test will be automatically submitted if the Time expired. !</b><br>
+      </div><br>
+      <div>
+          <p>The clock will be set at the server. The countdown in the top right corner of the screen will display the remaining time available for you to complete the exemination. When the timer reaches zero, the exam will end by itself. You will not be required to end or submit your examination.</p>
+          The Question Palette displayed on the right side of screen will show the status of each question using one of the following symbols.<br>
+         <p class="p"> <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#2dc937'"></i>&nbsp;<b>You have Answered the Question</b><br>
+          <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#cc3232'"></i>&nbsp;<b>You have Not Answered the Question</b><br>
+          <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#34baeb'"></i>&nbsp;<b>You have Not Visited the Question</b></p>
+      </div>
+      <button class="btnp" (click)="startExamFinal()" nz-button nzType="primary">Start Exam</button>
+   </div>
+</div>
+<!--****** Enter Key MODAL ************-->
+<nz-modal [(nzVisible)]="openKeyEnterForm" (nzOnCancel)="Cancel()" [nzFooter]="modalFooter">
+  <form [formGroup]="keyEnterform">
+      <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <label>Please Enter Exam Key</label>
+              <input nz-input nzLabel="Title" placeholder="Exam Key" formControlName="examKey" />
+              <div
+                  *ngIf="this.keyEnterform.get('examKey').errors?.required && this.keyEnterform.get('examKey').touched">
+                  <span class="text-danger validate">Exam Key Is Required</span></div>
+              <div
+                  *ngIf="this.keyEnterform.get('examKey').errors?.maxlength && this.keyEnterform.get('examKey').invalid">
+                  <span class="text-danger validate">Only 20 Characters are allowed</span>
+              </div>
+          </div>
+      </div>
+      <ng-template #modalFooter>
+          <button nz-button nzType="primary" class="ok" (click)="saveKey()"><i nz-icon nzType="check"
+                  nzTheme="outline"></i>Ok</button>
+          <button nz-button nzType="primary" class="cancel" (click)="Cancel()"> <i nz-icon
+                  nzType="close"></i>Cancel</button>
+      </ng-template>
+
+  </form>
+</nz-modal>
+<!-- *******Questions Page CARD******* -->
+<div *ngIf="Questionpage" class="card">
+  <div class="card-body">
+      <div class="row" >
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+              <div class="card">
+                 <div class="row" id="fRow">
+                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <b>  Topic :</b><b class="topic"> {{topicName}}</b>
+                     </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <b> Remarks : <label class="label">Don't Refresh while writing the exam. !</label></b>
+                  </div>
+<!-- name="{{currentQuestionSet.id}}" value="{{o.optionid}}" -->
+                 </div>
+              </div>
+                  <div class="card" >
+                  <div class="card-body">
+                      <div>
+                          <h5>{{currentQuestionSet?.qNumber}})&nbsp;{{currentQuestionSet?.question}}</h5>
+                          <div *ngFor="let option of currentQuestionSet?.options">
+                            <input type="radio" [value]="option" [(ngModel)]="currentQuestionSet.selectedOption" name="options"   (click)="selectOption(option.optionKey)"/><span class="radio">{{option.optionValue}}</span>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+              <div>
+              <button nz-button  class="btne" (click)="submit()"><span style="text-align: center;">Submit Exam</span></button>
+              <button *ngIf="showNextButton"  nz-button nzType="primary" (click)="next()" class="btns">Next
+                  <!-- <i nz-icon nzType="right" nzTheme="outline"></i> -->
+              </button>
+              <button *ngIf="showPrevButton" nz-button nzType="primary" (click)="previous()" class="btns">
+                  <!-- <i nz-icon nzType="left" nzTheme="outline"></i> -->
+                  Previous</button>&nbsp;
+              </div>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <div *ngIf="Questionpage" class="card">
+                  <div class="card-body">
+                      <b class="b2">Remaining Time</b>
+                      <!-- <h1>00:00:00</h1> -->
+                      <h1>  {{seconds | timeFormat}}</h1>
+                      <!-- <countdown #countdown  [config]="{leftTime: 5, demand: true}" (finished)="finishTest()">$!h!:$!m!:$!s!</countdown> -->
+                      <nz-divider></nz-divider>
+                      <b>Remaining Questions :&nbsp; {{remainingQuestion}}</b><nz-divider></nz-divider>
+                      <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#2dc937'" class="icon"></i>&nbsp;Answered
+                      <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#cc3232'" class="icon1"></i>&nbsp;Not Answered<br>
+                      <i nz-icon nzType="check-circle" nzTheme="twotone" [nzTwotoneColor]="'#34baeb'"></i>&nbsp;Not Visited
+                      <div class="card" style="margin-top: 20px;">
+                          <div class="card-body"  style="text-align: center;">
+                              <ng-container *ngFor="let circle of questions;let k = index">
+                                  <button nz-button nzType="default" nzShape="circle" class="nbtn" (click)="changeQuestion(k)" [ngStyle]="{'background-color': circle?.selectedOption != '' ? '#2dc937' : (circle.isVisited ? '#cc3232' : '#34baeb')}" >{{k+1}}</button>&nbsp;&nbsp;&nbsp;</ng-container>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- *********Submit CONFIRMATION MODAL********* -->
+<nz-modal [(nzVisible)]="afterSubmitForm" (nzOnCancel)="Cancel()" [nzFooter]="submitFooter">
+      <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <label>Are you sure you want to submit the Exam ?</label>
+          </div>
+      </div>
+      <ng-template #submitFooter>
+          <button nz-button nzType="primary" class="ok" (click)="submitExam()"><i nz-icon nzType="check"
+                  nzTheme="outline"></i>Yes</button>
+          <button nz-button nzType="primary" class="cancel" (click)="Cancel()"> <i nz-icon
+                  nzType="close"></i>No</button>
+      </ng-template>
+</nz-modal>
+
+
+
+<nz-modal [(nzVisible)]="resultPage" (nzOnCancel)="Cancel()" [nzFooter]="resultFooter">
+  <h4 style=" background-color: #2368a0;color: #ffffff; text-align: center;">E-Certification Results</h4>
+
+  <!-- <div class="card"> -->
+
+      <br>
+      <b style="margin-left: 3%;">Percentage : &nbsp;80%</b>
+      <br>
+      <div class="table">
+      <nz-table [nzBordered]=true #results [nzData]="result" [nzShowPagination]=false	>
+        <thead>
+
+        </thead>
+        <tbody>
+
+          <!-- MarksObtained: 1
+TotalMarks: 60
+UnAttempted: 58
+Exam Status: "FAIL"
+wrong: 1 -->
+            <tr *ngFor="let data of results.data">
+              <td> Practice </td>
+               <td>{{practiceName}}</td>
+              </tr>
+               <tr>
+                 <td> Topic </td>
+              <td> {{topicName}} </td>
+            </tr>
+            <tr>
+              <td>
+                Total Questions
+              </td>
+              <td>{{numberOfQuestions}}</td>
+            </tr>
+            <tr>
+              <td>Minimum marks</td>
+              <td>{{minimumMarks}}</td>
+              </tr>
+              <tr>
+              <td>Marks Obtained</td>
+              <td>
+                 {{obtainedMarks}}
+               </td>
+              </tr>
+              <tr>
+              <td>
+                Exam status
+              </td>
+              <td>
+                 {{examStatus}}
+                </td>
+             </tr>
+        </tbody>
+        </nz-table>
+      </div>
+      <div>
+      <!-- </div> -->
+
+  </div>
+  <ng-template #resultFooter>
+    <button nz-button nzType="primary" class="cancel" (click)="Cancel()"> <i nz-icon
+            nzType="close"></i>Cancel</button>
+</ng-template>
+</nz-modal>
+

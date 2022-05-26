@@ -1,0 +1,175 @@
+<!-- BreadCrumb -->
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li><a (click)="gotoAssembly()">Assembly Lines</a></li>
+          <li>Assembly Line Roles</li>
+      </ul>
+  </div>
+</div>
+<!-- Edit Assembly Lines -->
+<div class="card">
+<div class="card-body">
+<form nz-form [formGroup]="editAssemblyLineForm">
+  <div class="row">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">       
+        <label nzRequired>Assembly Line Title</label>
+        <input nz-input placeholder="Assembly Line Title " formControlName="AssemblyTitle" />
+        <div *ngIf="this.editAssemblyLineForm.get('AssemblyTitle').errors?.required && this.editAssemblyLineForm.get('AssemblyTitle').touched">
+          <span class="validationtest">Assembly Line Title Is Required</span></div>
+        <div *ngIf="this.editAssemblyLineForm.get('AssemblyTitle').errors?.maxlength && this.editAssemblyLineForm.get('AssemblyTitle').invalid">
+          <span class="validationtest">Only 25 Characters are allowed</span>
+        </div>
+        <div *ngIf="this.editAssemblyLineForm.get('AssemblyTitle').errors?.pattern && this.editAssemblyLineForm.get('AssemblyTitle').invalid">
+          <span class="validationtest">Only Characters Are Allowed</span></div>       
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <label>Status</label>
+      <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+        <nz-option *ngFor="let option of statusType" [nzValue]="option.Values" [nzLabel]="option.Label">
+        </nz-option>
+      </nz-select>
+      <div
+        *ngIf="this.editAssemblyLineForm.get('status').errors?.required && this.editAssemblyLineForm.get('status').touched">
+        <span class="validationtest">Please Select Status Type</span></div>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">       
+      <label>Created By</label>
+      <input nz-input placeholder="Created By" [readonly]="true" formControlName="createdBy"  />       
+  </div>
+  </div>
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">         
+          <label>Description</label>
+          <textarea nz-input placeholder="Description" maxlength="1501"  formControlName="description" nzAutosize></textarea>
+    </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">    
+     <button nz-button nzType="primary"  class="update" (click)="assemblyLineUpdate()"> <i nz-icon nzType="edit"></i>Update</button>
+ </div>
+</div>
+</form>
+</div>
+</div>
+<!-- Assembly line skills grid -->
+<div class="card" id="grid">
+  <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+        <label class="rec">No. of Records :{{records}} </label>
+      </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="add" (click)="addSkills()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+          </div>
+        </div>
+
+      <div class="card-body" id="gridBody">
+      <nz-table #basicTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+        nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+        [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+        (nzPageSizeChange)="onPageSizeChange($event)">
+        <thead>
+          <tr>                         
+            <th *ngFor="let column of listOfColumns"
+                 [nzWidth]="column.width">
+            {{ column.name }}
+             </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of listOfData ; let i = index ">
+            <tr>
+              <td>{{pageSize *(pageNum-1)+i+1}}</td>
+              <td >{{role[item.roleName]}}</td>
+              <td >{{skill[item.skillSetId]}}</td>
+              <td>{{item.qty }}</td>
+              <td>{{ item.description }}</td>
+             <td>
+                <i nz-icon nzType="edit" (click)="editSkills(item)" nzTheme="outline"></i>&nbsp;
+                <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                  (nzOnConfirm)="deleteRow(item)"></i>&nbsp;
+                <i nz-icon nzType="more" nzEllipsis nzTooltipTitle="Assembly Workers List" nz-tooltip (click)="view()" nzTheme="outline"></i>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+
+<!-- add skills -->
+<nz-modal nzWidth="50%" nzHeight="80%" [(nzVisible)]="addSkillsVisible" nzTitle="Add Skills" (nzOnCancel)="cancelAssemblySkills()"
+[nzFooter]="modalFooter">
+<form nz-form [formGroup]="addSkillsForm">
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+        <label>Role Name</label>
+        <nz-select  nzAllowClear nzPlaceHolder="Role Name" formControlName="role">
+          <nz-option *ngFor="let option of roleDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+          </nz-option>
+        </nz-select>         
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+          <label>Skill Set<span class="validationtest">*</span></label>
+          <nz-select  nzAllowClear nzPlaceHolder="Skillset" formControlName="skillSet">
+              <nz-option *ngFor="let option of SkillsetDropDown" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+              </nz-option>
+            </nz-select> 
+            <div *ngIf="this.addSkillsForm.get('skillSet').errors?.required &&
+            this.addSkillsForm.get('skillSet').touched">
+             <span class="validationtest">Skillset is required</span></div>        
+  </div>
+</div>  
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">     
+      <label>Quantity</label>
+      <input nz-input type="number" placeholder="Quantity" formControlName="quantity" />     
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">     
+     <label>Description</label>
+     <textarea nz-input placeholder="Description"   formControlName="description" nzAutosize></textarea>     
+  </div>
+</div>
+
+<ng-template #modalFooter>
+  <button nz-button class="cancel" nzType="primary" (click)="cancelAssemblySkills()"> <i nz-icon nzType="close"></i>Cancel</button>
+  <button nz-button class="save" nzType="primary" [disabled] = "btnDisabled" (click)="saveSkills()"> <i nz-icon nzType="save"></i>Save</button>
+</ng-template>
+</form>
+</nz-modal>
+
+<!-- edit skills -->
+<nz-modal nzWidth="50%" nzHeight="80%" [(nzVisible)]="editSkillVisible" nzTitle="Edit Skills" (nzOnCancel)="editCancel()"
+[nzFooter]="modalFooter1">
+<form nz-form [formGroup]="editSkillsForm">
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+        <label>Role Name</label>
+        <nz-select  nzAllowClear nzPlaceHolder="Role Name" formControlName="role">
+          <nz-option *ngFor="let option of roleDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+          </nz-option>
+        </nz-select>         
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">       
+       <label>Skill Set</label>
+       <nz-select  nzAllowClear nzPlaceHolder="Skillset" formControlName="skillSet">
+       <nz-option *ngFor="let option of SkillsetDropDown" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+       </nz-option>
+      </nz-select>         
+  </div>
+</div>  
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">     
+      <label>Quantity</label>
+      <input nz-input  type="number" placeholder="Quantity" formControlName="quantity" />     
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">     
+     <label>Description</label>
+     <textarea nz-input placeholder="Description"   formControlName="description" nzAutosize></textarea>     
+  </div>
+</div>
+<ng-template #modalFooter1>
+  <button nz-button class="cancel" nzType="primary" (click)="editCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+  <button nz-button class="save"nzType="primary" (click)="updateSkills()"> <i nz-icon nzType="edit"></i>Update</button>
+</ng-template>
+</form>
+</nz-modal>

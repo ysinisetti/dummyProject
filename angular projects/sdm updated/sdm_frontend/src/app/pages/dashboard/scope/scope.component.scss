@@ -1,0 +1,370 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+
+.search {
+  margin-left: 75%;
+  margin-top: -35px;
+  width: 25%;
+}
+.add {
+  font-size: 15px;
+  margin-left: 93%;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+.btn {
+  margin-top: 39px;
+  // width: 100px;
+  float: right;
+  margin-bottom: 10px;
+  // margin-left: 0px !important;
+  // margin-right: 53px;
+  margin-left: 36px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.bttodo {
+  // margin-top: 6px;
+  // margin-left: 60px;
+  float: right;
+  margin-bottom: 10px;
+  // margin-top: -35px;
+  // margin-right: -969px;
+}
+
+.btn1 {
+  // margin-top: -5px;
+  // width: 100px;
+  float: right;
+  margin-bottom: 10px;
+  margin-top: -5px;
+  margin-right: -20px;
+  font-size: 18px !important;
+  // margin-left: 0px !important;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn1 {
+    width: 50%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn1 {
+    width: 50%;
+    float: right;
+  }
+}
+.btn2 {
+  margin-top: -12px;
+  // width: 100px;
+  float: right;
+  margin-bottom: 10px;
+
+  // margin-left: 0px !important;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn2 {
+    width: 100%;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 100px) {
+  .btn2 {
+    width: 100%;
+    float: right;
+  }
+}
+// p{
+// // float: right;
+// margin-left: 729px;
+// }
+.reco {
+  margin-bottom: -80px;
+  margin-left: 5px;
+}
+b {
+  color: #00aae7;
+}
+#card {
+  margin-top: 5px;
+}
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  margin-left: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+nz-table[nzPaginationPosition] {
+  padding-right: 320px;
+}
+
+.name {
+  width: 198px;
+}
+.sSeq {
+  width: 250px;
+  margin-left: 25px;
+}
+
+.title1 {
+  margin-left: 1%;
+  width: 213px;
+}
+.title2 {
+  margin-left: 16%;
+}
+.site-page-header {
+  margin-bottom: -30px;
+}
+
+// h6{
+// margin-top: -55px;
+// }
+.title {
+  width: 250px;
+  margin-left: 66px;
+}
+.titleee {
+  width: 250px;
+  margin-left: 16px;
+}
+// .titleee {
+//   margin-left: 40px;
+// }
+.ETtitle {
+  width: 250px;
+  margin-left: 35px;
+}
+.status {
+  width: 350px;
+  margin-left: 380px;
+  margin-top: -80px;
+}
+.stat {
+  margin-left: 20px;
+  width: 350px;
+}
+.editde {
+  margin-left: 75px;
+  margin-top: -35px;
+}
+.bread {
+  margin-left: 180px !important;
+}
+.Ttitle {
+  margin-left: 45px;
+  width: 250px;
+}
+.etitle {
+  width: 250px;
+  margin-left: 15px;
+}
+.stitle {
+  margin-left: 43px;
+  width: 250px;
+}
+.seq {
+  width: 250px;
+  margin-left: 20px;
+}
+
+.seqNo {
+  width: 250px;
+  margin-left: 10px;
+}
+.predecessors {
+  width: 250px;
+}
+.predecessor {
+  width: 250px;
+  margin-left: 5px;
+}
+.tSeqNo {
+  width: 250px;
+  margin-left: 30px;
+}
+.priority {
+  width: 250px;
+  margin-left: 10px;
+}
+.assignedTo {
+  width: 250px;
+  margin-left: 10px;
+}
+.stdt {
+  width: 250px;
+}
+.Descript {
+  max-width: 80%;
+}
+.etdt {
+  width: 250px;
+}
+.tag {
+  width: 250px;
+}
+.createdBy,
+.dId,
+.tags {
+  width: 250px;
+}
+.aId {
+  width: 250px;
+  margin-left: 27px;
+}
+.arId {
+  width: 250px;
+  // margin-left: 2px;
+}
+.setitle {
+  width: 250px;
+  margin-left: 50px;
+}
+.seType {
+  margin-left: 16px;
+  width: 250px;
+}
+.sePoints {
+  margin-left: 30px;
+  width: 250px;
+}
+.createdBy {
+  margin-left: 8px;
+}
+.sdesp {
+  max-width: 83% !important;
+}
+.divdes {
+  margin-left: -20px;
+}
+.tags {
+  margin-left: 35px;
+}
+.Start {
+  width: 250px;
+  margin-left: 20px;
+}
+.endDate {
+  width: 250px;
+  margin-left: 20px;
+}
+.txt {
+  margin-left: 95px;
+  margin-top: -35px;
+  max-width: 93% !important;
+}
+.tAssignedTo {
+  width: 250px;
+  margin-left: 15px;
+}
+.etag,
+.task,
+.etask,
+.create,
+.sPoints,
+.sType {
+  width: 250px;
+}
+.task {
+  margin-left: 20px;
+}
+.sType {
+  margin-left: 9px;
+}
+.descript {
+  width: 1000px;
+  margin-left: 80px;
+  margin-top: -35px;
+}
+.edescript {
+  width: 750px;
+}
+.edescription {
+  margin-left: 100px;
+  margin-top: -35px;
+  max-width: 80% !important;
+}
+.eseq {
+  margin-left: -10px;
+  width: 250px;
+}
+.desDiv {
+  margin-left: 5px;
+}
+.sdep {
+  margin-left: 80px;
+  margin-top: -35px;
+}
+.fRow {
+  margin-left: 20px;
+}
+#search {
+  margin-top: 10px;
+  margin-left: 906%;
+  margin-bottom: 10px;
+}
+.sForm {
+  width: 250px;
+  position: relative;
+  margin-top: 10px;
+  // margin-left: 10px;
+}
+.sName {
+  margin-left: -25px;
+  margin-top: 18px;
+  position: absolute;
+}
+.home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -23px;
+}
+.comName {
+  margin-left: 150px;
+  margin-top: -22px;
+}

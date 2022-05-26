@@ -1,0 +1,524 @@
+<nz-breadcrumb>
+  <div>
+  <a (click)="details()">
+  <p class="title1">{{ProjectName}} <span class="arrow"></span></p>
+  </a>
+  </div>
+  <nz-breadcrumb-item>
+  <p class="bread">&nbsp;Todo List</p>
+  </nz-breadcrumb-item>
+ </nz-breadcrumb>
+  <div class="card">
+  <nz-page-header class="site-page-header" nzTitle="Todo List">
+  </nz-page-header>
+  <!-- <form>
+  <nz-input-group class="search" nzSearch [nzAddOnAfter]="suffixIconButton">
+  <input type="text" name="search" [(ngModel)]="searchTask" nz-input placeholder="Search ..." (ngModelChange)="onSearch($event)"/>
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+  <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  </form> -->
+  <div class="card-body">
+  <!-- <form [formGroup]="prjForm"> -->
+  <div class="row">
+  <div class="col-4">
+  <!-- <label nzRequired nzFor="Name">Customer Name:&nbsp; {{cusName}}</label>&nbsp; -->
+  
+  </div>
+  <div class="col-4">
+  <!-- <label>Project Name :&nbsp;{{proName}}</label>&nbsp; -->
+  
+  </div>
+  <div class="col-4" style="padding-left: 180px; margin-top: -37px;">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+  <input type="text" nz-input placeholder="Search Here" />
+  <!-- <input type="text" (input)="onSearch($event.target.value)" nz-input placeholder="Search Here" /> -->
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+  <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  </div>
+  </div>
+  <!-- </form> -->
+  </div>
+  </div>
+  <nz-tabset>
+  <nz-tab nzTitle="My Tasks">
+  
+  <div class="card">
+  <div class="row">
+  <div class="col-12 justify-content-end" class="add" >
+  <button nz-button (click)="addTask()" nzType="primary">
+  <i nz-icon nzType="plus"></i> Add</button>
+  </div>
+  </div>
+  <div class="card-body">
+  <nz-table>
+  <!-- <nz-pagination [nzPageIndex]="3" class="page" [nzTotal]="30" nzShowSizeChanger [nzPageSize]="10"></nz-pagination> -->
+  <thead>
+  <tr>
+  <th nzWidth="12%">TITLE</th>
+  <th nzWidth="6%">START DATE</th>
+  <th nzWidth="6%">END DATE</th>
+  <th nzWidth="3%">DURATION<br>(Days)</th>
+  <th nzWidth="3%">STATUS</th>
+  <th nzWidth="3%">PRIORITY</th>
+  <th nzWidth="3%">NOTES</th>
+  <th nzWidth="5%">ACTIONS</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of taskDetails">
+  <td>{{data.Name}}</td>
+  <td>{{data.StartDate | date: 'MM/dd/yyyy'}}</td>
+  <td>{{data.EndDate | date: 'MM/dd/yyyy'}}</td>
+  <td>{{data.Duration}} &nbsp; Days </td>
+  <td>{{data.Status}}</td>
+  <td>{{data.Priority}}</td>
+  <td>
+  <a nz-popover nzPopoverContent="{{data.Description}}">
+  <nz-card style="width:150px;height: 40px; white-space: nowrap;overflow: hidden;">
+  <p style="margin-top: -18px; margin-left:-20px">{{data.Description}}
+  </p>
+  </nz-card>
+  </a>
+  </td>
+  <td>
+  <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)"></i>&nbsp;&nbsp;
+  <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.Id)">
+  <i nz-icon nzTheme="fill" nzType="delete"></i>&nbsp;&nbsp;
+  </a>
+  </td>
+  </tr>
+  </tbody>
+  </nz-table>
+  </div>
+  </div>
+  </nz-tab>
+  <nz-tab nzTitle="Todo List">
+  <div class="card">
+  <div class="row">
+  <div class="col-12 justify-content-end" class="add">
+  <button nz-button (click)="addTodo()" nzType="primary">
+  <i nz-icon nzType="plus"></i> Add</button>
+  </div>
+  </div>
+  <div class="card-body">
+  <nz-table>
+  <!-- <nz-pagination [nzPageIndex]="3" class="page" [nzTotal]="30" nzShowSizeChanger [nzPageSize]="10"></nz-pagination> -->
+  <thead>
+  <tr>
+  <th nzWidth="12%">TITLE</th>
+  <th nzWidth="6%">START DATE</th>
+  <th nzWidth="6%">END DATE</th>
+  <th nzWidth="3%">DURATION<br>(Days)</th>
+  <th nzWidth="3%">STATUS</th>
+  <th nzWidth="3%">PRIORITY</th>
+  <th nzWidth="3%">NOTES</th>
+  <th nzWidth="5%">ACTIONS</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let todo of todoDetails">
+  <td>{{todo.TodoName }}</td>
+  <td>{{todo.StartDate | date: 'MM/dd/yyyy'}}</td>
+  <td>{{todo.EndDate | date: 'MM/dd/yyyy'}}</td>
+  <td>{{todo.Duration}} &nbsp; Days </td>
+  <td>{{todo.Status}}</td>
+  <td>{{todo.Priority}}</td>
+  <td>
+  <a nz-popover nzPopoverContent="{{todo.Description}}">
+  <nz-card style="width:150px;height: 40px; white-space: nowrap;overflow: hidden;">
+  <p style="margin-top: -18px; margin-left:-20px">{{todo.Description}}
+  </p>
+  </nz-card>
+  </a>
+  </td>
+  <td>
+  <i nz-icon nzType="edit" nzTheme="fill" (click)="editTodo(todo)"></i>&nbsp;&nbsp;
+  <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteTodo(todo.Id)">
+  <i nz-icon nzTheme="fill" nzType="delete"></i>&nbsp;&nbsp;
+  </a>
+  </td>
+  </tr>
+  </tbody>
+  </nz-table>
+  </div>
+  </div>
+  <!-- <h6>No. of Records : {{records}}</h6> -->
+  </nz-tab>
+  <nz-tabset>
+  
+  <!-- Edit Todo -->
+  <nz-modal nzWidth="70%" nzHeight="60%" [(nzVisible)]="openEditTodoForm" nzTitle="Edit Todo" (nzOnCancel)="cancel()" [nzFooter]="EditTodoFooter">
+  <form [formGroup]="editTodoForm">
+  <div class="row">
+  <div class="col-4">
+  <label>Title : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input nzLabel="Title" placeholder="Title " class="titlee" name="name" formControlName="name" />
+  
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label style="margin-left: -10px;">Status : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" style="width: 185px;margin-left: 4px;">
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.editTodoForm.get('status').errors?.required && this.editTodoForm.get('status').touched">
+  <small class="text-danger">Please Select Status</small></div> -->
+  
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Priority : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Priority" formControlName="priority" style="width: 180px;margin-left: 20px;">
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.editTodoForm.get('priority').errors?.required && this.editTodoForm.get('priority').touched">
+  <small class="text-danger">Please Select Priority</small></div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-6">
+  <nz-form-item>
+  <label>Start Date:</label>&nbsp;
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' [nzDisabled]="true" class="satdt" formControlName="startDate">
+  </nz-date-picker>
+  <!-- <div *ngIf="this.editTodoForm.get('startDate').errors?.required && this.editTodoForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  </nz-form-item>
+  </div>
+  <div class="col-6" class="endy">
+  <label class="etdt1" >End Date : </label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName="endDate" ></nz-date-picker>
+  <!-- <div *ngIf="this.editTodoForm.get('endDate').errors?.required && this.editTodoForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  </div>
+  </div>
+  
+  <div class="row">
+  <div class="col-12">
+  <nz-form-item>
+  <label class="tx">Description : </label>
+  <textarea class="txt" PlaceHolder='Write something on me .....' rows="3" cols="52" formControlName="description"></textarea>
+  <!-- <div *ngIf="this.editTodoForm.get('description').errors?.required && this.editTodoForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.editTodoForm.get('description').errors?.maxlength && this.editTodoForm.get('description').invalid">
+  <small class="text-danger">Only 225 Characters are allowed</small>
+  </div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  <ng-template #EditTodoFooter>
+  <nz-form-control>
+  <button type="submit" nz-button nzType="primary" (click)="updatingTodo()"><i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()"><i nz-icon nzType="close"></i>Cancel</button>
+  </nz-form-control>
+  </ng-template>
+  </form>
+  </nz-modal>
+  
+  <!-- Add a TODO -->
+  
+  <nz-modal nzWidth="70%" nzHeight="60%" [(nzVisible)]="openAddTodoForm" nzTitle="Add Todo"
+  (nzOnCancel)="cancel()" [nzFooter]="AddTodoFooter">
+  <form [formGroup]="addTodoForm">
+  <div class="row">
+  <div class="col-4">
+  <label Required>Name : </label>
+  <input nz-input nzLabel="Name" placeholder="Title" class="title" required formControlName="name" />
+  
+  </div>
+  
+  <div class="col-4">
+  <label class="slabel">Start Date :</label>
+  
+  <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+  (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+  formControlName="startDate" style="width: 190px;" ></nz-date-picker>
+  <!-- <div *ngIf="this.addTodoForm.get('startDate').errors?.required && this.addTodoForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  
+  </div>
+  <div class="col-4">
+  <label>End Date :</label>
+  
+  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" class="End"
+  (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)" [nzOpen]="endOpen"
+  name="endDate" placeholder="End Date" formControlName="endDate" style="width: 190px;"></nz-date-picker>
+  <!-- <div *ngIf="this.addTodoForm.get('endDate').errors?.required && this.addTodoForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-6">
+  <nz-form-item>
+  <label Required>Status : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status"
+  style="width: 200px;margin-left: 18px;">
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.addTodoForm.get('status').errors?.required && this.addTodoForm.get('status').touched">
+  <small class="text-danger">Please Select Status</small></div> -->
+  </nz-form-item>
+  </div>
+  <div class="col-6" style="margin-left: -200px;">
+  <nz-form-item>
+  <label Required style="margin-left: 22px;">Prority : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Prority" formControlName="priority"
+  style="width: 204px; margin-left: 10px;">
+  <!-- <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option> -->
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.addTodoForm.get('priority').errors?.required && this.addTodoForm.get('priority').touched">
+  <small class="text-danger">Please Select Prority</small></div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  
+  <!-- Description -->
+  <div class="row">
+  <div class="col-12">
+  <nz-form-item>
+  <label class="tx">Description : </label>
+  <textarea class="txt" PlaceHolder='Write something here .....' rows="3" cols="56" Required
+  formControlName="description"></textarea>
+  <!-- <div *ngIf="this.addTodoForm.get('description').errors?.required && this.addTodoForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.addTodoForm.get('description').errors?.maxlength && this.addTodoForm.get('description').invalid">
+  <small class="text-danger">Only 225 Characters are allowed</small>
+  </div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  <ng-template #AddTodoFooter>
+  <button type="submit" nz-button nzType="primary" (click)="addingTodo()">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+  <nz-tabset>
+  
+  
+  <!-- Add MyTask -->
+  <nz-modal nzWidth="70%" nzHeight="60%" [(nzVisible)]="openAddTaskForm" nzTitle="Add Task" (nzOnCancel)="cancel()" [nzFooter]="addMyTaskFooter">
+  <form [formGroup]="addMytaskForm">
+  <div class="row">
+  <div class="col-4">
+  <label Required>Name : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input nzLabel="Name" placeholder="Title" class="title" required formControlName="name" />
+  <!-- <div *ngIf="this.addMytaskForm.get('name').errors?.required && this.addMytaskForm.get('name').touched">
+  <small class="text-danger">Title Is Required</small></div>
+  <div *ngIf="this.addMytaskForm.get('name').errors?.maxlength && this.addMytaskForm.get('name').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addMytaskForm.get('name').errors?.pattern && this.addMytaskForm.get('name').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div> -->
+  
+  </div>
+  <div class="col-4">
+  <label Required>Created By : </label>
+  <input nz-input nzLabel="Created By" class="title" placeholder="Created By" required formControlName="createdBy" />
+  </div>
+  <div class="col-4">
+  <label Required>Assigned To : </label>
+  <input nz-input nzLabel="Assigned To" style="width: 190px;" placeholder="Assigned To" required formControlName="assignedTo" />
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-4">
+  <label class="slabel">Start Date :</label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+  (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+  formControlName="startDate" style="width : 200px"></nz-date-picker>
+  <!-- <div *ngIf="this.addMytaskForm.get('startDate').errors?.required && this.addMytaskForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  
+  </div>
+  <div class="col-4">
+  <label>End Date :</label>
+  
+  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" class="End"
+  (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)" [nzOpen]="endOpen"
+  name="endDate" placeholder="End Date" formControlName="endDate" style="width : 200px; margin-left: 30px; "></nz-date-picker>
+  <!-- <div *ngIf="this.addMytaskForm.get('endDate').errors?.required && this.addMytaskForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  
+  </div>
+  <div class="col-4">
+  <label Required>Seq No : </label>
+  <input nz-input nzLabel="Seq No" class="title" placeholder="Seq No" required formControlName="seqNo" />
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-4">
+  <label Required>Predecessors: </label>&nbsp;
+  <input nz-input nzLabel="Predecessors" class="title" placeholder="Predecessors" required formControlName="predecessors" style="margin-left:-1px"/>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Status : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status"
+  style="width: 202px;margin-left: 45px;">
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.addMytaskForm.get('status').errors?.required && this.addMytaskForm.get('status').touched">
+  <small class="text-danger">Please Select Status</small></div> -->
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Prority : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Prority" formControlName="priority" class="priority"
+  style="width: 200px;margin-left: 23px;">
+  <!-- <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option> -->
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.addMytaskForm.get('priority').errors?.required && this.addMytaskForm.get('priority').touched">
+  <small class="text-danger">Please Select Prority</small></div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  
+  <!-- Description -->
+  <div class="row">
+  
+  <div class="col-12">
+  <nz-form-item>
+  <label class="tx">Description : </label>
+  <textarea class="txt" PlaceHolder='Write something here .....' rows="3" cols="60" Required
+  formControlName="description"></textarea>
+  <!-- <div *ngIf="this.addMytaskForm.get('description').errors?.required && this.addMytaskForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div> -->
+  <!-- <div *ngIf="this.addMytaskForm.get('description').errors?.maxlength && this.addMytaskForm.get('description').invalid">
+  <small class="text-danger">Only 225 Characters are allowed</small>
+  </div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  
+  <ng-template #addMyTaskFooter>
+  <button type="submit" nz-button nzType="primary" (click)="AddingTask()">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+  
+  
+  <!-- Edit MyTask -->
+  <nz-modal nzWidth="70%" nzHeight="60%" [(nzVisible)]="openEditTaskForm" nzTitle="Edit Todo"
+  (nzOnCancel)="cancel()" [nzFooter]="editMyTaskFooter">
+  <form [formGroup]="editMyTaskForm">
+  <div class="row">
+  <div class="col-4">
+  
+  <label>Title : </label>
+  <input nz-input nzLabel="Title" placeholder="Title " class="title" name="name" formControlName="name" />
+  <!-- <div *ngIf="this.editMyTaskForm.get('name').errors?.required && this.editMyTaskForm.get('name').touched">
+  <small class="text-danger">Title Is Required</small></div>
+  <div *ngIf="this.editMyTaskForm.get('name').errors?.maxlength && this.editMyTaskForm.get('name').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editMyTaskForm.get('name').errors?.pattern && this.editMyTaskForm.get('name').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div> -->
+  
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label>Status : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status"
+  style="width: 200px;margin-left: 40px;">
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.editMyTaskForm.get('status').errors?.required && this.editMyTaskForm.get('status').touched">
+  <small class="text-danger">Please Select Status</small></div> -->
+  
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Priority : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Priority" formControlName="priority" class="priority"
+  style="width: 200px;margin-left: 30px;">
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <!-- <div *ngIf="this.editMyTaskForm.get('priority').errors?.required && this.editMyTaskForm.get('priority').touched">
+  <small class="text-danger">Please Select Priority</small></div> -->
+  </nz-form-item>
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label>Start Date:</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' class="stdt" formControlName="startDate">
+  </nz-date-picker>
+  <!-- <div *ngIf="this.editMyTaskForm.get('startDate').errors?.required && this.editMyTaskForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  </nz-form-item>
+  </div><br>
+  
+  <div class="col-4">
+  
+  <label>End Date : </label>
+  <nz-date-picker class="emend" nzPlaceHolder='yyyy-mm-dd' formControlName="endDate"></nz-date-picker>
+  <!-- <div *ngIf="this.editMyTaskForm.get('endDate').errors?.required && this.editMyTaskForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div> -->
+  </div>
+  <div class="col-4">
+  <label>Seq No : </label>
+  <input nz-input nzLabel="Seq No" class="emend" placeholder="Seq No" name="seqNo" formControlName="seqNo" />
+  </div>
+  </div>
+  <div class="row">
+  </div>
+  <br>
+  <div class="row">
+  <div class="col-4">
+  <label>Predecessors : </label>
+  <input nz-input nzLabel="Predecessors" class="emend" placeholder="Predecessors " name="predecessors" formControlName="predecessors" />
+  </div>
+  <div class="col-8">
+  <nz-form-item>
+  <label class="tx">Description : </label>
+  <textarea class="txt" PlaceHolder='Write something here .....' rows="3" cols="50"
+  formControlName="description"></textarea>
+  <!-- <div *ngIf="this.editMyTaskForm.get('description').errors?.required && this.editMyTaskForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.editMyTaskForm.get('description').errors?.maxlength && this.editMyTaskForm.get('description').invalid">
+  <small class="text-danger">Only 225 Characters are allowed</small>
+  </div> -->
+  </nz-form-item>
+  </div>
+  </div>
+  
+  
+  <ng-template #editMyTaskFooter>
+  <nz-form-control>
+  <button type="submit" nz-button nzType="primary" (click)="editMyTask()">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </nz-form-control>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+ 

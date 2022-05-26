@@ -1,0 +1,53 @@
+<div fxLayoutAlign="center center" class="card">
+    <mat-card fxFlex="35">
+        <mat-toolbar color="primary">{{name}}</mat-toolbar>
+        <form [formGroup]="loginForm" fxLayoutAlign="stretch" fxLayout="column" class="form">
+
+            <mat-form-field class="field" appearance="outline">
+                <mat-label for="userName"> User Name </mat-label>
+                <input matInput id="userName" autocomplete="off" type="text" placeholder="userName@email.com "
+                    formControlName="userName">
+                <mat-error *ngIf="loginForm.get('userName').errors?.required">User Name is Required
+                </mat-error>
+                <mat-error *ngIf="loginForm.get('userName').errors?.minlength">User Name must have 3
+                    characters</mat-error>
+                <mat-error *ngIf="loginForm.get('userName').errors?.maxlength">User Name Must have less than
+                    30 Characters</mat-error>
+                <mat-error *ngIf="loginForm.get('userName').errors?.pattern">Please enter valid email format
+                </mat-error>
+            </mat-form-field>
+
+
+
+            <mat-form-field class="field" appearance="outline">
+                <mat-label>password</mat-label>
+                <input matInput formControlName="password" autocomplete="off" placeholder="password"
+                    [type]="hide ? 'password' : 'text'" maxlength="15" minlength="8">
+                <mat-error *ngIf="loginForm.get('password').errors?.required">Password Is Required</mat-error>
+                <mat-error *ngIf="loginForm.get('password').errors?.minlength">Password Must have atlest 8
+                    characters</mat-error>
+                <mat-error *ngIf="loginForm.get('password').errors?.maxlength">Password Must have less than 15
+                    Characters</mat-error>
+                <mat-error *ngIf="loginForm.get('password').errors?.pattern">Password Must have one lower case
+                    letter, one Uppercase letter, one Alpha numeric symbol, one number
+                    Characters</mat-error>
+                <button mat-icon-button matSuffix (click)="hide=!hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="buttons">
+                <div class="space"></div>
+                <div class="login">
+                    <button mat-raised-button color="primary" (click)="login()" matTooltip="Do u want to login"  
+                    aria-label="Button that displays a tooltip when focused or hovered over">Login</button>
+                </div>
+                <div class="register">
+                    <button mat-raised-button color="primary" (click)="register()"
+                    matTooltip="Do u want to register"  
+                    aria-label="Button that displays a tooltip when focused or hovered over">Register</button>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+</div>

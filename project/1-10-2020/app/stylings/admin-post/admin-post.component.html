@@ -1,0 +1,41 @@
+<!-- <div fxLayout="column">
+    <mat-card>
+
+        <div>
+            <a href="https://drive.google.com/file/d/1uG225Mgmtf2MqXKq6AB9oIVq7V-_uypq/view" target="_blank">Food &&
+                accomdation for August</a>
+
+        </div>
+        <div>
+            <a href="http://event.on24.com/wcc/r/2300454/A43D15559D896395249EF74C6D270B12?partnerref=cognos"
+                target="_blank">Register for Data and AI</a>
+        </div>
+        <div>
+            <a href="https://www.miraclesoft.com/library/CaseStudy/enhanced-application-development-global-manufacturer.php"
+                target="_blank">Register for Continous Testing with AWS</a>
+        </div>
+
+        <div>
+            <a href="https://reinvent.awsevents.com/" target="_blank">Register for AWS Reinvent</a>
+        </div>
+
+        
+
+        <div>
+            <a href="https://www.miraclesoft.com/library/CaseStudy/enhanced-application-development-global-manufacturer.php" target="_blank">Register for AI SUMMIT</a>
+        </div>
+
+         <div>
+            <a href="https://reinvent.awsevents.com/" target="_blank">Register for AWS Reinvent</a>
+        </div> 
+
+    </mat-card>
+</div> -->
+<div fxLayout="column">
+      <div *ngFor="let option of data">
+            <a href={{option.link}} target="_blank">{{option.name}}</a>
+
+        </div>
+</div>
+
+

@@ -1,0 +1,130 @@
+<ul class="breadcrumb">
+    <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12" >
+   
+   
+    <li><a (click)="gotoHome()">Home</a></li>
+    <!-- <li><a (click)="details()">{{ProjectName}}</a></li> -->
+    <li>Add</li>
+   </div>
+    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" >
+    <li class="btn2">Customer Name : Miracle Software Systems</li>
+   </div>
+   </ul>
+    <nz-collapse nzAccordion>
+    <nz-collapse-panel class="header" nzHeader=" Library Asset Details" [nzActive]="true">
+    <form [formGroup]="libraryAssectForm">
+    <div class="row">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+    <label>SkillSet</label>
+    <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillSet'>
+    <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+    [nzLabel]="option.optionValue">
+    </nz-option>
+    </nz-select>
+    </div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+    <label>Asset Title</label>
+    <input nz-input placeholder="Asset Title" name="assetTitle" formControlName="assetTitle" />
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+    <label>Asset Type</label>
+    <nz-select nzAllowClear nzPlaceHolder="Asset Type" formControlName="assetType">
+    <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+    [nzLabel]="option.optionValue">
+    </nz-option>
+    </nz-select>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+    <label>Author</label>
+    <input nz-input placeholder="Author" name="author" formControlName="author" />
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+    <label>Status</label>
+    <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+    <nz-option *ngFor="let option of dropDown" [nzValue]="option.optionKey"
+    [nzLabel]="option.optionValue">
+    </nz-option>
+    </nz-select>
+    </div>
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <label>Description</label>
+    <textarea nz-input placeholder="Please enter description" formControlName='description'
+    nzAutosize></textarea>
+    <!-- <div>
+    <span class="validationtest"
+    *ngIf="addIssueForm.controls.description.touched && addIssueForm.controls.description.invalid && addIssueForm.controls.description.errors.required">
+    Please enter data
+    </span>
+    </div> -->
+    </div>
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"></div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+    <button class="btnClass" style="float: right;" nz-button nzType="primary"
+    (click)="resetLibaryAssectDetails()"><i nz-icon nzType="redo"></i>Reset</button>
+    <button class="btnClass" nz-button nzType="primary" (click)="searchLibraryAssectDetails()"><i
+    nz-icon nzType="search"></i>Search</button>
+    </div><br>
+    </div>
+    </form>
+    </nz-collapse-panel>
+    </nz-collapse>
+    <div class="card"><br>
+    <div class="card-body">
+    <br>
+    <div class="row">
+    <div class="col-12">
+    <div class="row">
+    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <!-- <label nzRequired nzFor="Name">Customer Name:&nbsp; {{cusName}}</label> -->
+    </div>
+    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <!-- <label>Choose File</label> -->
+    <!-- <label>Project Name :&nbsp;{{proName}}</label> -->
+    </div>
+    <!-- <label>Choose File</label> -->
+    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+    <button style="width: 100px;margin-top:-49px;float: right;" (click)="clickOnAdd()" nz-button
+    nzType="primary"><i nz-icon nzType="plus"></i>Add</button>&nbsp;
+    </div>
+    </div>
+    </div>
+    <div class="col-12">
+    <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="gridData" nzTableLayout="fixed"
+    [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+    [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+    (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+    <thead>
+    <tr>
+    <th>Artifact Type</th>
+    <th>Title</th>
+    <th>File Name</th>
+    <th>Size</th>
+    <th>Date Modified</th>
+    <th>Author</th>
+    <th>Status</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of basicTable.data ">
+    <td>{{data.artifactType}}</td>
+    <td>{{data.title}}</td>
+    <td>{{data.fileName}}</td>
+    <td>{{data.size}}</td>
+    <td>{{data.dataModified}}</td>
+    <td>{{data.author}}</td>
+    <td>{{data.status}}</td>
+    <td>
+    <i nz-icon nzType="edit" nzTheme="fill" (click)="editIssue(data.id)">
+    </i>
+    <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data)">
+    <i nz-icon nzTheme="fill" nzType="delete"></i></a>
+    </td>
+    </tr>
+    </tbody>
+    <h6>No. of Records : 0</h6>
+    </nz-table>
+    </div>
+    </div>
+    </div>
+    </div>

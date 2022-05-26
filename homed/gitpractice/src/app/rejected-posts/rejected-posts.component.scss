@@ -1,0 +1,51 @@
+.example-card {
+    margin-top:20px;  
+  }
+ 
+  .example-header-image {
+    background-image: url('https://www.w3schools.com/howto/img_avatar.png');
+    background-size: cover;
+  }
+  .width{
+    display: flex;
+    width:100%
+  }
+  .one {
+    flex: 2 1 0;
+}
+
+.two {
+    flex:6 1 0;
+    padding-top:20px
+}
+
+
+.buttons{
+  display: flex;
+  flex-wrap: wrap;
+ 
+}
+.like {
+  flex: 1 1 0;
+  padding-right:6px;
+}
+
+.disLike {
+  flex:1 1 0;
+
+}
+.space{
+  flex: 8 1 0;
+ 
+}
+.edit {
+  flex:1 1 0;
+  padding-right:6px;
+ 
+  
+}
+
+.delete {
+  flex:1 1 0;
+ 
+}

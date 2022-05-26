@@ -1,0 +1,100 @@
+.cancel {
+  font-weight: bold;
+  margin-top: 29px;
+  margin-bottom: 5px;
+  width: 100px;
+  color: black !important;
+  background-color: #f0f0f0 !important;
+  border: white !important;
+}
+  .save{
+    margin-top: 20px;
+  font-weight: bold;
+  width: 100px;
+  }
+
+  .reset {
+    margin-top: 15px;
+    float: right;
+    margin-right: 109px !important;
+    margin-bottom: -1px;
+  }
+  .search {
+    margin-top: 15px;
+    float: right;
+    margin-right: -207px !important;
+    margin-bottom: -5px;
+  }
+
+  .btn {
+    margin-top: 10px;
+    float: right;
+    margin-right: 2px;
+    margin-bottom: 10px;
+    }
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+
+  }
+
+  .add {
+    width: 90%;
+    float: right;
+    margin-right: 14px;
+    }
+    .customer {
+      margin-top: -3px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -2px;
+    }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px !important;
+      margin-bottom: -1px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px !important;
+      margin-bottom: -5px;
+    }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+
+  }
+  .add {
+    width: 90%;
+    float: right;
+    margin-right: 14px;
+    }
+    .customer {
+      margin-top: -3px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -2px;
+    }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px !important;
+      margin-bottom: -1px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px !important;
+      margin-bottom: -5px;
+    }
+}

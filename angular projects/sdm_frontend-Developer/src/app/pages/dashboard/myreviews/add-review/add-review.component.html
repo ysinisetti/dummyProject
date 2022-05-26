@@ -1,0 +1,172 @@
+<!-- bread crumb -->
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="proj()">Home</a></li>
+            <li><a (click)="dashboard()">{{ProjectName}}</a></li>
+            <li><a class="esc" (click)="resource()">Resources</a></li>
+            <li>Create Review</li>
+        </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+        <p id="cust"> Customer Name : <b class="cName">{{CustomerName}}</b></p>
+    </div>
+</div>
+<!-- To Create a review -->
+<div class="card">
+    <div class="card-body">
+        <h4 class="heading">Create Review</h4>
+        <form [formGroup]="addReview">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+                    <label Required>Resource Name </label>
+                    <input nz-input readonly placeholder="Resource Name" formControlName="Resource" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Role Played</label>
+                    <nz-select nzAllowClear maxlength="501" nzPlaceHolder="Role" formControlName='role'>
+                        <nz-option *ngFor="let option of skillSet" [nzValue]="option.optionKey"
+                            [nzLabel]="option.optionValue">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Project Type</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Choose Project Type" formControlName="typeProject">
+                        <nz-option *ngFor="let options of projectType" [nzValue]="options.Value"
+                            [nzLabel]="options.Label">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Start Date</label>
+                    <input nz-input placeholder="Start date" placeholder="Start Date" readonly
+                        formControlName="prjStartDate" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>End Date</label>
+                    <input nz-input placeholder="End date" placeholder="End Date" readonly
+                        formControlName="prjEndDate" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Duration(Days)</label> <input nz-input placeholder="Duration(Days)"
+                        formControlName="duration" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Scope</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Scope" formControlName="scope">
+                        <nz-option *ngFor="let options of scope" [nzValue]="options.Value" [nzLabel]="options.Label">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Context</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Context" formControlName="context">
+                        <nz-option *ngFor="let options of context" [nzValue]="options.Value" [nzLabel]="options.Label">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label Required>Attribute </label>
+                    <nz-select nzPlaceHolder="Attributes" nzMode="tags" formControlName="Attribute">
+                        <nz-option *ngFor="let attribute of attributes" [nzValue]="attribute.Value"
+                            [nzLabel]="attribute.Label">
+                        </nz-option>
+                    </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="addReview.controls.Attribute.touched && addReview.controls.Attribute.invalid && addReview.controls.Attribute.errors.required">
+                            Please Select Attribute
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Outcome</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Outcome" formControlName="outcome">
+                        <nz-option *ngFor="let options of outcome" [nzValue]="options.Value" [nzLabel]="options.Label">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <br>
+            <h4 class="heading">Ratings</h4>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+                    <label nzRequired>Focus Areas To Improve </label> <input nz-input
+                        placeholder="Focus Areas To Improve" formControlName="focusareas" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+                    <label nzRequired>Strengths </label> <input nz-input placeholder="Strengths"
+                        formControlName="strength" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+                    <label nzRequired>Growth Areas </label> <input nz-input placeholder="Growth Areas"
+                        formControlName="growth" />
+                </div>
+            </div><br>
+            <div class="row"></div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Technical</label>
+                    <nz-rate name="rate1" class="rate1" [nzCount]="5" formControlName="technical"></nz-rate>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Analytical </label>
+                    <nz-rate name="rate2" class="rate2" [nzCount]="5" formControlName="analytical"></nz-rate>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Communication </label>
+                    <nz-rate name="rate3" class="rate3" [nzCount]="5" formControlName="communication"></nz-rate>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Documentation </label>
+                    <nz-rate name="rate4" class="rate4" [nzCount]="5" formControlName="documentation"></nz-rate>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label nzRequired>Testing </label>
+                    <nz-rate name="rate5" class="rate5" [nzCount]="5" formControlName="testing"></nz-rate>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Reviewer Name</label>
+                    <input nz-input placeholder="Reviewer Name" readonly formControlName="ReviewerName" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Reviewer Role</label>
+                    <input nz-input placeholder="Reviewer Role" formControlName="ReviewerRole" />
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Date of Review</label>
+                    <input nz-input placeholder="yyyy-mm-dd" readonly formControlName="dateofReview" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <label nzRequired nzFor="name">Comment</label>
+                    <textarea formControlName="message" nz-input rows="3" placeholder="Enter the Comment"
+                        formControlName="comment"></textarea>
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12"></div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <button nz-button class="add1" nzType="primary" (click)="addReviewData()"><i nz-icon nzType="plus"
+                            nzTheme="outline"></i>Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

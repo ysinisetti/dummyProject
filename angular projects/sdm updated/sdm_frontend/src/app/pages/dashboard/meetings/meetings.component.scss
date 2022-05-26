@@ -1,0 +1,89 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 29px;
+  width: 100px;
+  margin-left: 8px;
+  margin-right: 8px;
+  float: right;
+}
+.home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -23px;
+}
+.comName {
+  margin-left: 150px;
+  margin-top: -22px;
+}
+.btn1 {
+  margin-top: 29px;
+  width: 100px;
+  margin-right: 8px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.add {
+  float: right;
+  width: 100px;
+  margin-bottom: 10px;
+  margin-top: -5px;
+}
+nz-date-picker {
+  width: 100%;
+}
+nz-time-picker {
+  width: 100%;
+}
+#label {
+  margin-top: -8px;
+}
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -22px;
+  margin-top: -22px;
+  margin-left: -23px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+.cust {
+  font-size: 18px !important;
+  position: absolute;
+  right: 0;
+}

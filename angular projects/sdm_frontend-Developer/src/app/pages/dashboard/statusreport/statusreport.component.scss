@@ -1,0 +1,83 @@
+.addarray {
+    padding-left: 41%;
+    cursor: pointer;
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+    .add {
+        width: 90%;
+        float: right;
+        margin-right: 15px;
+    }
+    .addarray {
+        padding-left: 37%;
+        cursor: pointer;
+    }
+    .Cancel {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+    .cancel {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+    .save {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+    .add {
+        width: 94%;
+        float: right;
+        margin-right: 16px;
+    }
+    .addarray {
+        padding-left: 37%;
+        cursor: pointer;
+    }
+    .Cancel {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+    .cancel {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+    .save {
+        margin-top: -5px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+}
+
+.Cancel {
+    font-weight: bold !important;
+    margin-top: 12px !important;
+    margin-bottom: 5px !important;
+    width: 100px !important;
+    color: black !important;
+    background-color: #f0f0f0 !important;
+}
+
+.cancel {
+    font-weight: bold;
+    margin-top: 32px;
+    margin-bottom: 5px;
+    width: 100px;
+}
+
+.save {
+    font-weight: bold;
+    width: 100px;
+}
+
+.icon-disabled {
+    pointer-events: none;
+}

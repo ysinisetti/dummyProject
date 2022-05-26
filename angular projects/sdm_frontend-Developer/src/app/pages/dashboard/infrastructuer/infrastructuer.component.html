@@ -1,0 +1,344 @@
+  <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="gotoHome()">Home</a></li>
+            <li><a (click)="details()">{{ProjectName}}</a></li>
+            <li>Infrastructure</li>
+        </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+        Customer Name : <b class="cName">{{customerName}}</b>
+    </div>
+  </div>
+
+  <div class="card">
+  <nz-collapse nzAccordion>
+  <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+  <form [formGroup]="searchForm">
+  <div class="row" id="fRow">
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Infra Name</label>
+  <input nz-input placeholder="Infrastructure Name" name="title" formControlName="searchValue" (ngModelChange)="onChange()" />
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Contact Name</label>
+  <input nz-input placeholder="Contact Name" name="title" formControlName="searchContact" (ngModelChange)="onChange()" />
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Location</label><br>
+  <nz-select nzAllowClear (ngModelChange)="onChange()" formControlName="searchLocation" nzPlaceHolder="Location" >
+  <nz-option name="type" *ngFor="let options of location" [nzValue]="options.Value" [nzLabel]="options.Label">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Infra Type</label><br>
+  <nz-select nzAllowClear (ngModelChange)="onChange()" formControlName="searchType" nzPlaceHolder="Type">
+  <nz-option name="type" *ngFor="let options of infraType" [nzValue]="options.Value" [nzLabel]="options.Label">
+  </nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <button class="btn" (click)="getAllInfras()" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+  <button class="btn" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon nzType="redo"></i>Reset</button>
+  </form>
+  </nz-collapse-panel>
+  </nz-collapse>
+  </div>
+  <div class="card" id="grid">
+<div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{records}}</label>
+    </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+  <nz-table #basicTable [nzData]="allInfrasDetails" class="table" [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+  [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+  (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+  <thead>
+  <tr>
+  <th nzWidth="5%">#</th>
+  <th nzWidth="10%">Infra Name</th>
+  <th nzWidth="10%">Infra Type</th>
+  <th nzWidth="6%">Location</th>
+  <th nzWidth="6%">Environment</th>
+  <th nzWidth="10%">Operating System</th>
+  <th nzWidth="6%">Contact Name</th>
+  <th nzWidth="5%">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of allInfrasDetails; let i=index">
+    <td>{{ pageSize *(pageNum-1)+i+1}}</td>
+    <td>{{data.name }}</td>
+  <td>{{InfraType[data.infraType]}}</td>
+  <td>{{data.location}}</td>
+  <td>{{EnvironmentType[data.environment]}}</td>
+  <td>{{OperatingSystem[data.operatingSystem]}}</td>
+  <td nzEllipsis nzTooltipTitle="{{data.contactName}}" nz-tooltip>{{ data.contactName }}</td>
+  <td>
+  <i nz-icon nzType="edit" nzTheme="outline" (click)="editRow(data)"> </i>&nbsp;&nbsp;
+  <a nz-popconfirm nzPopconfirmTitle="Sure to delete?"(nzOnConfirm)="deleteRow(data.id)">
+  <i nz-icon nzTheme="outline" nzType="delete"></i>&nbsp;&nbsp;</a>
+  </td>
+  </tr>
+  </tbody>
+  </nz-table>
+  </div>
+  </div>
+
+  <!-- POPUP FOR ADD InfraStructure -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="isVisible" nzTitle="Add Infrastructure" (nzOnCancel)="cancel()" [nzFooter]="modalFooter">
+  <form [formGroup]="addInfraForm" (ngSubmit)="newInfra()">
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label> Host Name <span class="validationtest">*</span> </label>
+  <input nz-input nzLabel="Host Name" placeholder="Host Name" formControlName="hostName" maxlength="21"/>
+  <div>
+  <span class="validationtest" *ngIf="addInfraForm.controls.hostName.touched && addInfraForm.controls.hostName.invalid && addInfraForm.controls.hostName.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('hostName').errors?.maxlength && this.addInfraForm.get('hostName').invalid">
+  <span class="text-danger">Only 20 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('hostName').errors?.pattern && this.addInfraForm.get('hostName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Infra Name </label>
+  <input nz-input nzLabel="Name" placeholder="Infra Name" formControlName="name" maxlength="31"/>
+  <div *ngIf="this.addInfraForm.get('name').errors?.maxlength && this.addInfraForm.get('name').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('name').errors?.pattern && this.addInfraForm.get('name').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label> Operating System </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Operating System" formControlName="operatingSystem">
+  <nz-option *ngFor="let options of os" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label> Environment </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Environment" formControlName="environment">
+  <nz-option *ngFor="let options of environment" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Public IPAddress </label>
+  <input nz-input nzLabel="Public IPAddress" placeholder="* * * . * * * . * * * . * * * " formControlName="publicIPAddress" maxlength="21"/>
+  <div *ngIf="this.addInfraForm.get('publicIPAddress').errors?.maxlength && this.addInfraForm.get('publicIPAddress').invalid">
+  <span class="text-danger">Only 20 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('publicIPAddress').errors?.pattern && this.addInfraForm.get('publicIPAddress').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Private IPAddress </label>
+  <input nz-input nzLabel="Private IPAddress" placeholder="* * * . * * * . * * * . * * * " formControlName="privateIPAddress" maxlength="21"/>
+  <div *ngIf="this.addInfraForm.get('privateIPAddress').errors?.maxlength && this.addInfraForm.get('privateIPAddress').invalid">
+  <span class="text-danger">Only 16 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('privateIPAddress').errors?.pattern && this.addInfraForm.get('privateIPAddress').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Infra Type <span class="validationtest">*</span> </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Infra Type" formControlName="infraType">
+  <nz-option *ngFor="let options of infraType" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="addInfraForm.controls.infraType.touched && addInfraForm.controls.infraType.invalid ">
+  Please Choose Infra Type
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Location </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Location" formControlName="location">
+  <nz-option *ngFor="let options of location" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label> Contact EmailId </label>
+  <input nz-input nzLabel="Contact Email Id" nzFor="email" placeholder="* * * * @gmail.com " formControlName="contactEmailId" maxlength="51"/>
+  <div *ngIf="this.addInfraForm.get('contactEmailId').errors?.pattern && this.addInfraForm.get('contactEmailId').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Contact Name </label>
+  <input nz-input nzLabel="Contact Name" placeholder="Contact Name " formControlName="contactName" maxlength="51"/>
+  <div *ngIf="this.addInfraForm.get('contactName').errors?.maxlength && this.addInfraForm.get('contactName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('contactName').errors?.pattern && this.addInfraForm.get('contactName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <label >Description </label>
+  <textarea nz-input nzLabel="Description" placeholder="Description" formControlName="description" maxlength="256" nzAutosize></textarea>
+  <div *ngIf="this.addInfraForm.get('description').errors?.maxlength && this.addInfraForm.get('description').invalid">
+  <span class="text-danger">Only 255 characters are allowed</span>
+  </div>
+  <div *ngIf="this.addInfraForm.get('description').errors?.pattern && this.addInfraForm.get('description').invalid">
+  <span class="text-danger">Enter Only Characters and Numbers</span>
+  </div>
+  </div>
+  </div>
+  <ng-template #modalFooter>
+  <button nz-button class="cancel" (click)="cancel()"><i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+  <button type="submit" nz-button nzType="primary" class="save" [disabled] = "btnDisabled" (click)="newInfra()" ><i nz-icon nzType="save" nzTheme="outline"></i>Save</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+
+  <!-- POPUP FOR EDIT InfraStructure -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="isVisible1" nzTitle="Edit Infrastructure" (nzOnCancel)="cancel()" [nzFooter]="Footer1">
+  <form [formGroup]="editInfraForm" (ngSubmit)="modifyInfra()">
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label > Host Name <span class="validationtest">*</span> </label>
+  <input nz-input nzLabel="Host Name" placeholder="Host Name" formControlName="hostName" maxlength="21"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.hostName.touched && editInfraForm.controls.hostName.invalid && editInfraForm.controls.hostName.errors.required">
+  Please Enter Name
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('hostName').errors?.maxlength && this.editInfraForm.get('hostName').invalid">
+  <span class="text-danger">Only 20 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('hostName').errors?.pattern && this.editInfraForm.get('hostName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Infra Name </label>
+  <input nz-input nzLabel="Name" placeholder="Name" formControlName="name" maxlength="31"/>
+  <div *ngIf="this.editInfraForm.get('name').errors?.maxlength && this.editInfraForm.get('name').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('name').errors?.pattern && this.editInfraForm.get('name').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label > Operating System </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Operating System" formControlName="operatingSystem">
+  <nz-option *ngFor="let options of os" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label > Environment </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Environment" formControlName="environment">
+  <nz-option *ngFor="let options of environment" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Public IPAddress </label>
+  <input nz-input nzLabel="Public IPAddress" placeholder="* * * . * * * . * * * . * * * " formControlName="publicIPAddress" maxlength="21"/>
+  <div *ngIf="this.editInfraForm.get('publicIPAddress').errors?.maxlength && this.editInfraForm.get('publicIPAddress').invalid">
+  <span class="text-danger">Only 20 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('publicIPAddress').errors?.pattern && this.editInfraForm.get('publicIPAddress').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Private IPAddress </label>
+  <input nz-input nzLabel="Private IPAddress" placeholder="* * * . * * * . * * * . * * * " formControlName="privateIPAddress" maxlength="21"/>
+  <div>
+  <span class="validationtest" *ngIf="editInfraForm.controls.privateIPAddress.touched && editInfraForm.controls.privateIPAddress.invalid ">
+  Please Enter Private IPAddress
+  </span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('privateIPAddress').errors?.maxlength && this.editInfraForm.get('privateIPAddress').invalid">
+  <span class="text-danger">Only 20 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('privateIPAddress').errors?.pattern && this.editInfraForm.get('privateIPAddress').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Infra Type<span class="star">*</span> </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Infra Type" formControlName="infraType">
+  <nz-option *ngFor="let options of infraType" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  <div>
+  <span class="validationtest"
+  *ngIf="editInfraForm.controls.infraType.touched && editInfraForm.controls.infraType.invalid ">
+  Please Choose Infra Type
+  </span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Location </label><br>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Location" formControlName="location">
+  <nz-option *ngFor="let options of location" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label > Contact EmailId </label>
+  <input nz-input nzLabel="Contact Email Id" nzFor="email" placeholder="* * * * @gmail.com " formControlName="contactEmailId" maxlength="51"/>
+  <div *ngIf="this.editInfraForm.get('contactEmailId').errors?.pattern && this.editInfraForm.get('contactEmailId').invalid">
+  <span class="text-danger">Follow Given Pattern</span>
+  </div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label >Contact Name </label>
+  <input nz-input nzLabel="Contact Name" placeholder="Contact Name " formControlName="contactName" maxlength="51"/>
+  <div *ngIf="this.editInfraForm.get('contactName').errors?.maxlength && this.editInfraForm.get('contactName').invalid">
+  <span class="text-danger">Only 60 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('contactName').errors?.pattern && this.editInfraForm.get('contactName').invalid">
+  <span class="text-danger">Enter Only Characters</span>
+  </div>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <label >Description </label>
+  <textarea nz-input nzLabel="Description" placeholder="Description" formControlName="description" maxlength="256" nzAutosize></textarea>
+  <div *ngIf="this.editInfraForm.get('description').errors?.maxlength && this.editInfraForm.get('description').invalid">
+  <span class="text-danger">Only 226 characters are allowed</span>
+  </div>
+  <div *ngIf="this.editInfraForm.get('description').errors?.pattern && this.editInfraForm.get('description').invalid">
+  <span class="text-danger">Enter Only Characters and Numbers</span>
+  </div>
+  </div>
+  </div>
+  <ng-template #Footer1>
+  <nz-form-control>
+  <button nz-button class="cancel" (click)="cancel()"><i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+  <button type="submit" nz-button nzType="primary" class="save" (click)="modifyInfra()"><i nz-icon nzType="edit" nzTheme="outline"></i>Update</button>
+  </nz-form-control>
+  </ng-template>
+  </form>
+  </nz-modal>

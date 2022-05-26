@@ -1,0 +1,22 @@
+.sidebar {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 160px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    top:72px; 
+    /* left: 0; */
+    background-color: rgb(159, 168, 158);
+    text-align: center;
+    padding:20px;
+  }
+  .button {
+    background-color:rgb(175, 209, 219);
+    /* border: none; */
+    color:rgb(0, 0, 0);
+    padding: 1px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 8px 6px;
+    cursor: pointer;
+  }

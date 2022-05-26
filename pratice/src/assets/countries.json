@@ -1,0 +1,92 @@
+[
+    {
+        "userName": "ysinisetti",
+        "role": "Front end developer",
+        "title":"My opinion",
+        "post": "Nice to work with organisation",
+        "postedOn":"13-05-2020",
+        "pId":1
+    },
+    {
+        "userName": "gkolluri",
+        "role": "Front end developer",
+        "post": "Nice to work with organisation",
+        "postedOn":"13-05-2020",
+        "pId":2,
+        "title":"My opinion"
+    },
+    {
+        "userName": "simandi",
+        "role": "Front end developer",
+        "post": "Irrespective of the size of the enterprise, connectivity plays a vital role in defining how connected your enterprise is. Over the past 25 years our teams have helped numerous customers transition their IT architecture to enable an agile and on-demand enterprise. Through messaging and connectivity the enterprise becomes much more flexible to changes in a demanding market place while also ensuring quicker time-to-market and reduced support development costs. Contact us today to learn more about how a SOA-based approach will help you become the connected enterprise (or) how APIs can help open a whole new world of possibilities for your developers.",
+        "postedOn":"13-05-2020",
+        "pId":3,
+        "title":"My opinion"
+    },
+    {
+        "userName": "dyellapu",
+        "role": "Front end developer",
+        "post": "Irrespective of the size of the enterprise, connectivity plays a vital role in defining how connected your enterprise is. Over the past 25 years our teams have helped numerous customers transition their IT architecture to enable an agile and on-demand enterprise. Through messaging and connectivity the enterprise becomes much more flexible to changes in a demanding market place while also ensuring quicker time-to-market and reduced support development costs. Contact us today to learn more about how a SOA-based approach will help you become the connected enterprise (or) how APIs can help open a whole new world of possibilities for your developers.",
+        "postedOn":"13-05-2020",
+        "pId":4,
+        "title":"My opinion"
+    },
+    {
+        "userName": "jpujala",
+        "role": "Front end developer",
+        "post": "Irrespective of the size of the enterprise, connectivity plays a vital role in defining how connected your enterprise is. Over the past 25 years our teams have helped numerous customers transition their IT architecture to enable an agile and on-demand enterprise. Through messaging and connectivity the enterprise becomes much more flexible to changes in a demanding market place while also ensuring quicker time-to-market and reduced support development costs. Contact us today to learn more about how a SOA-based approach will help you become the connected enterprise (or) how APIs can help open a whole new world of possibilities for your developers.",
+        "postedOn":"13-05-2020",
+        "pId":5,
+        "title":"My opinion"
+    },
+    {
+        "userName": "ngeesidi",
+        "role": " Full stack  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":6
+    },
+    {
+        "userName": "ngeesidi",
+        "role": " Full stack  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":7
+    },
+    {
+        "userName": "jchetri",
+        "role": "Back end  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":8
+    },
+    {
+        "userName": "vmarapu",
+        "role": "Back end  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":9
+    },
+    {
+        "userName": "vmanigandula",
+        "role": "Back end  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":10
+    },
+    {
+        "userName": "ekurapati",
+        "role": "Back end  developer",
+        "post": "Technical Excellence",
+        "postedOn":"13-05-2020",
+        "title":"My opinion",
+        "pId":11
+    }
+
+
+]

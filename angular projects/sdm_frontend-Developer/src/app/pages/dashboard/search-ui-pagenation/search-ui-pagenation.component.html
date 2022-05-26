@@ -1,0 +1,61 @@
+<div class="card">
+    <div class="card-header">
+        <h5>
+            <strong class="mr-3">Search With UI Pagenation</strong>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Task Name</label>
+                <input nz-input placeholder="Task Name" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Start Date</label>
+                <nz-date-picker nzPlaceHolder='Start Date'></nz-date-picker>
+                <!-- (ngModelChange)="onChange($event)" -->
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>End Date</label>
+                <nz-date-picker nzPlaceHolder='End Date'></nz-date-picker>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Status</label>
+                <nz-select nzAllowClear nzPlaceHolder="Status">
+                    <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label">
+                    </nz-option>
+                </nz-select>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <button class="btn" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-12">
+                <div class="card" style="margin-top: 25px;"  >
+                <nz-table #basicTable class="tablescroll" [nzData]="tableData"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+                    >
+                    <!-- (nzCurrentPageDataChange)="onCurrentPageDataChange($event)" -->
+                    <thead>
+                    <tr>
+                        <th>Task NAme</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td>{{ data.tName }}</td>
+                        <td>{{ data.sDate }}</td>
+                        <td>{{ data.cDate }}</td>
+                        <td>{{data.status}}</td>
+                    </tr>
+                </tbody>
+                </nz-table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

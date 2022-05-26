@@ -1,0 +1,725 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a (click)="gotoEnablement()">Enablement</a></li>
+    </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+    Course Name : <b class="cName">{{enablementdata.cTitle}}</b>
+  </div>
+</div>
+<!-- Search Course Details -->
+<div class="card">
+  <div class="card-body">
+    <nz-tabset>
+      <nz-tab nzTitle="Course Detail">
+        <ng-template #titleTemplate>Course Detail</ng-template>
+        <nz-collapse nzAccordion>
+          <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+            <form [formGroup]="moduleSearchForm">
+              <div class="row" id="fRow">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Title</label>
+                  <input nz-input placeholder="Title" name="Title" formControlName="title" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Author</label>
+                  <input nz-input placeholder="Author" name="author" formControlName="author" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Created By</label>
+                  <input nz-input placeholder="Created By" name="CreatedBy" formControlName="createdBy" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Created Date</label>
+                  <nz-date-picker nzPlaceHolder="Created Date" name="CreatedDate" formControlName="createdDate">
+                  </nz-date-picker>
+                </div>
+              </div>
+              <div>
+                <button class="btn" (click)="getModules()" nz-button nzType="primary">
+                  <i nz-icon nzType="search"></i>Search
+                </button>
+              </div>
+              <div>
+                <button class="btn" (click)="cancel()" nz-button nzType="primary">
+                  <i nz-icon nzType="redo" nzTheme="outline"></i>Reset
+                </button>
+              </div>
+            </form>
+          </nz-collapse-panel>
+        </nz-collapse>
+        <br>
+        <br>
+        <!-- Modules and sections table -->
+        <div class="card" id="grid">
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <p class="rec">No. of Records : {{totalPages}}</p>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <button class="add" nz-button nzType="primary" (click)="openForm('','add')">
+                <i nz-icon nzType="plus"></i>Add
+              </button>
+            </div>
+          </div>
+          <div class="card-body" id="gridBody">
+            <nz-table #nzTable class="tablescroll" [nzData]="moduleData" nzTableLayout="fixed" [nzPaginationPosition]
+              nzShowSizeChanger nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages"
+              [nzPageSize]="pageSizemodule" [nzPageIndex]="pageNummodule"
+              (nzPageIndexChange)="onCurrentPageDataChangemodule($event)"
+              (nzPageSizeChange)="onPageSizeChangemodule($event)">
+              <thead nzSingleSort>
+                <tr>
+                  <th *ngFor="let column of listOfColumnsModule" [nzWidth]="column.width">
+                    {{ column.name }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let item of nzTable.data">
+                  <tr>
+                    <td>{{ item.mTitle }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ item.createdDate | date: 'MMM d, yyyy' }}</td>
+                    <td>{{ item.createdBy}}</td>
+                    <td [nzExpand]="expandSet.has(item.id)" (nzExpandChange)="onExpandChange(item.id, $event)"></td>
+                    <td>
+                      <a (click)="openForm(item,'edit')"><i nz-icon nzType="edit" nzTheme="outline"></i></a>&nbsp;&nbsp;
+                      <a>
+                        <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                          (nzOnConfirm)="deleteModule(item.id)"></i></a>
+                    </td>
+                  </tr>
+                  <tr [nzExpand]="expandSet.has(item.id)">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="margin-top: -17px;">
+                        <label class="rec"><b> Sections </b></label>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="margin-top: -17px;">
+                        <button nz-button [nzType]="'primary'" class="add" (click)="sectionForm('','add')"
+                          style="float: right;">
+                          <i nz-icon nzType="plus"></i>Add </button>
+                      </div>
+                    </div>
+                    <div class="card-body" id="gridBodyInternal">
+                      <nz-table #nzTable class="innerTable" [nzData]="sectionData" nzTableLayout="fixed"
+                        [nzShowPagination]="false" [nzPaginationPosition] nzShowSizeChanger nzShowPagination
+                        [nzFrontPagination]="false" [nzTotal]="totalPagessection" [nzPageSize]="pageSizesection"
+                        [nzPageIndex]="pageNumsection" (nzPageIndexChange)="onCurrentPageDataChangesection($event)"
+                        (nzPageSizeChange)="onPageSizeChangesection($event)">
+
+                        <thead>
+                          <tr>
+                            <th *ngFor="let column of listOfColumnsSections" [nzWidth]="column.width">
+                              {{ column.name }}
+                            </th>
+                          </tr>
+                        </thead>
+              <tbody>
+                <ng-container *ngFor="let data of nzTable.data">
+                  <tr *ngIf="item.id==data.moduleId">
+                    <td>{{data.sectionTitle}}</td>
+                    <td>{{ data.createdBy}}</td>
+                    <td>{{ data.author }}</td>
+                    <td>{{ data.createdDate | date: 'MMM d, yyyy'}}</td>
+                    <td>{{ data.estimatedTime}}</td>
+                    <td nzEllipsis nzTooltipTitle="{{data.videoLinks}}" nz-tooltip><a
+                        (click)="videoLink(data.videoLinks)"> {{data.videoLinks}} </a></td>
+                    <td>
+                      <i nz-icon nzType="edit" (click)="sectionForm(data,'edit')" nzTheme="outline"></i>&nbsp;
+                      <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                        (nzOnConfirm)="deleteSection(data.id)"></i>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </nz-table>
+          </div>
+          </tr>
+          </ng-container>
+          </tbody>
+          </nz-table>
+        </div>
+  </div>
+  </nz-tab>
+  <!-- Module ADD and UPDATE form -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openModuleForm" nzTitle="{{formTitle}}" (nzOnCancel)="cancel()"
+    [nzFooter]="addModuleFooter">
+    <form [formGroup]="moduleAddUpdateForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Module Title <span class="star">*</span></label>
+          <input nz-input placeholder="Module Title" name="moduleid" formControlName="moduleTitle" maxlength="71">
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('moduleTitle').errors?.required && this.moduleAddUpdateForm.get('moduleTitle').touched">
+            <span class="text-danger">Module Title Is Required</span></div>
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('moduleTitle').errors?.maxlength && this.moduleAddUpdateForm.get('moduleTitle').invalid">
+            <span class="text-danger">Only 70 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('moduleTitle').errors?.pattern && this.moduleAddUpdateForm.get('moduleTitle').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Estimated Time(Hours)</label>
+          <input nz-input placeholder="Estimated Time(Hours)" name="estimatedTime" formControlName="estimatedTime"
+            maxlength="3" />
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('estimatedTime').errors?.maxlength && this.moduleAddUpdateForm.get('estimatedTime').invalid">
+            <span class="text-danger">Only 2 Numbers Are allowed</span>
+          </div>
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('estimatedTime').errors?.pattern && this.moduleAddUpdateForm.get('estimatedTime').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Description</label>
+          <textarea nz-input placeholder="Description" name="Description" formControlName="description" maxlength="251"
+            nzAutosize></textarea>
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('description').errors?.maxlength && this.moduleAddUpdateForm.get('description').invalid">
+            <span class="text-danger">Only 250 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.moduleAddUpdateForm.get('description').errors?.pattern && this.moduleAddUpdateForm.get('description').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+      </div>
+      <ng-template #addModuleFooter>
+        <button nzType="primary" nz-button class="cancel" (click)="cancel()">
+          <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+        </button>
+        <button nz-button class="save" nzType="primary" (click)="addRUpdateModules()">
+          <i nz-icon nzType="{{icon}}"></i>{{btnLabel}}
+        </button>
+      </ng-template>
+    </form>
+  </nz-modal>
+  <!-- Section ADD and UPDATE form -->
+  <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="openSetionForm" nzTitle="{{formTitle}}" (nzOnCancel)="cancel()"
+    [nzFooter]="sectionFooter">
+    <form [formGroup]="sectionAddUpdateForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Section Title <span class="star">*</span> </label>
+          <input nz-input placeholder="Section Title" name="sectionTitle" formControlName="sectionTitle" maxlength="71">
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('sectionTitle').errors?.required && this.sectionAddUpdateForm.get('sectionTitle').touched">
+            <span class="text-danger">Section Title Is Required</span></div>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('sectionTitle').errors?.maxlength && this.sectionAddUpdateForm.get('sectionTitle').invalid">
+            <span class="text-danger">Only 70 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('sectionTitle').errors?.pattern && this.sectionAddUpdateForm.get('sectionTitle').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Sequence Number</label>
+          <input nz-input placeholder="Sequence Number" name="seqNo" formControlName="seqNo" maxlength="4">
+
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('seqNo').errors?.maxlength && this.sectionAddUpdateForm.get('seqNo').invalid">
+            <span class="text-danger">Only 3 Numbers Are allowed</span>
+          </div>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('seqNo').errors?.pattern && this.sectionAddUpdateForm.get('seqNo').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Reference Link</label>
+          <input nz-input placeholder="Reference Link" name="htmlLinks" formControlName="htmlLinks" maxlength="201">
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Video Link</label>
+          <input nz-input placeholder="Video Link" name="VideoLinks" formControlName="videoLinks" maxlength="201">
+
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Notes</label>
+          <input nz-input placeholder="Notes" name="notes" formControlName="notes">
+
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Estimated Time(Hours)</label>
+          <input nz-input placeholder="Estimated Time(Hours)" name="estimatedTime" formControlName="estimatedTime"
+            maxlength="3" />
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('estimatedTime').errors?.maxlength && this.sectionAddUpdateForm.get('estimatedTime').invalid">
+            <span class="text-danger">Only 2 Numbers Are allowed</span>
+          </div>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('estimatedTime').errors?.pattern && this.sectionAddUpdateForm.get('estimatedTime').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Description</label>
+          <textarea nz-input placeholder="Description" name="Description" formControlName="description" maxlength="251"
+            nzAutosize></textarea>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('description').errors?.maxlength && this.sectionAddUpdateForm.get('description').invalid">
+            <span class="text-danger">Only 250 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.sectionAddUpdateForm.get('description').errors?.pattern && this.sectionAddUpdateForm.get('description').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+      </div>
+      <ng-template #sectionFooter>
+        <button nz-button nzType="primary" class="cancel" (click)="cancel()">
+          <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+        </button>
+        <button nz-button class="save" nzType="primary" (click)="addRUpdateSection()">
+          <i nz-icon nzType="{{icon}}"></i>{{btnLabel}}
+        </button>
+      </ng-template>
+    </form>
+  </nz-modal>
+  <!-- ---------------------------------------------Schedule------------------------------------------ -->
+  <nz-tab nzTitle="Schedules">
+    <ng-template #titleTemplate> Schedules</ng-template>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+        <form [formGroup]="scheduleSearch">
+          <div class="row" id="fRow">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Location Type</label>
+              <nz-select nzAllowClear nzPlaceHolder="Location Type" formControlName="serachlocationtype">
+                <nz-option *ngFor="let option of locationDownLists" [nzValue]="option.optionKey"
+                  [nzLabel]="option.optionValue">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"></div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"></div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <button class="btn1" nz-button nzType="primary" (click)="scheduledSearch()">
+                <i nz-icon nzType="search"></i>Search
+              </button>&nbsp;
+              <button class="btn1" nz-button nzType="primary" (click)="resetSchedule()">
+                <i nz-icon nzType="redo"></i>Reset</button>
+            </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <br>
+    <br />
+    <!-- Schedule Table -->
+    <div class="card" id="grid">
+      <div class="row">
+        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+          <label class="rec">No. of Records : {{noOfRecords11}} </label>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+          <button class="add" nz-button nzType="primary" (click)="startEdit('data')">
+            <i nz-icon nzType="plus"></i>Add
+          </button>
+        </div>
+      </div>
+      <div class="card-body" id="gridBody">
+        <nz-table nzShowPagination #nzTable class="tablescroll" [nzData]="allIssues" nzTableLayout="fixed"
+          [nzPaginationPosition] nzShowSizeChanger [nzFrontPagination]="false" [nzTotal]="totalPagesshedule"
+          [nzPageSize]="pageSizeshedule" [nzPageIndex]="pageNumshedule"
+          (nzPageIndexChange)="onCurrentPageDataChangeshedule($event)"
+          (nzPageSizeChange)="onPageSizeChangeshedule($event)">
+          <thead>
+            <tr>
+              <th *ngFor="let column of listOfColumnsSchedule" [nzWidth]="column.width">
+                {{ column.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of allIssues; let i = index">
+              <td>{{ pageSizeshedule *(pageNumshedule-1)+i+1}}</td>
+              <td>{{ data.offeredDate | date: 'MMM d, yyyy' }}</td>
+              <td>{{ data.startTime }}</td>
+              <td>{{ data.instructor }}</td>
+              <td>{{ loactiontype[data.locationType] }}</td>
+              <td>{{ data.cost }}</td>
+              <td>
+                <i nz-icon nzType="edit" nzTheme="outline" (click)="startEdit(data)"> </i>
+                &nbsp;&nbsp;
+                <i nz-icon nzType="delete" (click)="deleteSchedule(data)" nzTheme="outline"></i>
+                &nbsp;&nbsp;
+                <i nz-icon nzType="plus-circle" nzTheme="outline" nzEllipsis (click)="startEditEnroll(data.id,'data')"
+                  nzTooltipTitle="Enroll" nz-tooltip></i>
+
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-tab>
+  <!-- Add and Update Form -->
+  <nz-modal [(nzVisible)]="visiblEdit" nzWidth="50%" nzHeight="50%" nzTitle="{{title}}" (nzOnOk)="scheduleAddhandleOk()"
+    (nzOnCancel)="scheduleAddCancel()" [nzFooter]="modalFooter3">
+    <form [formGroup]="scheduleForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Instructor <span class="star">*</span></label>
+          <nz-input-group>
+            <input nz-input placeholder="Instructor" formControlName="Instructor" maxlength="26" />
+            <div
+              *ngIf="this.scheduleForm.get('Instructor').errors?.required && this.scheduleForm.get('Instructor').touched">
+              <span class="text-danger">Instructor Is Required</span></div>
+            <div
+              *ngIf="this.scheduleForm.get('Instructor').errors?.maxlength && this.scheduleForm.get('Instructor').invalid">
+              <span class="text-danger">Only 25 Characters Are Allowed</span>
+            </div>
+            <div
+              *ngIf="this.scheduleForm.get('Instructor').errors?.pattern && this.scheduleForm.get('Instructor').invalid">
+              <span class="text-danger">Only Characters Are Allowed</span>
+            </div>
+          </nz-input-group>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>Start Time <span class="star">*</span></label>
+          <nz-time-picker formControlName="startTime" [nzMinuteStep]="15" (ngModelChange)="onStartTime($event)"
+            [nzDefaultOpenValue]="defaultOpenValue" nzFormat="HH:mm"></nz-time-picker>
+          <div
+            *ngIf="this.scheduleForm.get('startTime').errors?.required && this.scheduleForm.get('startTime').touched">
+            <span class="text-danger">Start Time Is Required</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="!viewUpdate">
+          <label nzRequired nzFor="name">Instructor Machines</label>
+          <nz-input-group>
+            <input nz-input placeholder="Instructor Machines" formControlName="InstructorMachines" maxlength="101" />
+            <div
+              *ngIf="this.scheduleForm.get('InstructorMachines').errors?.maxlength && this.scheduleForm.get('InstructorMachines').invalid">
+              <span class="text-danger">Only 100 Characters Are Allowed</span>
+            </div>
+            <div
+              *ngIf="this.scheduleForm.get('InstructorMachines').errors?.pattern && this.scheduleForm.get('InstructorMachines').invalid">
+              <span class="text-danger">Only Characters Are Allowed</span>
+            </div>
+          </nz-input-group>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="!viewUpdate ">
+          <label nzRequired nzFor="name">HR Manager</label>
+          <nz-input-group>
+            <input nz-input placeholder="HR Manager" formControlName="HrManagr" maxlength="26" />
+            <div
+              *ngIf="this.scheduleForm.get('HrManagr').errors?.maxlength && this.scheduleForm.get('HrManagr').invalid">
+              <span class="text-danger">Only 25 Characters Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('HrManagr').errors?.pattern && this.scheduleForm.get('HrManagr').invalid">
+              <span class="text-danger">Only Characters Are Allowed</span>
+            </div>
+          </nz-input-group>
+        </div>
+
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="!viewUpdate">
+          <label nzRequired nzFor="name">Location</label>
+          <nz-input-group>
+            <input nz-input placeholder="Location" formControlName="Loaction" maxlength="101" />
+            <div
+              *ngIf="this.scheduleForm.get('Loaction').errors?.maxlength && this.scheduleForm.get('Loaction').invalid">
+              <span class="text-danger">Only 100 Characters Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('Loaction').errors?.pattern && this.scheduleForm.get('Loaction').invalid">
+              <span class="text-danger">Only Characters Are Allowed</span>
+            </div>
+          </nz-input-group>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label> Offerred Date</label>
+          <nz-date-picker nzPlaceHolder="Offerred Date" name="offeredDate" formControlName="offeredDate">
+          </nz-date-picker>
+        </div>
+        <div class="col-x-12 col-l-12 col-m-12 col-sm-6 col-6">
+          <label>Location Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="LocationType" formControlName="locationType">
+            <nz-option *ngFor="let option of locationDownLists" [nzValue]="option.optionKey"
+              [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Cost</label>
+          <nz-input-group>
+            <input nz-input placeholder="Cost" formControlName="Cost" />
+            <div *ngIf="this.scheduleForm.get('Cost').errors?.maxlength && this.scheduleForm.get('Cost').invalid">
+              <span class="text-danger">Only 5 Number Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('Cost').errors?.pattern && this.scheduleForm.get('Cost').invalid">
+              <span class="text-danger">Only Number Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('Cost').errors?.min">
+              <span class="text-danger">Minimum required cost is 2500.</span>
+            </div>
+          </nz-input-group>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="!viewUpdate">
+          <label nzRequired nzFor="name">Capacity</label>
+          <nz-input-group>
+            <input nz-input placeholder="Capacity" formControlName="Capacity" maxlength="4" type="number" />
+            <div
+              *ngIf="this.scheduleForm.get('Capacity').errors?.maxlength && this.scheduleForm.get('Capacity').invalid">
+              <span class="text-danger">Only 3 Number Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('Capacity').errors?.pattern && this.scheduleForm.get('Capacity').invalid">
+              <span class="text-danger">Only Number Are Allowed</span>
+            </div>
+            <div *ngIf="this.scheduleForm.get('Capacity').errors?.min">
+              <span class="text-danger">Minimum required capacity is 5.</span>
+            </div>
+          </nz-input-group>
+        </div>
+      </div>
+      <ng-template #modalFooter3>
+        <div class="btnCss">
+          <button nz-button nzType="primary" class="cancelBtn" (click)="scheduleAddCancel()">
+            <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+          </button>
+          <button nz-button nzType="primary" (click)="saveRupdate()">
+            <i nz-icon nzType="{{icon}}"></i>{{btnLabel}}
+          </button>
+        </div>
+      </ng-template>
+    </form>
+  </nz-modal>
+
+  <!-- ------------------------------------------------------Enroll----------------------- -->
+  <nz-tab nzTitle="Enrolled List">
+    <ng-template #titleTemplate> Enrolled List</ng-template>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+        <form [formGroup]="enrolledList">
+          <div class="row" id="fRow">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Created By</label>
+              <input nz-input placeholder="Created By" name="CreatedBy" formControlName="enrolledCreatedBy" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Status</label>
+              <nz-select nzAllowClear formControlName="enrolledStatus" nzPlaceHolder="Status">
+                <nz-option name="type" *ngFor="let option of enrollStatusList" [nzValue]="option.optionKey"
+                  [nzLabel]="option.optionValue">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <label>Approved Date</label>
+              <nz-date-picker nzPlaceHolder="Approved Date" name="enrollDate" formControlName="enrolledDate">
+              </nz-date-picker>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <button class="button" (click)="searchEnrolledList()" nz-button nzType="primary"><i nz-icon
+                  nzType="search"></i>Search</button>&nbsp;
+              <button class="button" (click)="resetEnrolledList()" nz-button nzType="primary"><i nz-icon
+                  nzType="redo"></i>Reset</button>
+            </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <br />
+    <br />
+    <div class="card" id="grid">
+      <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label class="rec">No. of Records : {{enrolltotalPages}}</label>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <div class="add"></div>
+        </div>
+      </div>
+      <br>
+      <div class="card-body" id="gridBody">
+        <nz-table nzShowPagination #basiccTable class="tablescroll" [nzData]="enrolldatatable" nzTableLayout="fixed"
+          [nzPaginationPosition] nzShowSizeChanger [nzFrontPagination]="false" [nzTotal]="enrolltotalPages"
+          [nzPageSize]="pageSizeenroll" [nzPageIndex]="pageNumenroll"
+          (nzPageIndexChange)="onCurrentPageDataChangenroll($event)"
+          (nzPageSizeChange)="onPageSizeChangeenroll($event)">
+          <thead>
+            <tr>
+              <th *ngFor="let column of listOfColumnsEnroll" [nzWidth]="column.width">
+                {{ column.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of enrolldatatable; let i = index">
+              <td>{{ pageSizeenroll *(pageNumenroll-1)+i+1}}</td>
+              <td>{{ data.attendeeId }}</td>
+              <td>{{ data.attendeeFeedback }}</td>
+              <td>{{ data.crsScheduleId }}</td>
+              <td>{{ statusoption[data.status] }}</td>
+              <td>{{ data.approvedDate | date: 'MMM d, yyyy' }}</td>
+              <td>{{data.createdBy}}</td>
+              <td>{{ data.comments }}</td>
+              <td>
+                <i nz-icon nzType="edit" nzTheme="outline" (click)="startEditEnroll(data.id,data)"> </i>
+                &nbsp;
+                <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                  (nzOnConfirm)="enrollDelete(data)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-tab>
+  <!-- Add and Update the enroll list -->
+  <nz-modal [(nzVisible)]="enrollVisible" nzWidth="50%" nzHeight="50%" nzTitle="{{title}}"
+    (nzOnOk)="enrollAddhandleOk()" (nzOnCancel)="enrollAddCancel()" [nzFooter]="modalFooterenroll">
+    <form [formGroup]="enrollAddForm">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>CrsSchedule Id <span class="star">*</span></label>
+          <input readonly nz-input placeholder="CrsSchedule Id" name="crsScheduleId"
+            formControlName="enrollcrsScheduleId" maxlength="10" />
+          <div
+            *ngIf="this.enrollAddForm.get('enrollcrsScheduleId').errors?.required && this.enrollAddForm.get('enrollcrsScheduleId').touched">
+            <span class="text-danger">CRS Schedule Id Is Required</span></div>
+          <div
+            *ngIf="this.enrollAddForm.get('enrollcrsScheduleId').errors?.maxlength && this.enrollAddForm.get('enrollcrsScheduleId').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.enrollAddForm.get('enrollcrsScheduleId').errors?.pattern && this.enrollAddForm.get('enrollcrsScheduleId').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Enrolled Person</label>
+          <input readonly nz-input placeholder="Enrolled Person" name="attendeeId" formControlName="enrollattendeeId" />
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Attendee Mgr Id</label>
+          <input readonly nz-input placeholder="AttendeeMgr Id" name="attendeeMgrId"
+            formControlName="enrollattendeeMgrId" />
+          <div
+            *ngIf="this.enrollAddForm.get('enrollattendeeMgrId').errors?.required && this.enrollAddForm.get('enrollattendeeMgrId').touched">
+            <span class="text-danger">Attendee Mgr Id Is Required</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Status</label>
+          <nz-select nzAllowClear formControlName="enrollstatus" nzPlaceHolder="Status">
+            <nz-option name="type" *ngFor="let option of enrollStatusList" [nzValue]="option.optionKey"
+              [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Comments</label>
+          <input nz-input placeholder="Comments" name="comments" formControlName="enrollcomments" maxlength="251" />
+          <div
+            *ngIf="this.enrollAddForm.get('enrollcomments').errors?.maxlength && this.enrollAddForm.get('enrollcomments').invalid">
+            <span class="text-danger">Only 250 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.enrollAddForm.get('enrollcomments').errors?.pattern && this.enrollAddForm.get('enrollcomments').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="viewUpdateEnroll">
+          <label>Attendee Feedback</label>
+          <input nz-input placeholder="Attendee Feedback" name="attendeeFeedback"
+            formControlName="enrollattendeeFeedback" maxlength="11" />
+          <div
+            *ngIf="this.enrollAddForm.get('enrollattendeeFeedback').errors?.maxlength && this.enrollAddForm.get('enrollattendeeFeedback').invalid">
+            <span class="text-danger">Only 10 Numbers Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.enrollAddForm.get('enrollattendeeFeedback').errors?.pattern && this.enrollAddForm.get('enrollattendeeFeedback').invalid">
+            <span class="text-danger">Only Numbers Are Allowed</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #modalFooterenroll>
+        <button nz-button nzType="primary" class="cancel" (click)="enrollAddCancel()">
+          <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+        </button>
+        <button nz-button nzType="primary" (click)="saveRupdateEnroll()">
+          <i nz-icon nzType="{{icon}}"></i>{{btnLabel}}
+        </button>
+      </ng-template>
+    </form>
+    <br />
+  </nz-modal>
+  <!-- ---------------------------  My Schedules  ------------------- -->
+  <nz-tab nzTitle="My Schedules">
+    <ng-template #titleTemplate> My Schedules </ng-template>
+    <div class="card">
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+          <form [formGroup]="mysheduleform">
+            <div class="row" id="fRow">
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>C Title</label>
+                <input nz-input placeholder="CTitle" name="Ctitle" formControlName="myschedulectitle" />
+              </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Instructor</label>
+                <input nz-input placeholder="Instructor" name="Instructor" formControlName="myscheduleinstructor" />
+              </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Start Date</label>
+                <nz-date-picker nzPlaceHolder="StartDate" name="StartDate" formControlName="myschedulestartdate">
+                </nz-date-picker>
+              </div>
+              <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <button class="button" nz-button nzType="primary" (click)="mysheduleSearch()"><i nz-icon
+                    nzType="search"></i>Search</button>&nbsp;
+                <button class="button" nz-button nzType="primary" (click)="resetMyshedule()"><i nz-icon
+                    nzType="redo"></i>Reset</button>
+              </div>
+            </div>
+          </form>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </div>
+    <br>
+    <!-- My schedule table -->
+    <div class="card" id="grid">
+      <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label class="rec">No. of Records : {{mysheduletablelength}}</label>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        </div>
+      </div>
+      <br>
+      <div class="card-body" id="gridBody">
+        <nz-table nzShowPagination #basicTable class="tablescroll" nzTableLayout="fixed" [nzData]="mysheduletableData"
+          [nzPaginationPosition] nzShowSizeChanger [nzFrontPagination]="false" [nzTotal]="mysheduletotalPages"
+          [nzPageSize]="pageSizemyshedule" [nzPageIndex]="pageNummyshedule"
+          (nzPageIndexChange)="onCurrentPageDataChangmyshedule($event)"
+          (nzPageSizeChange)="onPageSizeChangemyshedule($event)">
+          <thead>
+            <tr>
+              <th *ngFor="let column of listOfColumnsMyschedule" [nzWidth]="column.width">
+                {{ column.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data; let i = index ">
+              <td>{{ pageSizemyshedule *(pageNummyshedule-1)+i+1}}</td>
+              <td>{{data.cTitle}}</td>
+              <td>{{data.instructor}}</td>
+              <td>{{statusoption[data.status]}}</td>
+              <td>{{data.startDate | date: 'MMM d, yyyy'}}</td>
+              <td>{{data.description }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </nz-tab>
+  </nz-tabset>
+</div>
+</div>
+<!-- ----------------------------------------------------------------------------------------- -->

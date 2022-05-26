@@ -1,0 +1,549 @@
+<div style="background-color: rgb(240,240,240);">
+    <div class="card">
+  
+      <div class="card-body">
+        <h3>{{pName}} Calendar</h3>
+        <div class="row">
+          <div class="col-8">
+            <nz-calendar (nzSelectChange)="selectChange($event)">
+              <ul *nzDateCell="let date" class="events" (onClick)="create()">
+                <ng-container [ngSwitch]="date.getDate()">
+                  <ng-container *ngSwitchCase="8">
+                    <li *ngFor="let item of listDataMap.eight">
+                      <a routerLink="/dashboard/lookupmeeting" nz-tooltip nzTooltipTitle="4:00PM -  test"><nz-badge [nzStatus]="item.type" [nzText]="item.content"></nz-badge></a>
+                    </li>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="10">
+                    <li *ngFor="let item of listDataMap.ten">
+                      <a routerLink="/dashboard/lookupmeeting" nz-tooltip nzTooltipTitle="8:00PM -  test"><nz-badge [nzStatus]="item.type" [nzText]="item.content"></nz-badge></a>
+                    </li>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="11">
+                    <li *ngFor="let item of listDataMap.eleven">
+                      <a routerLink="/dashboard/lookupmeeting" nz-tooltip nzTooltipTitle="12:30PM -  test"><nz-badge [nzStatus]="item.type" [nzText]="item.content"></nz-badge></a>
+                    </li>
+                  </ng-container>
+                </ng-container>
+              </ul>
+              <ng-container *nzMonthCell="let month">
+                <div *ngIf="getMonthData(month) as monthData" class="notes-month">
+                  <section>{{ monthData }}</section>
+                  <span>Backlog number</span>
+                </div>
+              </ng-container>
+            </nz-calendar>
+          </div>
+          <div class="col-4">
+            <nz-collapse [nzBordered]="true">
+              <nz-collapse-panel #p *ngFor="let panel of panels; let isFirst = first" [nzHeader]="panel.name"
+                [nzActive]="panel.active" [ngStyle]="panel.customStyle" [nzBodyStyle]="{height: '300px'}"
+                [nzExpandedIcon]="!isFirst ? panel.icon || expandedIcon : undefined">
+                
+                <ul>
+                  <li>
+                    <p>4:00PM - 4:30PM | <a routerLink="/dashboard/lookupmeeting">Starts in 12 Minutes</a></p>
+                  </li>
+                  <li>
+                    <p>2:00AM - 3:30AM | <a routerLink="/dashboard/lookupmeeting">Starts in 1 Minute</a></p>
+                  </li>
+                  <li>
+                    <p>10:15PM - 11:15PM | <a routerLink="/dashboard/lookupmeeting">Starts in 20 Minutes</a></p>
+                  </li>
+                  <li>
+                    <p>3:00AM - 4:30AM | <a routerLink="/dashboard/lookupmeeting">Starts in 12 Minutes</a></p>
+                  </li>
+                </ul>
+                <ng-template #expandedIcon let-active>
+                  {{ active }}
+                  <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                </ng-template>
+              
+              </nz-collapse-panel>
+              <nz-collapse>
+  
+              </nz-collapse>
+            </nz-collapse>
+            
+          </div>
+        </div>
+        <div class="row">
+  
+        </div>
+  
+  
+  
+      </div>
+    </div>
+  </div>
+  
+  
+    <!------------------------------------------- CREATE MEETING MODAL -------------------------------------------->
+    <nz-modal [(nzVisible)]="createvisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+      [nzWidth]="'45%'" (nzOnCancel)="handleCancel()" [nzBodyStyle]="{height: 'auto'}">
+      <ng-template #modalTitle>
+        Create meeting
+      </ng-template>
+  
+      <ng-template #modalContent>
+  
+  
+  
+        <div>
+  
+  
+  
+          <form [formGroup]="createMeetingForm">
+  
+  
+  
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <div class="inner-box">
+  
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="name">Subject </nz-form-label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <nz-form-control nzErrorTip="Please input your subject">
+                      <input type="text" name="name" nz-input formControlName="name"
+                        placeholder="Subject" />
+                    </nz-form-control>
+                  </nz-form-item>
+  
+                </div>
+              </div>
+            
+  
+  
+              
+                
+              </div>
+  
+  
+  
+  
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+  
+                <div nz-col class="gutter-row" [nzSpan]="24">
+                  <div class="inner-box">
+  
+                    <nz-form-item>
+                      <nz-form-label id="label" nzRequired nzFor="attendee">Attendees</nz-form-label>
+                      <nz-form-control nzErrorTip="Please input Attendees">
+                        <nz-select name="attendee" nzMode="tags" nzPlaceHolder="select the Attendees here"
+                          formControlName="attendees" [(ngModel)]="listOfSelectedValue">
+                          <nz-option *ngFor="let option of listOfOption" [nzLabel]="option" [nzValue]="option"
+                            ></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+  
+  
+                  </div>
+                </div>
+  
+              </div>
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+                <div nz-col class="gutter-row" [nzSpan]="24">
+                  <div class="inner-box">
+                    <nz-form-item>
+                      <nz-form-label id="label" nzRequired nzFor="ctype">Conference Type</nz-form-label>
+                      <nz-form-control nzErrorTip="Please Select Conference type">
+                        <nz-radio-group name="ctype" formControlName="conferenceType">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label nz-radio nzValue="p">Physical</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label nz-radio nzValue="a">Audio</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label nz-radio nzValue="v">Video</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label nz-radio nzValue="m">Web</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </nz-radio-group>
+                      </nz-form-control> 
+                    </nz-form-item>
+    
+                  </div>
+                </div>
+              </div>
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+              <div nz-col class="gutter-row" [nzSpan]="24">
+                <div class="inner-box">
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="location">Location</nz-form-label>&nbsp;&nbsp;&nbsp;
+                    <nz-form-control nzErrorTip="Please Select Location">
+                      <input type="text" name="name" nz-input formControlName="location"
+                        placeholder="Please input Location" />
+                    </nz-form-control>
+                  </nz-form-item>
+  
+                </div>
+              </div>
+            </div>
+            
+            
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"> 
+          <div nz-col class="gutter-row" [nzSpan]="13" >
+            <div class="inner-box">
+            
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="timezone">Time Zone</nz-form-label>
+                    <nz-form-control nzErrorTip="Please Select Time Zone">
+                      <nz-select [(ngModel)]="selectedValue1" name="timezone" formControlName="selectedTimeZone">
+                        <nz-option nzValue="e" nzLabel="Atlantic Time (AT)"> Atlantic Time (AT)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Alaska Standard Time(AST)"> Alaska Standard Time(AST)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Brazil Eastern Time (BET"> Brazil Eastern Time (BET)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Central Standard Time (CST)"> Central Standard Time (CST)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Eastern European Time (EET)"> Eastern European Time (EET)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Eastern Standard Time (EST)">Eastern Standard Time (EST)</nz-option>
+                        <nz-option nzValue="e" nzLabel="European Central Time (ECT)"> European Central Time (ECT)</nz-option>
+                        <nz-option nzValue="e" nzLabel="India Standard Time (IST)">India Standard Time (IST) </nz-option>
+                        <nz-option nzValue="e" nzLabel="Mountain Standard Time (MST)"> Mountain Standard Time (MST)</nz-option>
+                        <nz-option nzValue="e" nzLabel="New Zealand Standard Time (NST)"> New Zealand Standard Time (NST)</nz-option>
+                        <nz-option nzValue="e" nzLabel="Pacific Standard Time (PST)"> Pacific Standard Time (PST)</nz-option>
+                      </nz-select>
+                   
+            </nz-form-control> 
+            </nz-form-item>
+        </div></div>
+        
+        <div nz-col class="gutter-row" [nzSpan]="11">
+          <div class="inner-box">
+          <nz-form-item>
+              <nz-form-control>
+                  <label nz-checkbox name="check" [ngModelOptions]="{standalone: true}" [(ngModel)]="All" (ngModelChange)="Allday()">
+                     All Day
+                    </label>
+             
+          </nz-form-control> 
+          </nz-form-item>
+      </div>
+    </div>
+  
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+       
+  </div>
+           
+           
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+            
+            
+            
+              <div nz-col *ngIf="visibleTime" class="gutter-row" [nzSpan]="11">
+                <div class="inner-box">
+            
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="sDate">Start Date</nz-form-label>
+                    <nz-form-control nzErrorTip="Please Select Start Date">
+                      <nz-date-picker name="sDate" *ngIf="!allday" formControlName="startDate" [nzFormat]="'MM-dd-yyyy'">
+                      </nz-date-picker>
+                      <nz-date-picker name="sDate" *ngIf="allday" formControlName="startDate1" [nzFormat]="'MM-dd-yyyy'">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+            
+            
+                </div>
+              </div>
+            
+              <div nz-col class="gutter-row" *ngIf="!allday" [nzSpan]="10">
+                <div class="inner-box">
+            
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="sDate">Start Time</nz-form-label>
+                    <nz-form-control nzErrorTip="Please input Time">
+                      <nz-time-picker [(ngModel)]="time" formControlName="startTime"></nz-time-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            
+              
+            
+            
+            
+            </div>
+           
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+            <div nz-col *ngIf="visibleTime" class="gutter-row" [nzSpan]="11">
+              <div class="inner-box">
+          
+                <nz-form-item>
+                  <nz-form-label id="label" nzRequired nzFor="sDate">End Date</nz-form-label>&nbsp;&nbsp;&nbsp;
+                  <nz-form-control nzErrorTip="Please Select Start Date">
+                    <nz-date-picker name="sDate" *ngIf="!allday" formControlName="endDate" [nzFormat]="'MM-dd-yyyy'">
+                    </nz-date-picker>
+                    <nz-date-picker name="sDate" *ngIf="allday" formControlName="endDate1" [nzFormat]="'MM-dd-yyyy'">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+          
+          
+              </div>
+            </div>
+          
+            <div nz-col class="gutter-row" *ngIf="!allday" [nzSpan]="10">
+              <div class="inner-box">
+          
+                <nz-form-item>
+                  <nz-form-label id="label" nzRequired nzFor="sDate">End Time</nz-form-label>&nbsp;&nbsp;
+                  <nz-form-control nzErrorTip="Please input Time">
+                      <nz-time-picker  formControlName="endTime" ></nz-time-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+            
+            
+              <div nz-col class="gutter-row" [nzSpan]="6">
+                <div class="inner-box">
+                  <nz-form-item>
+                    <nz-form-control>
+                      <label (click)="Recurring()" nz-checkbox name="check">
+                        Recurring
+                      </label>
+            
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            
+            
+              <div nz-col class="gutter-row" [nzSpan]="12">
+                <div class="inner-box">
+                  <nz-form-item>
+                    <nz-form-label id="label" nzRequired nzFor="sDate">File Upload</nz-form-label>
+                    <nz-form-control nzErrorTip="Please input Time">
+                      <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzFileList]="fileList"
+                        [nzMultiple]="'true'">
+                        <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
+                      </nz-upload>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            
+            </div>
+           
+            <nz-table [nzData]="['']" formArrayName="quantities" [nzDefaultEmptyContent]="'false'" [nzShowPagination]="'false'">
+              <thead>
+                <tr>
+            
+                  <th [nzWidth]="'130px'">AGENDA</th>
+                  <th [nzWidth]="'90px'"></th>
+                  <th></th>
+                  <th></th>
+                  <th [nzWidth]="'40px'"><i nz-icon nzType="plus-circle" nzTheme="fill" style="cursor: pointer;"
+                      (click)="addQuantity()"></i></th>
+            
+                </tr>
+              </thead>
+              <tbody>
+            
+                <!-- <ng-container *ngFor="let item of mapOfExpandedData[data.id]"> -->
+                <tr *ngFor="let quantity of quantities().controls; let i=index" [formGroupName]="i">
+            
+                  <td>
+            
+                    <nz-form-item>
+            
+                      <nz-form-control nzErrorTip="Please enter title">
+                        <input type="text" nz-input formControlName="title" placeholder="Title" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+            
+                      <nz-form-control nzErrorTip="Please select duration">
+                        <nz-select nzPlaceHolder="Duration" formControlName="duration">
+                          <nz-option *ngFor="let time of timeMiutes" [nzLabel]="time.m" [nzValue]="time.m"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+            
+                      <nz-form-control nzErrorTip="Please Select Value">
+                        <nz-select nzPlaceHolder="Assign To" formControlName="assignedto">
+                          <nz-option *ngFor="let time of attendees" [nzLabel]="time.a" [nzValue]="time.a"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+            
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nzErrorTip="Please Select Value">
+                        <input type="text" nz-input formControlName="description" placeholder="Description" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+            
+            
+                  <td>
+            
+            
+                    <i nz-icon nzType="minus-circle" nzTheme="fill" *ngIf="quantities().controls.length > 1"
+                      (click)="removeQuantity(i)" style="cursor: pointer;"></i>
+            
+                  </td>
+            
+                </tr>
+            
+                <!-- </ng-container> -->
+            
+            
+              </tbody>
+            
+            </nz-table>
+  
+  
+          </form>
+  
+  
+  
+        </div>
+  
+  
+  
+      </ng-template>
+  
+      <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+        <button nz-button nzType="primary" (click)="submitData()">Create</button>
+  
+      </ng-template>
+    </nz-modal>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+   <!----------------------------------------- RECURRING MODAL  ----------------------------------------->
+    <nz-modal [(nzVisible)]="recurvisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1" [nzFooter]="modalFooter1"
+      [nzWidth]="'50%'" (nzOnCancel)="RecurCancel()" [nzBodyStyle]="{height: 'auto'}">
+      <ng-template #modalTitle1>
+        Recurring Meeting
+      </ng-template>
+    
+      <ng-template #modalContent1>
+        <form [formGroup]="recurform">
+          
+    
+            
+    
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+                <div nz-col class="gutter-row" [nzSpan]="12">
+                  <div class="inner-box">
+                    <nz-form-item>
+                      <nz-form-label id="label" nzRequired>Repeat</nz-form-label><br>
+                      <nz-form-control>
+                        <nz-select (ngModelChange)="repeatDropDown($event)" nzPlaceHolder="repeat" formControlName="repeat"
+                          style="width: 120px;">
+    
+                          <nz-option *ngFor="let time of repeat" [nzLabel]="time.label" [nzValue]="time.value"></nz-option>
+    
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </div>
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" >
+                <div nz-col class="gutter-row" [nzSpan]="24" *ngIf="repeatevery" >
+                  <div class="inner-box">
+                    <nz-form-item>
+                      
+                  <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()' formControlName="meetingType">
+                      <label nz-radio nzValue="Project">Every Day</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label nz-radio nzValue="Department">Every Week Day</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <label nz-radio nzValue="asdas"> Every <nz-input-number [(ngModel)]="demoValue" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number> Days</label>
+                    </nz-radio-group>
+                   
+                    </nz-form-item>
+          
+                  </div>
+                </div>
+  
+                <div nz-col class="gutter-row" [nzSpan]="24" *ngIf="weekly">
+                  <div class="inner-box">
+                    <nz-form-item>
+                
+                      <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                        formControlName="meetingType">
+                        <label nz-radio nzValue="Project">Every </label>&nbsp;&nbsp;&nbsp;
+                        <nz-form-item>
+                
+                
+                          <nz-select [(ngModel)]="selectedValue1" name="timezone" formControlName="week">
+                            <nz-option nzValue="EST" nzLabel="Sunday">Sunday</nz-option>
+                            <nz-option nzValue="AT" nzLabel="Monday"> Monday</nz-option>
+                            <nz-option nzValue="AST" nzLabel="Tuesday"> Tuesday</nz-option>
+                            <nz-option nzValue="BET" nzLabel="Wednesday"> Wednesday</nz-option>
+                            <nz-option nzValue="CST" nzLabel="Thursday"> Thursday</nz-option>
+                            <nz-option nzValue="EET" nzLabel="Friday"> Friday</nz-option>
+                            <nz-option nzValue="EST" nzLabel="Saturday">Saturday</nz-option>
+                            <nz-option nzValue="ECT" nzLabel="Monday, Wednesday, Friday"> Monday, Wednesday, Friday</nz-option>
+                            <nz-option nzValue="IST" nzLabel="Tuesday, Thursday">Tuesday, Thursday</nz-option>
+                            <nz-option nzValue="MST" nzLabel="Saturday, Sunday"> Saturday, Sunday</nz-option>
+                
+                          </nz-select>
+                
+                
+                        </nz-form-item>
+                       
+                        <label nz-radio nzValue="Department">Every <nz-input-number [(ngModel)]="demoValue" [nzMin]="1" [nzMax]="10"
+                            [nzStep]="1"></nz-input-number>
+                          weeks</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                      </nz-radio-group>
+                
+                    </nz-form-item>
+                
+                  </div>
+                </div>
+                <br>
+                <div nz-col class="gutter-row" [nzSpan]="24" *ngIf="weekly" >
+                  <div class="inner-box">
+                    <nz-form-item>
+                      <nz-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="log(checkOptionsOne)" formControlName="Checkmonday"></nz-checkbox-group>
+                      </nz-form-item>
+                    </div>
+                    </div>
+                
+              </div>
+             
+  
+              <p>End</p>
+              <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
+                <div nz-col class="gutter-row" [nzSpan]="12">
+                  <div class="inner-box">
+                    <nz-form-item>
+                             
+                  <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()' formControlName="meetingType">
+                    <label nz-radio nzValue="Project">No End Date</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label nz-radio nzValue="Department">End After <nz-input-number [(ngModel)]="demoValue" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number> Occurences</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label nz-radio nzValue="asdas"> End By &nbsp;&nbsp; &nbsp;  <nz-date-picker [(ngModel)]="date" ></nz-date-picker> </label>
+                  </nz-radio-group>
+                  </nz-form-item>
+                  </div>
+                  </div>
+                  </div>
+  
+          
+  
+           
+          
+         
+        </form>
+      </ng-template>
+      <ng-template #modalFooter1>
+        <button nz-button nzType="default" (click)="RecurCancel()">Cancel</button>
+        <button nz-button nzType="primary" (click)="RecurOk()">Recurring Meeting</button>
+    
+      </ng-template>
+    </nz-modal>

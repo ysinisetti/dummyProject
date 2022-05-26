@@ -1,0 +1,679 @@
+<nz-breadcrumb>
+  <div>
+   <a  (click)="details()"><p class="title4" >{{ProjectName}}  <span class="arrow"></span> </p></a>
+ </div>
+   <nz-breadcrumb-item>
+    <p class= "bread">   &nbsp;&nbsp;Scope</p>
+   </nz-breadcrumb-item>
+ </nz-breadcrumb>
+ <div class="card">
+  <nz-page-header class="site-page-header" nzTitle="Project Scope">
+  </nz-page-header>
+  <div class="card-body">
+  <form [formGroup]="prjForm">
+  <div class="row">
+  <div class="col-4">
+  <label nzRequired nzFor="Name">Project Scope :</label>&nbsp;
+  <input class="name" nz-input placeholder="Project Scope" formControlName='pScope' /><br>
+  </div>
+  <div class="col-4">
+  </div>
+  <div class="col-4" style="padding-left: 180px;">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+  <input type="text" nz-input placeholder="Search Here" />
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+  <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  </div>
+  </div>
+  </form>
+  </div>
+ </div>
+ <!-- <div class="card" *ngFor="let data of getOnlyTask">
+  <button nz-button (click)="editRow(data)" nzType="primary">EditTask</button>
+  </div> -->
+ <div class="card">
+  <div class="card-body">
+  <div class="row">
+  <div class="col-12">
+  <button nz-button (click)="addEpic()" class="add" nzType="primary">
+  <i nz-icon nzType="plus"></i> Add</button>
+ 
+  <nz-table #expandTable [nzData]="listOfMapData" [nzPaginationPosition] nzTableLayout="fixed">
+  <thead>
+  <tr>
+  <th [nzWidth]="'250px'">TITLE</th>
+  <th>STORY POINTS</th>
+  <th>TYPE</th>
+  <th>CREATED DATE</th>
+  <th>ACTION</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let data of listOfMapData">
+  <ng-container *ngFor="let item of mapOfExpandedData[data.id]">
+  <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+  <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="item.child"
+  [(nzExpand)]="item.expand"
+  (nzExpandChange)="collapse(mapOfExpandedData[data.id], item, $event)">
+  <span
+  style="padding: 0px 5px 0px 0px;" *ngIf="item.child">
+  <i nz-icon nzType="thunderbolt" nzTheme="fill"></i></span>
+  <span style="padding: 0px 5px 0px 0px;" *ngIf="!item.child"><i nz-icon
+  nzType="file" nzTheme="twotone"></i></span>
+  {{ item.title }}
+  </td>
+  <td>{{ item.storyPoints }}</td>
+  <td>{{ Type[item.type] }}</td>
+  <td>{{item.createdDate | date:'MM-dd-yyyy' }}</td>
+  <!-- <td>{{item.createdDdate | date:'MM-dd-yyyy' }}</td> -->
+  <td>
+  <i nz-icon nzType="edit" (click)="editRow(item)" nzTheme="outline"></i>&nbsp;
+  <i nz-icon nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(item)"></i>
+  <i nz-icon nzType="plus" (click)="addchildRow(item)" nzTheme="outline"></i>
+  </td>
+  </tr>
+  </ng-container>
+  </ng-container>
+  </tbody>
+  </nz-table>
+  <br>
+  </div>
+  </div>
+  </div>
+ </div>
+ 
+ 
+ 
+ <!-- Add Epic Form -->
+ <nz-modal nzWidth="68%" nzHeight="80%" [(nzVisible)]="openEpicAddForm" nzTitle="Add Epic" (nzOnCancel)="cancel()" [nzFooter]="adEpicFooter">
+ <form [formGroup]="addEpicForm">
+  <div class="row">
+  <div class="col-4">
+  <label Required>Title: </label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input placeholder="Title" class="title" formControlName="title"/>
+  <div *ngIf="this.addEpicForm.get('title').errors?.required && this.addEpicForm.get('title').touched">
+  <small class="text-danger">Title Is Required</small></div>
+  <div *ngIf="this.addEpicForm.get('title').errors?.maxlength && this.addEpicForm.get('title').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addEpicForm.get('title').errors?.pattern && this.addEpicForm.get('title').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Seq No: </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input placeholder="Seq no" class="title" formControlName="seqNo"/>
+  <div *ngIf="this.addEpicForm.get('seqNo').errors?.required && this.addEpicForm.get('seqNo').touched">
+  <small class="text-danger">Seq No: Is Required</small></div>
+  <div *ngIf="this.addEpicForm.get('seqNo').errors?.maxlength && this.addEpicForm.get('seqNo').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.addEpicForm.get('seqNo').errors?.pattern && this.addEpicForm.get('seqNo').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Tags: </label>
+  <input nz-input placeholder="Tags" class="title" formControlName="tags"/>
+  <div *ngIf="this.addEpicForm.get('tags').errors?.required && this.addEpicForm.get('tags').touched">
+  <small class="text-danger">Tags Are Required</small></div>
+  <div *ngIf="this.addEpicForm.get('tags').errors?.maxlength && this.addEpicForm.get('tags').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <!-- <div *ngIf="this.addEpicForm.get('tags').errors?.pattern && this.addEpicForm.get('tags').invalid">
+  <small class="text-danger">Only Numerics Are Allowed</small> -->
+  </div>
+  </div>
+  <br>
+  <div class="row">
+  <div class="col-4">
+  <label Required>Task ID: </label>
+  <input nz-input placeholder="Task ID" class="title" formControlName="taskId"/>
+  <div *ngIf="this.addEpicForm.get('taskId').errors?.required && this.addEpicForm.get('taskId').touched">
+  <small class="text-danger">TaskID Is Required</small></div>
+  <div *ngIf="this.addEpicForm.get('taskId').errors?.maxlength && this.addEpicForm.get('taskId').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.addEpicForm.get('taskId').errors?.pattern && this.addEpicForm.get('taskId').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Created By: </label>
+  <input nz-input placeholder="created by" class="title" formControlName="createdBy"/>
+  <div *ngIf="this.addEpicForm.get('createdBy').errors?.required && this.addEpicForm.get('createdBy').touched">
+  <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.addEpicForm.get('createdBy').errors?.maxlength && this.addEpicForm.get('createdBy').invalid">
+  <small class="text-danger">Only 25 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addEpicForm.get('createdBy').errors?.pattern && this.addEpicForm.get('createdBy').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+ </div><br>
+ 
+  <div class="row">
+  <div class="col-12">
+  <label class="txd">Description : </label><br>
+  <textarea class="txt1" PlaceHolder='Write something here .....' rows="3" cols="59" Required formControlName="description"></textarea>
+  <div *ngIf="this.addEpicForm.get('description').errors?.required && this.addEpicForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.addEpicForm.get('description').errors?.maxlength && this.addEpicForm.get('description').invalid">
+  <small class="text-danger">Only 1000 Characters are allowed</small>
+  </div>
+  <!-- <div *ngIf="this.addEpicForm.get('description').errors?.pattern && this.addEpicForm.get('description').invalid">
+  <small class="text-danger">Only Numerics Are Allowed</small> -->
+  </div>
+  </div>
+  <ng-template #adEpicFooter>
+  <button nz-button nzType="primary" (click)="newEpic()"> <i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+ </form>
+ </nz-modal>
+ 
+ <!-- Edit Epic Form -->
+ <nz-modal nzWidth="75%" nzHeight="80%" [(nzVisible)]="modifyEpicForm" nzTitle="Edit Epic" (nzOnCancel)="cancel()" [nzFooter]="editEpicFooter">
+  <form [formGroup]="editEpicForm">
+  <div class="row">
+  <div class="col-4">
+  <label Required class="edittitle">Title: </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input placeholder="Title" class="title" formControlName="title"/>
+  <div *ngIf="this.editEpicForm.get('title').errors?.required && this.editEpicForm.get('title').touched">
+  <small class="text-danger">Title Is Required</small></div>
+  <div *ngIf="this.editEpicForm.get('title').errors?.maxlength && this.editEpicForm.get('title').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editEpicForm.get('title').errors?.pattern && this.editEpicForm.get('title').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Seq No: </label>
+  <input nz-input placeholder="Seq no" class="title" formControlName="seqNo"/>
+  <div *ngIf="this.editEpicForm.get('seqNo').errors?.required && this.editEpicForm.get('seqNo').touched">
+  <small class="text-danger">Seq No: Is Required</small></div>
+  <div *ngIf="this.editEpicForm.get('seqNo').errors?.maxlength && this.editEpicForm.get('seqNo').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.editEpicForm.get('seqNo').errors?.pattern && this.editEpicForm.get('seqNo').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required class="titlet">Tags: </label>
+  <input nz-input placeholder="Tags" id="titlelabel" formControlName="tags"/>
+  <div *ngIf="this.editEpicForm.get('tags').errors?.required && this.editEpicForm.get('tags').touched">
+  <small class="text-danger">Tags Are Required</small></div>
+  <div *ngIf="this.editEpicForm.get('tags').errors?.maxlength && this.editEpicForm.get('tags').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editEpicForm.get('tags').errors?.pattern && this.editEpicForm.get('tags').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div >
+  </div>
+  <div class="row">
+  <div class="col-4">
+  <label Required class="titletas" >Task ID: </label>&nbsp;
+  <input nz-input placeholder="Task ID" class="title" formControlName="taskId"/>
+  <div *ngIf="this.editEpicForm.get('taskId').errors?.required && this.editEpicForm.get('taskId').touched">
+  <small class="text-danger">TaskId Is Required</small></div>
+  <div *ngIf="this.editEpicForm.get('taskId').errors?.maxlength && this.editEpicForm.get('taskId').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.editEpicForm.get('taskId').errors?.pattern && this.editEpicForm.get('taskId').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-8">
+  <nz-form-item>
+  <label class="tx2">Description : </label>
+  <textarea class="txt2" PlaceHolder='Write something here....' rows="3" cols="59" Required formControlName="description"></textarea>
+  <div *ngIf="this.editEpicForm.get('description').errors?.required && this.editEpicForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.editEpicForm.get('description').errors?.maxlength && this.editEpicForm.get('description').invalid">
+  <small class="text-danger">Only 1000 Characters are allowed</small>
+  </div>
+  
+  </nz-form-item>
+  </div>
+</div>
+  <ng-template #editEpicFooter>
+  <button nz-button nzType="primary" (click)="updatingEpic()"> <i nz-icon nzType="edit" nzTheme="outline" ></i>Update</button>
+  <button nz-button nzType="primary" (click)="cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+ 
+ <!--Add Story screen-->
+ <nz-modal nzWidth="75%" nzHeight="80%" [(nzVisible)]="openStoryForm" nzTitle="Add Story" (nzOnCancel)="cancel()" [nzFooter]="addStoryFooter">
+  <form [formGroup]="addStoryForm">
+  
+  <div class="row">
+  <div class="col-4">
+  <label Required >Title: </label>
+  <input nz-input placeholder="Title" class="atitle" formControlName="title"/>
+  <div *ngIf="this.addStoryForm.get('title').errors?.required && this.addStoryForm.get('title').touched">
+  <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('title').errors?.maxlength && this.addStoryForm.get('title').invalid">
+  <small class="text-danger">Only 70 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addStoryForm.get('title').errors?.pattern && this.addStoryForm.get('title').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Tags : </label>
+  <input nz-input placeholder="Tags" class= "atag" formControlName="tags"/>
+  <div *ngIf="this.addStoryForm.get('tags').errors?.required && this.addStoryForm.get('tags').touched">
+  <small class="text-danger">Tags are Required</small></div>
+  <div *ngIf="this.addStoryForm.get('createdBy').errors?.maxlength && this.addStoryForm.get('createdBy').invalid">
+  <small class="text-danger">Only 100 Characters are allowed</small>
+  </div>
+  
+  </div>
+  <div class="col-4">
+  <label Required>Created By : </label>&nbsp;&nbsp;&nbsp;
+  <input nz-input placeholder="Tags" class= "acre" formControlName="createdBy"/>
+  <div *ngIf="this.addStoryForm.get('createdBy').errors?.required && this.addStoryForm.get('createdBy').touched">
+  <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('createdBy').errors?.maxlength && this.addStoryForm.get('createdBy').invalid">
+  <small class="text-danger">Only 25 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addStoryForm.get('createdBy').errors?.pattern && this.addStoryForm.get('createdBy').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  </div><br>
+  
+  <div class="row">
+  <div class="col-4">
+  <label Required>Document ID : </label>&nbsp;
+  <input nz-input placeholder="Document ID" class= "adoc" formControlName="documentId"/>
+  <div *ngIf="this.addStoryForm.get('documentId').errors?.required && this.addStoryForm.get('documentId').touched">
+  <small class="text-danger">DocumentId Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('documentId').errors?.maxlength && this.addStoryForm.get('documentId').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.addStoryForm.get('documentId').errors?.pattern && this.addStoryForm.get('documentId').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Artifact ID : </label>&nbsp;
+  <input nz-input placeholder="Artifact ID" class= "aart" formControlName="artifactId"/>
+  <div *ngIf="this.addStoryForm.get('artifactId').errors?.required && this.addStoryForm.get('artifactId').touched">
+  <small class="text-danger">Number Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('artifactId').errors?.maxlength && this.addStoryForm.get('artifactId').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.addStoryForm.get('artifactId').errors?.pattern && this.addStoryForm.get('artifactId').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Story Points : </label>&nbsp;
+  <input nz-input placeholder="Story Points " class= "asto" formControlName="storyPoints"/>
+  <div *ngIf="this.addStoryForm.get('storyPoints').errors?.required && this.addStoryForm.get('storyPoints').touched">
+  <small class="text-danger">Number Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('storyPoints').errors?.maxlength && this.addStoryForm.get('storyPoints').invalid">
+  <small class="text-danger">Only 3 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.addStoryForm.get('storyPoints').errors?.pattern && this.addStoryForm.get('storyPoints').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  </div><br>
+  <div class ="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Story Type : </label>&nbsp;
+  <nz-select nzAllowClear nzPlaceHolder="Choose Story Type" formControlName="storyType" style="width: 190px; margin-left: 20px;" >
+  <nz-option nzValue="U" nzLabel="UX Requirements"></nz-option>
+  <nz-option nzValue="D" nzLabel="Data Requirements"></nz-option>
+  <nz-option nzValue="I" nzLabel="Interface"></nz-option>
+  <nz-option nzValue="O" nzLabel="Others"></nz-option>
+  </nz-select>
+  <div *ngIf="this.addStoryForm.get('storyType').errors?.required && this.addStoryForm.get('storyType').touched">
+  <small class="text-danger">Please Select Story Type</small></div>
+  </nz-form-item>
+  </div><br>
+  <div class="col-8">
+  <nz-form-item>
+  <label class="tx3">Description : </label>
+  <textarea class="txt3" PlaceHolder='Write something here .....' rows="3" cols="62" Required formControlName="description"></textarea>
+  <div *ngIf="this.addStoryForm.get('description').errors?.required && this.addStoryForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.addStoryForm.get('description').errors?.maxlength && this.addStoryForm.get('description').invalid">
+  <small class="text-danger">Only 500 Characters are allowed</small>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+  <ng-template #addStoryFooter>
+  <button nz-button nzType="primary" (click)="addingStory()"> <i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+  </form>
+  </nz-modal>
+ <!--Edit Story screen--><nz-modal nzWidth="80%" nzHeight="80%" [(nzVisible)]="modifyStoryForm" nzTitle="Edit Story" (nzOnCancel)="cancel()"
+ [nzFooter]="modalFooter3">
+ <form [formGroup]="editStoryForm">
+ <div class="row">
+ <div class="col-4">
+ <label Required>Title: </label>
+ <input nz-input placeholder="Title" class="title" formControlName="title" id="label1"/>
+ <div *ngIf="this.editStoryForm.get('title').errors?.required && this.editStoryForm.get('title').touched">
+ <small class="text-danger">Title Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('title').errors?.maxlength && this.editStoryForm.get('title').invalid">
+ <small class="text-danger">Only 70 Characters are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('title').errors?.pattern && this.editStoryForm.get('title').invalid">
+ <small class="text-danger">Only Characters Are Allowed</small></div>
+ </div>
+ <div class="col-4">
+ <label class= "edittag1" Required>Tags : </label>
+ <input class= "edittagg" nz-input placeholder="Tags" formControlName="tags" id= "labelt"/>
+ <div *ngIf="this.editStoryForm.get('tags').errors?.required && this.editStoryForm.get('tags').touched">
+ <small class="text-danger">Tags are Required</small></div>
+ <div *ngIf="this.editStoryForm.get('tags').errors?.maxlength && this.editStoryForm.get('tags').invalid">
+ <small class="text-danger">Only 100 Characters are allowed</small>
+ </div>
+ 
+ </div>
+ <div class="col-4">
+ <label Required>Created By : </label>&nbsp;&nbsp;
+ <input nz-input placeholder="Tags" formControlName="createdBy" id= "label"/>
+ <div *ngIf="this.editStoryForm.get('createdBy').errors?.required && this.editStoryForm.get('createdBy').touched">
+ <small class="text-danger">Name Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('createdBy').errors?.maxlength && this.editStoryForm.get('createdBy').invalid">
+ <small class="text-danger">Only 25 Characters are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('createdBy').errors?.pattern && this.editStoryForm.get('createdBy').invalid">
+ <small class="text-danger">Only Characters Are Allowed</small></div>
+ </div>
+ <!-- <div class="col-3">
+ <label Required>Modified By : </label>
+ <input nz-input placeholder="Tags" formControlName="modifiedBy" id= "label"/>
+ </div> -->
+ 
+ </div><br>
+ <div class="row">
+ <div class="col-4">
+ <label Required>Document ID : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <input nz-input placeholder="Document ID" formControlName="documentId" id= "label"/>
+ <div *ngIf="this.editStoryForm.get('documentId').errors?.required && this.editStoryForm.get('documentId').touched">
+ <small class="text-danger">Document ID Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('documentId').errors?.maxlength && this.editStoryForm.get('documentId').invalid">
+ <small class="text-danger">Only 10 Digits are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('documentId').errors?.pattern && this.editStoryForm.get('documentId').invalid">
+ <small class="text-danger">Only Numbers Are Allowed</small></div>
+ </div>
+ <div class="col-4">
+ <label Required>Artifact ID : </label>&nbsp;
+ <input nz-input placeholder="Artifact ID" formControlName="artifactId" id="label"/>
+ <div *ngIf="this.editStoryForm.get('artifactId').errors?.required && this.editStoryForm.get('artifactId').touched">
+ <small class="text-danger">Artifact Id Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('artifactId').errors?.maxlength && this.editStoryForm.get('artifactId').invalid">
+ <small class="text-danger">Only 10 Digits are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('artifactId').errors?.pattern && this.editStoryForm.get('artifactId').invalid">
+ <small class="text-danger">Only Numbers Are Allowed</small></div>
+ </div>
+ <div class="col-4">
+ <label Required>Story Points : </label>
+ <input nz-input placeholder="Story Points " formControlName="storyPoints" id="label"/>
+ <div *ngIf="this.editStoryForm.get('storyPoints').errors?.required && this.editStoryForm.get('storyPoints').touched">
+ <small class="text-danger">Number Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('storyPoints').errors?.maxlength && this.editStoryForm.get('storyPoints').invalid">
+ <small class="text-danger">Only 3 Digits are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('storyPoints').errors?.pattern && this.editStoryForm.get('storyPoints').invalid">
+ <small class="text-danger">Only Numbers Are Allowed</small></div>
+ </div>
+</div><br>
+<div class="row">
+ <div class="col-4">
+ <label Required>Sequence Number : </label>
+ <input nz-input placeholder="Sequence Number " formControlName="seqNo" id="label"/>
+ <div *ngIf="this.editStoryForm.get('seqNo').errors?.required && this.editStoryForm.get('seqNo').touched">
+ <small class="text-danger">Seq no: Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('seqNo').errors?.maxlength && this.editStoryForm.get('seqNo').invalid">
+ <small class="text-danger">Only 10 Digits are allowed</small>
+ </div>
+ <div *ngIf="this.editStoryForm.get('seqNo').errors?.pattern && this.editStoryForm.get('seqNo').invalid">
+ <small class="text-danger">Only Numbers Are Allowed</small></div>
+ </div>
+ 
+ 
+ <div class="col-4">
+ <nz-form-item>
+ <label Required>Story Type : </label>
+ <nz-select nzAllowClear nzPlaceHolder="Choose Story Type" formControlName="storyType" style="width: 200px;margin-left: 6px;">
+ <nz-option nzValue="U" nzLabel="UX Requirements"></nz-option>
+ <nz-option nzValue="D" nzLabel="Data Requirements"></nz-option>
+ <nz-option nzValue="I" nzLabel="Interface"></nz-option>
+ <nz-option nzValue="O" nzLabel="Others"></nz-option>
+ </nz-select>
+ <div *ngIf="this.editStoryForm.get('storyType').errors?.required && this.editStoryForm.get('storyType').touched">
+ <small class="text-danger">Please Select Story Type</small></div>
+ </nz-form-item>
+ </div>
+</div>
+<div class="row">
+ <div class="col-8">
+ <nz-form-item>
+ <label class="tx">Description : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <textarea class="txt" PlaceHolder='Write something on me .....' rows="3" cols="60" Required formControlName="description"></textarea>
+ <div *ngIf="this.editStoryForm.get('description').errors?.required && this.editStoryForm.get('description').touched">
+ <small class="text-danger">Description Is Required</small></div>
+ <div *ngIf="this.editStoryForm.get('description').errors?.maxlength && this.editStoryForm.get('description').invalid">
+ <small class="text-danger">Only 500 Characters are allowed</small>
+ </div>
+ </nz-form-item>
+ </div>
+</div>
+ <ng-template #modalFooter3>
+ <button nz-button nzType="primary" (click)="updatingStory()"> <i nz-icon nzType="save"></i>Save</button>
+ <button nz-button nzType="primary" (click)="cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+ </ng-template>
+ </form>
+ </nz-modal>
+ 
+ <!--Add Task screen-->
+  <nz-modal nzWidth="73%" nzHeight="60%" [(nzVisible)]="openTaskaddForm" nzTitle="Add Task" (nzOnCancel)="cancel()" [nzFooter]="addTaskFooter">
+ <form [formGroup]="addTaskForm">
+  <div class="row">
+  <div class="col-4">
+  <label Required>Name : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input nz-input nzLabel="Name" placeholder="Title" class="task" formControlName="name"/>
+  <div *ngIf="this.addTaskForm.get('name').errors?.required && this.addTaskForm.get('name').touched">
+  <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.addTaskForm.get('name').errors?.maxlength && this.addTaskForm.get('name').invalid">
+  <small class="text-danger">Only 50 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addTaskForm.get('name').errors?.pattern && this.addTaskForm.get('name').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label Required>Assigned To : </label>&nbsp;  
+  <input nz-input nzLabel="Assigned To" placeholder="Assigned To" class="task" formControlName="assignedTo"/>
+  <div *ngIf="this.addTaskForm.get('assignedTo').errors?.required && this.addTaskForm.get('assignedTo').touched">
+  <small class="text-danger">Name Is Required</small></div>
+  <div *ngIf="this.addTaskForm.get('assignedTo').errors?.maxlength && this.addTaskForm.get('assignedTo').invalid">
+  <small class="text-danger">Only 25 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.addTaskForm.get('assignedTo').errors?.pattern && this.addTaskForm.get('assignedTo').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  
+  <div class="col-4">
+  <label class="slabel">Start Date :</label>&nbsp;
+  <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy"  name="startDate" (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)" formControlName="startDate" style="width: 200px;"></nz-date-picker>
+  <div *ngIf="this.addTaskForm.get('startDate').errors?.required && this.addTaskForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div>
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-4">
+  <label >End Date :</label>&nbsp;
+  <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy"  class="task" (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)" [nzOpen]="endOpen" name="endDate" placeholder="End Date" formControlName="endDate" style="width: 200px;"></nz-date-picker>
+  <div *ngIf="this.addTaskForm.get('endDate').errors?.required && this.addTaskForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div>
+  </div>
+  
+  
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Status : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status" class="status" style="width: 200px;margin-left: 20px;">
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <div *ngIf="this.addTaskForm.get('status').errors?.required && this.addTaskForm.get('status').touched">
+  <small class="text-danger">Status Is Required</small></div>
+  </nz-form-item>
+  </div>
+  <div class="col-4">
+  <label Required>Prority : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <nz-select nzAllowClear nzPlaceHolder="Choose Prority" formControlName="priority" class="priority" style="width: 200px;margin-left: 10px;" >
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <div *ngIf="this.addTaskForm.get('priority').errors?.required && this.addTaskForm.get('priority').touched">
+  <small class="text-danger">Priority Is Required</small></div>
+  </div>
+  </div>
+ 
+  <div class ="row">
+  <div class="col-12">
+  <nz-form-item>
+  <label class="tx">Description : </label>&nbsp;
+  <textarea class="txt" PlaceHolder='Write something on me .....' rows="3" cols="61" Required formControlName="description"></textarea>
+  <div *ngIf="this.addTaskForm.get('description').errors?.required && this.addTaskForm.get('description').touched">
+  <small class="text-danger">Description Is Required</small></div>
+  <div *ngIf="this.addTaskForm.get('description').errors?.maxlength && this.addTaskForm.get('description').invalid">
+  <small class="text-danger">Only 225 Characters are allowed</small>
+  </div>
+  </nz-form-item>
+  </div>
+  </div>
+ 
+  <ng-template #addTaskFooter>
+  <button type="submit" nz-button nzType="primary" (click)="addingTask()">  <i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">  <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+  </form>
+ </nz-modal>
+ 
+ <!--Edit Task screen-->
+ <!-- <nz-modal nzWidth="80%" nzHeight="80%" [(nzVisible)]="modifyTaskForm" nzTitle="Add Epic" (nzOnCancel)="cancel()"
+ [nzFooter]="modalFooter3">
+ <form [formGroup]="addEpicForm">
+ 
+ 
+  <ng-template #modalFooter3>
+  <button nz-button nzType="primary" (click)="newEpics()"> <i nz-icon nzType="save"></i>Save</button>
+  <button nz-button nzType="primary" (click)="cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+  </ng-template>
+ </form>
+ </nz-modal> -->
+ <nz-modal nzWidth="80%" nzHeight="60%" [(nzVisible)]="modifyTaskForm" nzTitle="Edit Task" (nzOnCancel)="cancel()" [nzFooter]="editTaskFooter">
+  <form [formGroup]="editTaskForm">
+  <div class="row">
+  <div class="col-4">
+  <label >Title : </label>
+  <input nz-input nzLabel="Title" placeholder="Title " class="title1" name="name" formControlName="name"/>
+  <div *ngIf="this.editTaskForm.get('name').errors?.required && this.editTaskForm.get('name').touched">
+  <small class="text-danger">Title Is Required</small></div>
+  <div *ngIf="this.editTaskForm.get('name').errors?.maxlength && this.editTaskForm.get('name').invalid">
+  <small class="text-danger">Only 50 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editTaskForm.get('name').errors?.pattern && this.editTaskForm.get('name').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label >Seq No:  </label>
+  <input nz-input nzLabel="Title" placeholder="seqNo" class="seq" name="seqNo" formControlName="seqNo"/>
+  <div *ngIf="this.editTaskForm.get('seqNo').errors?.required && this.editTaskForm.get('seqNo').touched">
+  <small class="text-danger">Seq No: Is Required</small></div>
+  <div *ngIf="this.editTaskForm.get('seqNo').errors?.maxlength && this.editTaskForm.get('seqNo').invalid">
+  <small class="text-danger">Only 10 Digits are allowed</small>
+  </div>
+  <div *ngIf="this.editTaskForm.get('seqNo').errors?.pattern && this.editTaskForm.get('seqNo').invalid">
+  <small class="text-danger">Only Numbers Are Allowed</small></div>
+  </div>
+  <div class="col-4">
+  <label >Predecessors : </label>
+  <input nz-input nzLabel="Title" placeholder="Predecessors " class="title" name="predecessors" formControlName="predecessors"/>
+  <div *ngIf="this.editTaskForm.get('predecessors').errors?.required && this.editTaskForm.get('predecessors').touched">
+  <small class="text-danger">Predecessors Is Required</small></div>
+  <div *ngIf="this.editTaskForm.get('predecessors').errors?.maxlength && this.editTaskForm.get('predecessors').invalid">
+  <small class="text-danger">Only 50 Characters are allowed</small>
+  </div>
+  <div *ngIf="this.editTaskForm.get('predecessors').errors?.pattern && this.editTaskForm.get('predecessors').invalid">
+  <small class="text-danger">Only Characters Are Allowed</small></div>
+  </div>
+  </div><br>
+  <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label>Start Date:</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' [nzDisabled]="true" class="date" formControlName="startDate"></nz-date-picker>
+  <div *ngIf="this.editTaskForm.get('startDate').errors?.required && this.editTaskForm.get('startDate').touched">
+  <small class="text-danger">Date Is Required</small></div>
+  </nz-form-item>
+  </div><br>
+ 
+  <div class="col-4">
+  <label>End Date : </label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' class="date" formControlName="endDate" ></nz-date-picker>
+  <div *ngIf="this.editTaskForm.get('endDate').errors?.required && this.editTaskForm.get('endDate').touched">
+  <small class="text-danger">Date Is Required</small></div>
+ 
+  </div>
+ 
+ 
+ 
+  <div class="col-4">
+  <nz-form-item>
+  <label >Status : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status"  style="width: 200px;margin-left: 50px; margin-top: 0px;" >
+  <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+  <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+  </nz-select>
+  <div *ngIf="this.editTaskForm.get('status').errors?.required && this.editTaskForm.get('status').touched">
+  <small class="text-danger">Please Select Status</small></div>
+ 
+  </nz-form-item>
+  </div>
+</div>
+ <div class="row">
+  <div class="col-4">
+  <nz-form-item>
+  <label Required>Priority : </label>
+  <nz-select nzAllowClear nzPlaceHolder="Choose Priority" formControlName="priority" style="width: 200px;margin-left: 20px; margin-top:0px;" >
+  <nz-option nzValue="High" nzLabel="High"></nz-option>
+  <nz-option nzValue="Low" nzLabel="Low"></nz-option>
+  <nz-option nzValue="Medium" nzLabel="Medium"></nz-option>
+  </nz-select>
+  <div *ngIf="this.editTaskForm.get('priority').errors?.required && this.editTaskForm.get('priority').touched">
+  <small class="text-danger">Please Select Status</small></div>
+ 
+  </nz-form-item>
+  </div>
+  <div class="col-8">
+    <nz-form-item>
+    <label class="tx">Description : </label>
+    <textarea class="txtdes" PlaceHolder='Write something on me .....' rows="3" cols="75" formControlName="description"></textarea>
+    <div *ngIf="this.editTaskForm.get('description').errors?.required && this.editTaskForm.get('description').touched">
+    <small class="text-danger">Description Is Required</small></div>
+    <div *ngIf="this.editTaskForm.get('description').errors?.maxlength && this.editTaskForm.get('description').invalid">
+    <small class="text-danger">Only 225 Characters are allowed</small>
+    </div>
+    </nz-form-item>
+    </div>
+  </div>
+ 
+ 
+ 
+  <ng-template #editTaskFooter>
+  <nz-form-control>
+  <button type="submit" nz-button nzType="primary" (click)="updatingtask()">Save</button>
+  <button nz-button nzType="primary" (click)="cancel()">Cancel</button>
+  </nz-form-control>
+  </ng-template>
+  </form>
+  </nz-modal>

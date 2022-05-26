@@ -1,0 +1,50 @@
+<!-- <form [formGroup]="regForm" >
+<label style="color: black; text-align: center;">Student Name</label>
+<label>Name</label>
+<input type="text" formControlName = "sName"><br>
+<label class="center-block">College Name</label>
+<inputtype="text" formControlName = "cName"><br>
+<label class="center-block">College Branch</label>
+<inputtype="text" formControlName = "cBranch"><br>
+<label class="center-block">Collage Code</label>
+<input type="text" formControlName = "cCode"><br>
+<label class="center-block">Phone Number</label>
+<inputtype="text" formControlName = "Phone Number"><br>
+<label class="center-block">EmailId</label>
+<inputtype="text" formControlName = "emailId"><br>
+</form> -->
+<app-header></app-header>
+<div>
+<form [formGroup]="regForm">
+    <table  class="list" style="margin-right: 10% !important;">
+        <tr>
+            <td><label>Student Name :</label></td>
+            <td><input type="text" formControlName = "sName"></td>
+        </tr>
+        <tr>
+            <td><label>College Name:</label></td>
+            <td><input type="text" formControlName = "cName"></td>
+        </tr>
+        <tr>
+            <td><label>Student Branch:</label></td>
+            <td><input type="text" formControlName = "sBranch"></td>
+        </tr>
+        <tr>
+            <td><label>Phone Number:</label></td>
+            <td><input type="text" formControlName = "pNumber"></td>
+        </tr>
+        <tr>
+            <td><label>Collage Code:</label></td>
+            <td><input type="text" formControlName = "cCode"></td>
+        </tr>
+        <tr>
+            <td><label>EmailId:</label></td>
+            <td><input type="text" formControlName = "emailId"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button class="button"(click)='add()'>Register</button></td>
+        </tr>
+    </table>
+</form>
+</div>

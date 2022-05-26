@@ -1,0 +1,382 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li>Accounts</li>
+    </ul>
+  </div>
+</div>
+<!-- Account Search -->
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <form [formGroup]="searchForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Name</label>
+            <input nz-input nzLabel="Name" placeholder="Name" formControlName="searchName" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>State</label>
+            <input nz-input nzLabel="State" placeholder="State" formControlName="searchState" />
+          </div>
+          <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Status</label>
+            <input nz-input nzLabel="Status" placeholder="Status" formControlName="searchStatus" />
+          </div> -->     
+           <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        <label>Account Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Select Status" formControlName="searchStatus">
+        <nz-option *ngFor="let options of accountStatus" [nzValue]="options.value" [nzLabel]="options.label">
+        </nz-option>
+        </nz-select>
+        </div>
+      
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Web Address</label>
+            <input nz-input nzLabel="Web Address" placeholder="Web Address" formControlName="searchWebAddress" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="btn" (click)="getAllAccounts()" nz-button nzType="primary">
+              <i nz-icon nzType="search"></i>Search
+            </button>
+            <button class="btn" (click)="cancel()" nz-button nzType="primary">
+              <i nz-icon nzType="redo"></i>Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{ records }}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="addAccount()" nz-button nzType="primary">
+        <i nz-icon nzType="plus"></i>Add
+      </button>
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table #record [nzData]="accTableData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+      nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+      [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+      <thead>
+        <tr>
+          <th nzWidth="6%">#</th>
+          <th nzWidth="20%">Name</th>
+          <th nzWidth="18%">Created By</th>
+          <th nzWidth="20%">Web Address</th>
+          <th nzWidth="15%">State</th>
+          <th nzWidth="14%">Status</th>
+          <th nzWidth="16%">Description</th>
+          <th nzWidth="10%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of accTableData; let i = index">
+          <td>{{i+1}}</td>
+          <td nzEllipsis nzTooltipTitle="{{data.name}}" nz-tooltip>{{data.name}}</td>
+          <td>{{data.createdBy}}</td>
+          <td nzEllipsis nzTooltipTitle="{{data.webAddress}}" nz-tooltip>{{data.webAddress}}</td>
+          <td>{{data.state}}</td>
+          <td>{{Cstatus[data.status]}}</td>
+          <td nzEllipsis nzTooltipTitle="{{data.description}}" nz-tooltip>{{data.description}}</td>
+          <td style="text-align: center">
+            <i nz-icon (click)="editAccount(data)" nzType="edit" nzTheme="outline"> </i>&nbsp;
+            <i nz-icon (click)="deleteAccount(data)" nzType="delete" nzTheme="outline"> </i>&nbsp;
+            <i (click)="contacts(data.id)" nzTooltipTitle="Contact" nz-tooltip nz-icon nzType="eye" nzTheme="outline">
+            </i>
+
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+<!-- ADD A NEW PROJECT -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="addModel" nzTitle="Add Account" (nzOnCancel)="cancelAccounts()"
+  [nzFooter]="addFooter">
+  <form [formGroup]="addAccountForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Name <span class="validationtest"> *</span></label>
+        <input nz-input nzLabel="Name" placeholder="Name" formControlName="name" maxlength="61" />
+        <div *ngIf="this.addAccountForm.get('name').errors?.required && this.addAccountForm.get('name').touched">
+          <span class="text-danger">Name Is Required</span></div>
+        <div *ngIf="this.addAccountForm.get('name').errors?.maxlength && this.addAccountForm.get('name').invalid">
+          <span class="text-danger">Only 12 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('name').errors?.pattern && this.addAccountForm.get('name').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Alias</label>
+        <input nz-input nzLabel="Alias" placeholder="Alias" formControlName="alias" maxlength="61" />
+        <div *ngIf="this.addAccountForm.get('alias').errors?.maxlength && this.addAccountForm.get('alias').invalid">
+          <span class="text-danger">Only 60 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('alias').errors?.pattern && this.addAccountForm.get('alias').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Region </label>
+        <input nz-input nzLabel="Region" placeholder="Region" formControlName="region" maxlength="13" />
+ <div *ngIf="this.addAccountForm.get('region').errors?.maxlength && this.addAccountForm.get('region').invalid">
+          <span class="text-danger">Only 12 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('region').errors?.pattern && this.addAccountForm.get('region').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Teritory</label>
+        <input nz-input nzLabel="Teritory" placeholder="Teritory" formControlName="teritory" maxlength="16" />
+        <div
+          *ngIf="this.addAccountForm.get('teritory').errors?.maxlength && this.addAccountForm.get('teritory').invalid">
+          <span class="text-danger">Only 15 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('teritory').errors?.pattern && this.addAccountForm.get('teritory').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>State</label>
+        <input nz-input nzLabel="State" placeholder="State" formControlName="state" maxlength="51" />
+        <div *ngIf="this.addAccountForm.get('state').errors?.maxlength && this.addAccountForm.get('state').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('state').errors?.pattern && this.addAccountForm.get('state').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Industry</label>
+        <input nz-input nzLabel="Industry" placeholder="Industry" formControlName="industry" maxlength="51" />
+        <div
+          *ngIf="this.addAccountForm.get('industry').errors?.maxlength && this.addAccountForm.get('industry').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('industry').errors?.pattern && this.addAccountForm.get('industry').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Account Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Select Status" formControlName="status">
+        <nz-option *ngFor="let options of accountStatus" [nzValue]="options.value" [nzLabel]="options.label">
+        </nz-option>
+        </nz-select>
+      </div>
+      <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <input nz-input nzLabel="Status" placeholder="Status" formControlName="status" maxlength="31" />
+        <div *ngIf="this.addAccountForm.get('status').errors?.maxlength && this.addAccountForm.get('status').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('status').errors?.pattern && this.addAccountForm.get('status').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div> -->
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Type</label>
+        <input nz-input nzLabel="Type" placeholder="Type" formControlName="type" maxlength="31" />
+        <div *ngIf="this.addAccountForm.get('type').errors?.maxlength && this.addAccountForm.get('type').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('type').errors?.pattern && this.addAccountForm.get('type').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+   
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Phone</label>
+        <input nz-input nzLabel="Phone" placeholder="Phone" formControlName="phone" maxlength="26" />
+        <div *ngIf="this.addAccountForm.get('phone').errors?.maxlength && this.addAccountForm.get('phone').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('phone').errors?.pattern && this.addAccountForm.get('phone').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Web Address</label>
+        <input nz-input nzLabel="Web Address" placeholder="Web Address" formControlName="webAddress" maxlength="121" />
+        <div
+          *ngIf="this.addAccountForm.get('webAddress').errors?.maxlength && this.addAccountForm.get('webAddress').invalid">
+          <span class="text-danger">Only 120 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Stock Symbol 1</label>
+        <input nz-input nzLabel="Stock Symbol 1" placeholder="Stock Symbol 1" formControlName="stocksymbol1"
+          maxlength="13" />
+        <div
+          *ngIf="this.addAccountForm.get('stocksymbol1').errors?.maxlength && this.addAccountForm.get('stocksymbol1').invalid">
+          <span class="text-danger">Only 12 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addAccountForm.get('stocksymbol1').errors?.pattern && this.addAccountForm.get('stocksymbol1').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Stock Symbol 2</label>
+        <input nz-input nzLabel="Stock Symbol 2" placeholder="Stock Symbol 2" formControlName="stocksymbol2"
+          maxlength="13" />
+        <div
+          *ngIf="this.addAccountForm.get('stocksymbol2').errors?.maxlength && this.addAccountForm.get('stocksymbol2').invalid">
+          <span class="text-danger">Only 12 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addAccountForm.get('stocksymbol2').errors?.pattern && this.addAccountForm.get('stocksymbol2').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Revenues</label>
+        <input nz-input nzLabel="Revenues" placeholder="Revenues" formControlName="revenues" maxlength="11" />
+        <div *ngIf="this.addAccountForm.get('revenues').errors?.maxlength && this.addAccountForm.get('revenues').invalid">
+          <span class="text-danger">Only 10 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('revenues').errors?.pattern && this.addAccountForm.get('revenues').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>It Budget</label>
+        <input nz-input nzLabel="It Budget" placeholder="It Budget" formControlName="itBudget" maxlength="11" />
+        <div *ngIf="this.addAccountForm.get('itBudget').errors?.maxlength && this.addAccountForm.get('itBudget').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('itBudget').errors?.pattern && this.addAccountForm.get('itBudget').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Tax ID</label>
+        <input nz-input nzLabel="Tax ID" placeholder="Tax ID" formControlName="taxid" maxlength="51" />
+        <div *ngIf="this.addAccountForm.get('taxid').errors?.maxlength && this.addAccountForm.get('taxid').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.addAccountForm.get('taxid').errors?.pattern && this.addAccountForm.get('taxid').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+  
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>LinkedIn Url</label>
+        <input nz-input nzLabel="LinkedIn Url" placeholder="LinkedIn Url" formControlName="LinkedInUrl"
+          maxlength="501" />
+        <div
+          *ngIf="this.addAccountForm.get('LinkedInUrl').errors?.maxlength && this.addAccountForm.get('LinkedInUrl').invalid">
+          <span class="text-danger">Only 500 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label> Description </label>
+        <textarea nz-input PlaceHolder="Write something on me " nzLabel="Description" formControlName="description"
+          maxlength="1501" nzAutosize></textarea>
+        <div
+          *ngIf="this.addAccountForm.get('description').errors?.maxlength && this.addAccountForm.get('description').invalid">
+          <span class="text-danger">Only 1500 Characters Are Allowed</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #addFooter>
+      <button nz-button class="cancel" (click)="cancelAccounts()">
+        <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+      </button>
+      <button type="submit" nz-button class="save" nzType="primary" (click)="saveAccount()">
+        <i nz-icon nzType="save" nzTheme="outline"></i>Save
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>
+
+<!-- POPUP FOR EDIT PROJECTS -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="editModel" nzTitle="Edit Account" (nzOnCancel)="cancelEdit()"
+  [nzFooter]="editFooter">
+  <form [formGroup]="editAccountForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Name<span class="validationtest"> *</span></label>
+        <input nz-input nzLabel="Name" placeholder="Name" formControlName="editName" maxlength="61" />
+        <div
+          *ngIf="this.editAccountForm.get('editName').errors?.required && this.editAccountForm.get('editName').touched">
+          <span class="text-danger">Name Is Required</span></div>
+        <div
+          *ngIf="this.editAccountForm.get('editName').errors?.maxlength && this.editAccountForm.get('editName').invalid">
+          <span class="text-danger">Only 60 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>createdBy</label>
+        <input nz-input nzLabel="CreatedBy" placeholder="CreatedBy" formControlName="editCreatedBy" maxlength="31" />
+        <div
+          *ngIf="this.editAccountForm.get('editCreatedBy').errors?.maxlength && this.editAccountForm.get('editCreatedBy').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editAccountForm.get('editCreatedBy').errors?.pattern && this.editAccountForm.get('editCreatedBy').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Web Address</label>
+        <input nz-input nzLabel="Web Address" placeholder="Web Address" formControlName="editWebAddress"
+          maxlength="121" />
+        <div
+          *ngIf="this.editAccountForm.get('editWebAddress').errors?.maxlength && this.editAccountForm.get('editWebAddress').invalid">
+          <span class="text-danger">Only 120 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>State</label>
+        <input nz-input nzLabel="State" placeholder="State" formControlName="editState" maxlength="51" />
+        <div
+          *ngIf="this.editAccountForm.get('editState').errors?.maxlength && this.editAccountForm.get('editState').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editAccountForm.get('editState').errors?.pattern && this.editAccountForm.get('editState').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+
+      <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label>
+        <input nz-input nzLabel="Status" placeholder="Status" formControlName="editStatus" maxlength="31" />
+        <div
+          *ngIf="this.editAccountForm.get('editStatus').errors?.maxlength && this.editAccountForm.get('editStatus').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editAccountForm.get('editStatus').errors?.pattern && this.editAccountForm.get('editStatus').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div> -->
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Account Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Select Status" formControlName="editStatus">
+        <nz-option *ngFor="let options of accountStatus" [nzValue]="options.value" [nzLabel]="options.label">
+        </nz-option>
+        </nz-select>
+        </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label> Description </label>
+        <textarea nz-input PlaceHolder="Write something on me " nzLabel="Description" formControlName="editDescription"
+          maxlength="1501" nzAutosize></textarea>
+        <div
+          *ngIf="this.editAccountForm.get('editDescription').errors?.maxlength && this.editAccountForm.get('editDescription').invalid">
+          <span class="text-danger">Only 1500 Characters Are Allowed</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #editFooter>
+      <button nz-button class="cancel" (click)="cancelEdit()">
+        <i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+      <button type="submit" class="save" nz-button nzType="primary" (click)="updateAccount()">
+        <i nz-icon nzType="edit" nzTheme="outline"> </i>Edit
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>

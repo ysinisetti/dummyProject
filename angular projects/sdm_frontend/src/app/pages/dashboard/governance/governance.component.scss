@@ -1,0 +1,72 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.bread {
+  margin-top: -35px;
+  font-size: 16px;
+  margin-left: 160px;
+}
+.title {
+  //text-align: center;
+  //font-weight: bold;
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  // float:right;
+  margin-left: 65px;
+  //margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}
+#cust {
+  float: right;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  // margin-right: -20px;
+  font-size: 18px !important;
+}
+
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -10px;
+  margin-top: -22px;
+  margin-left: -5px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

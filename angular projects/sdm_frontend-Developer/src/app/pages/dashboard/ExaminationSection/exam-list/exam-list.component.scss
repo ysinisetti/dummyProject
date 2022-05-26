@@ -1,0 +1,32 @@
+.btn {
+  margin-top: 38px;
+  width: 100px;
+ // margin-left: 28px;
+  float:right;
+  margin-right:   10px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+  width: 100px;
+  float: right;
+  }
+  }
+  @media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+  width: 100%;
+  float: right;
+  }
+  }
+#fRow{
+  margin-left: -8px;
+}
+.add{
+margin-top: 6px;
+}
+.cancel{
+  font-weight:bold;
+  margin-top: 30px;
+  width: 100px;
+  // color: black !important;
+  // background-color: #f0f0f0 !important;
+  }

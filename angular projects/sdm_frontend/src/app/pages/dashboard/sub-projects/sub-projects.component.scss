@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+::ng-deep .ant-picker {
+  width: 100%;
+}
+::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  position: relative;
+  padding: 11px 5px;
+  padding-left: 40px;
+  color: black !important;
+  line-height: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+nz-select {
+  width: 100%;
+}
+
+.btn {
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 767px) {
+  .ant-table {
+    overflow-x: auto;
+  }
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+    margin-right: 8px;
+  }
+}
+
+.btn1 {
+  margin-top: 29px;
+  width: 100px;
+  margin-left: 8px;
+  float: right;
+}
+.btn2 {
+  margin-top: 29px;
+  width: 100px;
+  margin-right: 8px;
+  float: right;
+}
+.cusName {
+  float: right;
+  color: #00aae7;
+}
+
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+
+.editable-cell {
+  position: relative;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
+}
+
+.innertable {
+  width: 97%;
+  margin-left: 5%;
+}
+
+::ng-deep [data-kit-theme='default'] {
+  tr.ant-table-expanded-row > td {
+    background-color: white !important;
+  }
+}
+
+#label {
+  margin-top: -6px;
+}
+
+nz-select1 {
+  width: 200px;
+}
+
+.search {
+  margin-left: 75%;
+  margin-top: -35px;
+  width: 25%;
+}
+#search {
+  margin-top: 10px;
+  margin-left: 906%;
+  margin-bottom: 10px;
+}
+
+.resource {
+  width: 215px;
+  margin-left: 2%;
+  margin-top: 3%;
+}
+.name {
+  width: 215px;
+  margin-top: 3%;
+}
+
+nz-date-picker {
+  margin: 0 8px 12px 0;
+}
+
+.customer {
+  margin-top: -21px;
+  text-align: right;
+  font-size: 18px;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+  }
+  .customer {
+    margin-top: 2px;
+    text-align: left;
+    font-size: 18px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .customer {
+    margin-top: 2px;
+    text-align: left;
+    font-size: 18px;
+  }
+  .btn1 {
+    width: 100%;
+  }
+  .btn2 {
+    width: 100%;
+  }
+}
+
+.home {
+  font-weight: bold;
+  margin-top: -30px;
+  font-size: 18px;
+}
+.proName {
+  margin-left: 60px;
+  margin-top: -23px;
+}
+.comName {
+  margin-left: 170px;
+  margin-top: -22px;
+}
+
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: -5px;
+  margin-top: -22px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 2px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .btn1 {
+    width: 100px;
+    float: right;
+    margin-left: 8px;
+  }
+  .btn2 {
+    width: 100px;
+    float: right;
+  }
+  p {
+    text-align: left;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .btn1 {
+    width: 100%;
+  }
+  .btn2 {
+    width: 100%;
+  }
+  p {
+    text-align: left;
+  }
+}

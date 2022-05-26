@@ -1,0 +1,144 @@
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="gotoHome()">Home</a></li>
+            <li><a (click)="details()">{{projectname}}</a></li>
+            <li>Documents</li>
+        </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+        Customer Name : <b class="cName">{{cusName}}</b>
+    </div>
+  </div>
+  <div class="card">
+    <nz-collapse nzAccordion >
+        <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="searchForm">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Document Name</label>
+                        <input nz-input placeholder="Document Name" name="title" formControlName="searchDOcName" />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Owner</label>
+                        <input nz-input placeholder="Owner" name="title" formControlName="searchOwner" />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Updated Date</label>
+                        <nz-date-picker formControlName="searchDate" nzFormat="MM-dd-yyyy"></nz-date-picker>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label> Document Type</label>
+                        <nz-select nzAllowClear (ngModelChange)="onChange()" formControlName="searchDocType"
+                            nzPlaceHolder="Document Type">  
+                            <nz-option name="type" *ngFor="let type of optionList" [nzValue]="type.Value"
+                                [nzLabel]="type.Label">
+                            </nz-option>
+                        </nz-select>
+                      </div>           
+                </div>
+                 <div class="row">
+                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"></div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                            <button class="reset" (click)="resetSearchFields()" nz-button nzType="primary"><i nz-icon
+                                nzType="redo"></i>Reset</button>
+                          <button class="search" (click)="getTableData()" nz-button nzType="primary"><i nz-icon
+                              nzType="search"></i>Search</button>                              
+                        </div>
+                      </div>
+            </form>
+        </nz-collapse-panel>
+    </nz-collapse>
+  </div>
+  <div class="card" id="grid">  
+        <div class="row">
+            <div class="col-12">
+                <div class="row">  
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                        <label class="rec">No. of Records : {{records}}</label>
+                      </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                            <button class="add"  (click)="addRow()" nz-button nzType="primary"><i nz-icon
+                                nzType="plus"></i>Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" >
+                <div class="card-body" id="gridBody">
+                <nz-table  #expandTable [nzData]="tableData" nzTableLayout="fixed"
+                    [nzPaginationPosition] nzShowSizeChanger nzShowPagination
+                    [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum" [nzFrontPagination]="false"
+                    (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead> 
+                        <tr>
+                            <th *ngFor="let column of listOfColumns" [nzSortOrder]="column.sortOrder"
+                                [nzSortFn]="column.sortFn" [nzWidth]="column.width">
+                                {{ column.name }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of tableData; let i=index">
+                            <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                            <td nzEllipsis>
+                                <span style="padding: 0px 5px 0px 0px;"><i nz-icon nzType="file"
+                                        nzTheme="twotone"></i></span>
+                                {{data.fileName}}
+                            </td>
+                            <td nzEllipsis>{{data.createdBy}}</td>
+  
+                            <td> {{data.createdDate | date: 'MMM d,yyyy'}}</td>
+                            <td nzEllipsis>{{ documentType[data.docType] }}</td>
+                            <td>
+                                <span>
+                                    <i nz-icon nzType="download" (click)="downloadFile(data.path,data.fileName)"
+                                        nzTheme="outline"></i>
+                                </span>
+                                <span Style="padding-left:  19px;">
+                                    <i nz-icon nzType="delete" nz-popconfirm
+                                        nzPopconfirmTitle="Sure to Delete?"
+                                        (nzOnConfirm)="deleteRow(data)" (nzOnCancel)="Cancel()" nzTheme="fill"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>  
+                </nz-table>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  <nz-modal [(nzVisible)]="isAddVisible" nzTitle="Add Documents" (nzOnCancel)="addcancel()"
+    [nzFooter]="modalFooter2">  
+    <form nz-form [formGroup]="addform">
+   <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Document Type <span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Document Type" formControlName="doctype"
+                    (ngModelChange)="onSelectType($event)">
+                    <nz-option *ngFor="let option of optionList" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.addform.get('doctype').errors?.required && this.addform.get('doctype').touched">
+                            <span class="text-danger">Document Type is Required</span></div>
+  
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Attachment <span class="validationtest">*</span></label><br>
+                <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                [nzHeaders]="{ authorization: 'authorization-text' }" [nzMultiple]="true"
+                    (nzChange)="onFileChange($event)" [(nzFileList)]="fileList">
+                    <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
+                    <!-- <p class="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+                    </p> -->
+                </nz-upload>  
+            </div>
+        </div>
+        <ng-template #modalFooter2>  
+            <button nz-button  nzType="primary" class="cancel" (click)="addcancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+            <button nz-button nzType="primary"  class="save" (click)="Save()"> <i nz-icon nzType="save"></i>Save</button>
+        </ng-template>
+    </form>
+  </nz-modal>
+  

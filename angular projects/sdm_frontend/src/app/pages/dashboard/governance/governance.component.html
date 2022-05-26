@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a href="/allProjects">Home</a></li>
+      <li><a href="/dashboard/projectDetails">{{ProjectName1}}</a></li>
+      <li>Governence</li>
+      
+    </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <p id="cust"> Customer Name:   <b style="color:  #0275d8;" > {{customerName}}</b></p>
+    </div>
+    </div>
+   <div class="card">
+    <!-- <div class="card-header">
+        <h5>
+            <strong class="mr-3">All Projects</strong>
+        </h5>
+    </div> -->
+    <div class="card-header">
+        <form [formGroup]="prjForm">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Customer Name</label>
+                    <input nz-input placeholder="Customer Name" formControlName="cName" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Project Name</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Project Name" formControlName="pName">
+                        <nz-option *ngFor="let option of optionList1" [nzValue]="option" [nzLabel]="option.label">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <label>Status</label>
+                <nz-select nzAllowClear nzPlaceHolder="Status">
+                    <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label">
+                    </nz-option>
+                </nz-select>
+            </div> -->
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <button class="btn" nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="margin-top: 25px;">
+                    <nz-table #basicTable class="tablescroll" [nzData]="tableData"
+                        (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                        <!-- (nzCurrentPageDataChange)="onCurrentPageDataChange($event)" -->
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Customer Name</th>
+                                <th>Project Duration</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable.data">
+                                <td>{{ data.pName }}</td>
+                                <td>{{ data.cName }}</td>
+                                <td>{{ data.pDuration }}</td>
+                                <td>{{data.status}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<!-- <p>project-details works!</p> -->
+<div class="title">
+  <!-- <nz-card style="width:1200px;">
+    {{projectTitle}}
+  </nz-card> -->
+
+  {{projectTitle}}
+
+
+</div>
+<div class="main">
+<div class="row">
+<div  *ngFor="let data of tableData" class="di" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+<div (dblclick)="desc(data.url)" class="card">
+  <img src={{data.src}} style="height: 40px;width: 40px;margin-left: 225px;margin-top: 25px;">
+
+    <div class="card-body">
+     <h5 >{{data.listName}}</h5>
+     <p>
+       {{data.details}}
+     </p>
+    </div>
+</div>
+</div>
+</div>
+</div>

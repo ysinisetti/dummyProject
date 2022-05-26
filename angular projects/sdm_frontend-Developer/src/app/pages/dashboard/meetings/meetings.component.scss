@@ -1,0 +1,187 @@
+.radio{
+  padding-left: 33px;
+}
+
+.coll {
+  margin-top: -2px;
+  font-family: "Open Sans", sans-serif;
+}
+.reset {
+  margin-top: 15px;
+  float: right;
+  margin-right: 112px;
+  margin-bottom: -1px;
+}
+.search {
+  margin-top: 15px;
+  float: right;
+  margin-right: -208px;
+  margin-bottom: -5px;
+}
+.minus
+{
+  margin-bottom: 7px;
+  margin-right: -27px;
+}
+.addEditForm {
+float: right;
+margin-top: -36px;
+}
+  @media (min-width: 538px) and (max-width: 768px) {
+    .reset {
+      margin-top: 15px;
+      float: right;
+   
+      margin-bottom: -5px;
+    }
+    .search {
+      margin-top: 15px;
+      float: right;
+      margin-right: -122px;
+      margin-bottom: -5px;
+    }
+    .ant-table-thead > tr > th{
+      position: relative;
+      padding: 15px 10px;
+      overflow-wrap: break-word;
+  }
+  }
+  @media (min-width: 320px) and (max-width: 538px) {
+    .customer {
+      margin-top: -3px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -2px;
+    }
+    .add {
+      width: 89%;
+      float: right;
+      margin-right: 17px;
+    
+      }
+      .cancel{
+        font-weight: bold;
+        margin-top: -46px;
+        width: 100%;
+      }
+      .save{
+        width: 100%;
+        font-weight: bold;
+        margin-top: -4px;
+      }
+    .button
+    {
+      width:133px;
+    }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px;
+      margin-bottom: -1px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px;
+      margin-bottom: -5px;
+    }
+  }
+
+  @media (min-width: 300px) and (max-width: 500px) {
+    .customer {
+      margin-top: -3px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -2px;
+    }
+    .add {
+      width: 89%;
+      float: right;
+      margin-right: 17px;
+    
+      }
+      .cancel{
+        font-weight: bold;
+        margin-top: -46px;
+        width: 100%;
+      }
+      .save{
+        width: 100%;
+        font-weight: bold;
+        margin-top: -4px;
+      }
+    .button
+    {
+      width:133px;
+    }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px;
+      margin-bottom: -1px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px;
+      margin-bottom: -5px;
+    }
+    }
+  @media (min-width: 501px) and (max-width: 767px) {
+
+  .customer {
+    margin-top: -3px;
+    text-align: left;
+      font-size: 14px;
+    margin-left: -2px;
+  }
+  .add {
+    width: 94%;
+    float: right;
+    
+    }
+  
+    .cancel {
+      width: 100px;
+      float: right;
+      }
+      .save {
+        width: 100px;
+        float: right;
+        }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px;
+    }
+}
+.cancel{
+  margin-top: 40px;
+  font-weight: bold;
+  width: 100px;
+  border: white !important;
+  color: black !important;
+  background-color: #F0F0F0 !important;
+  }
+.button
+{
+  width:150px;
+}
+#agenda{
+  margin-top: 20px;
+}
+.more
+{
+  font-size: 20px;
+}

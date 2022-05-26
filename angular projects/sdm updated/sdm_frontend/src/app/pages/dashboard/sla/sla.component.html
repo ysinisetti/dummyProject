@@ -1,0 +1,179 @@
+
+<!-- 
+ <div  (click)="detailsh()"  class="home">Home .</div>
+ <div  (click)="details()" class="proName">{{ProjectName}}.</div>
+ <p class="comName">SLA</p> -->
+
+ <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <ul class="breadcrumb">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li><a (click)="details()">{{ProjectName}}</a></li>
+    <li>SLA</li>
+    
+  </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <p id="cust"> Customer Name:   <b style="color:  #0275d8;" > {{customerName}}</b></p>
+  </div>
+  </div>
+ 
+<div style="padding-top: 30px;">
+<div class="card"  style="margin-top: -15px;">
+  
+  <div class="card-body">
+      <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="row">
+              <div class="col-4">
+               
+              </div>
+              <div class="col-4">
+                
+              </div>
+              <div class="col-4">
+              <button class="btn"  (click)="addRow()" nz-button nzType="primary">
+              <i nz-icon nzType="plus"></i>Add</button
+            >
+            </div>
+            </div>
+  
+                  <nz-table  #basicTable [nzShowPagination]="false" nzBordered  class="tablescroll" [nzData]="tableData"
+                      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                     
+                      <thead >
+                          <tr >
+                              <th nzWidth="4%" style="background-color: white !important;color: black !important" >SLA Targets </th>
+                              <th nzWidth="4%" style="background-color: #c6f0ca !important;color: black !important">LOW</th>
+                              <th nzWidth="4%" style="background-color: #ece6aa !important;color: black !important">NORMAL</th>
+                              <th nzWidth="4%" style="background-color: #f3d4b7 !important;color: black !important">HIGH</th>
+                              <th nzWidth="4%" style="background-color: #f55e59 !important;color: black !important">URGENT</th>
+                              <th nzWidth="1%" style="background-color: #5acbee !important;color: black !important" >Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let data of basicTable.data  ">
+                              <!-- <td>{{  mySla[data.slaTargets] }}</td> -->
+                              <td>{{data.slaTargets}}</td>
+                              <td>{{ data.low }}</td>
+                              <td>{{ data.normal }}</td>
+                              <td>{{data.high}}</td>
+                              <td>{{data.urgent}}</td>
+                              <td>
+                                  <i nz-icon nzType="edit" nzTheme="fill" (click)="editRow(data)"> </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a nz-popconfirm nzPopconfirmTitle="Sure to delete?"  (nzOnConfirm)="deleteRow(data.id)">
+                            <i nz-icon nzTheme="fill"   nzType="delete"></i>
+
+                          </a>
+                                </td>
+                          </tr>
+                      </tbody>
+                  </nz-table>
+              <!-- </div> -->
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+    <!-- ***************To add a Target**************** -->
+<nz-modal nzWidth="35%" nzHeight="60%" [(nzVisible)]="isVisible" nzTitle="Add a target "
+   (nzOnCancel)="handleCancel()"  [nzFooter]="modalFooter">
+   <form [formGroup]="addData" >
+     <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <label >SLA Target :</label>
+      <nz-select class= "label1"   nzAllowClear nzPlaceHolder="SLA Target" formControlName="slaTarget">
+          <nz-option *ngFor="let option of optionList1" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+      </nz-select>
+  </div>
+</div><br>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <nz-form-item>
+      <label Required>Low : </label> &nbsp;
+        <input class= "label"  nz-input nzLabel="Task Name" placeholder="Low" required name="taskName1" formControlName="low"/>
+        </nz-form-item>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <nz-form-item>
+                <label Required>Normal: </label> &nbsp;
+                  <input class= "label"  nz-input nzLabel="Task Name" placeholder="Normal" required name="taskName1" formControlName="normal"/>
+                  </nz-form-item>
+                      </div>
+    </div>
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <nz-form-item>
+        <label Required>High :</label> &nbsp;
+          <input class= "label"  nz-input nzLabel="Task Name" placeholder="High" required name="taskName1" formControlName="high"/>
+          </nz-form-item>
+              </div>
+
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                  <nz-form-item>
+                    <label Required>Urgent : </label> &nbsp;
+                      <input class= "label"  nz-input nzLabel="Task Name" placeholder="Urgent" required name="taskName1" formControlName="urgent"/>
+                      </nz-form-item>
+                          </div>
+
+    </div>
+
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" (click)="addTarget()"><i nz-icon nzType="save"></i>Save</button>
+      <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+    </ng-template>
+    </form>
+  </nz-modal>
+
+<!-- *****************to edit a Target**************** -->
+  <nz-modal nzWidth="35%" nzHeight="60%" [(nzVisible)]="isVisible1" nzTitle="Edit a target"
+  (nzOnCancel)="handleCancel()"  [nzFooter]="modalFooterr">
+  <form [formGroup]="editData" >
+    <div class="row">
+    <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">
+      <label >SLA Target :</label>
+      <nz-select class= "label1"   nzAllowClear nzPlaceHolder="SLA Target" formControlName="slaTarget">
+          <nz-option *ngFor="let option of optionList1" [nzValue]="option.value" [nzLabel]="option.label">
+          </nz-option>
+      </nz-select>
+  </div>
+  </div><br>
+      <div class="row">
+        <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">
+        <nz-form-item>
+          <label Required>Low : </label> &nbsp;
+            <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="low"/>
+            </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <nz-form-item>
+                    <label Required>Normal : </label> &nbsp;
+                      <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="normal"/>
+                      </nz-form-item>
+                          </div>
+        </div><br>
+    <div class="row">
+      <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">
+          <nz-form-item>
+            <label Required>High: </label> &nbsp;
+              <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="high"/>
+              </nz-form-item>
+                  </div>
+
+                  <div class="col-xl-6 col-lg-3 col-md-3 col-sm-12 col-12">
+                      <nz-form-item>
+                        <label Required>Urgent:  </label> &nbsp;
+                          <input class= "label" nz-input nzLabel="Task Name" placeholder="" required name="taskName1" formControlName="urgent"/>
+                          </nz-form-item>
+                              </div>
+
+        </div>
+
+   <ng-template #modalFooterr>
+     <button nz-button nzType="primary"   (click)="updateTarget()"><i nz-icon
+      nzType="edit"></i>Update</button>
+     <button nz-button nzType="primary" (click)="handleCancel()"><i nz-icon nzType="close"></i>Cancel</button>
+   </ng-template>
+   </form>
+ </nz-modal>

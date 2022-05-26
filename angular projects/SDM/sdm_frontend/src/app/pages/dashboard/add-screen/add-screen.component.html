@@ -1,0 +1,180 @@
+<div class="card">
+    <div class="card-header">
+        <h5>
+            <strong class="mr-3">Add Screen</strong>
+        </h5>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="userAddForm">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label nzRequired nzFor="name">Name</label>
+                    <!-- <input nz-input placeholder="Name" formControlName='name' nzErrorTip="Please enter name"/> -->
+
+                    <input nz-input placeholder="Name" formControlName='name' />
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.name.touched && userAddForm.controls.name.invalid && userAddForm.controls.name.errors.required">
+                            Please enter name
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Date Of Birth</label>
+
+                    <nz-date-picker nzPlaceHolder='Date Of Birth' formControlName='date'></nz-date-picker>
+                    <!-- (ngModelChange)="onChange($event)" -->
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.date.touched && userAddForm.controls.date.invalid && userAddForm.controls.date.errors.required">
+                            Please select date
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Status</label>
+
+
+                    <nz-select nzAllowClear nzPlaceHolder="Status" formControlName='status'>
+                        <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label">
+                        </nz-option>
+                    </nz-select>
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.status.touched && userAddForm.controls.status.invalid && userAddForm.controls.status.errors.required">
+                            Please select status
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Country</label>
+                    <nz-select nzAllowClear nzPlaceHolder="Country" formControlName='status' (ngModelChange)='countryBasedState($event)'>
+                        <nz-option *ngFor="let option of countryData" [nzValue]="option" [nzLabel]="option.value">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>State</label>
+                    <nz-select nzAllowClear nzPlaceHolder="State" formControlName='status'>
+                        <nz-option *ngFor="let option of stateData" [nzValue]="option" [nzLabel]="option.value">
+                        </nz-option>
+                    </nz-select>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Phone Number</label>
+
+                    <input nz-input placeholder="Phone Number" formControlName='phone' phone />
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.phone.touched && userAddForm.controls.phone.invalid && userAddForm.controls.phone.errors.required">
+                            Please enter phone number
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Auto Complete</label>
+
+
+                    <input placeholder="input here" nz-input formControlName="autoCompleteData"
+                        (input)="onInput($event)" [nzAutocomplete]="auto" />
+                    <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete>
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.autoCompleteData.touched && userAddForm.controls.autoCompleteData.invalid && userAddForm.controls.autoCompleteData.errors.required">
+                            Please select data
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Time Picker</label>
+
+
+                    <nz-time-picker [nzHourStep]='5' [nzMinuteStep]="15" [nzSecondStep]="10" formControlName='timeData'>
+                    </nz-time-picker>
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.timeData.touched && userAddForm.controls.timeData.invalid && userAddForm.controls.timeData.errors.required">
+                            Please select time
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Multi Select</label>
+
+
+                    <nz-select [nzMaxTagCount]="3" nzMode="multiple" nzPlaceHolder="Please select"
+                        formControlName='multiSelect'>
+                        <nz-option *ngFor="let data of listOfOption" [nzLabel]="data.name" [nzValue]="data">
+                        </nz-option>
+                    </nz-select>
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.multiSelect.touched && userAddForm.controls.multiSelect.invalid && userAddForm.controls.multiSelect.errors.required">
+                            Please select atleast one value
+                        </span>
+                    </div>
+                    <!-- <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
+                    </ng-template> -->
+                </div>
+
+
+
+
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Multi Select</label>
+                    <ng-multiselect-dropdown [placeholder]="'Select Data'" [data]="listOfOption"
+                    formControlName="multipleValue" [settings]="dropdownSettings"  (onSelect)="onItemSelect($event)"
+                        (onSelectAll)="onSelectAll($event)">
+                    </ng-multiselect-dropdown>
+                </div> -->
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <!-- <label>Choose File</label> -->
+                    <label style="margin-top: 30px;" nz-checkbox formControlName="checkbox"
+                        (ngModelChange)='getCheckboxData($event)'>Checkbox</label>
+
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <!-- <label>Choose File</label> -->
+                    <nz-radio-group style="margin-top: 30px;" formControlName='radioData'
+                        (ngModelChange)='getRadioData($event)'>
+                        <label nz-radio nzValue="A">A</label>
+                        <label nz-radio nzValue="B">B</label>
+                    </nz-radio-group>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" style="margin-top: 29px;">
+                    <!-- <label>Choose File</label> -->
+                    <nz-upload nzAction="https://jsonplaceholder.typicode.com/posts/">
+                        <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+                    </nz-upload>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <label>Text Area</label>
+
+                    <textarea nz-input placeholder="Autosize height based on content lines" formControlName='textArea'
+                        nzAutosize></textarea>
+
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="userAddForm.controls.textArea.touched && userAddForm.controls.textArea.invalid && userAddForm.controls.textArea.errors.required">
+                            Please enter data
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <button class="btn" type="submit" nz-button nzType="primary" (click)='submitForm()'><i nz-icon
+                            nzType="save" nzTheme="outline"></i>Save</button>&nbsp;
+                    <button class="btn1" nz-button nzType="primary"><i nz-icon nzType="sync"
+                            nzTheme="outline"></i>Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>

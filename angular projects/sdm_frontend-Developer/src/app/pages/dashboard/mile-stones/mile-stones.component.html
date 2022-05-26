@@ -1,0 +1,382 @@
+
+<div class="row">
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="dashboard()">Home</a></li>
+            <li><a (click)="proj()">{{pName}}</a></li>
+            <li>Milestones</li>
+        </ul>
+    </div>
+    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 customer">
+        Customer Name : <b class="cName">{{cName}}</b>
+    </div>
+</div>
+
+<!-- ------------------------------------------ Search Collapse -------------------------------------- -->
+<div class="card">
+<nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+        <form [formGroup]="searchForm" class="popUp">
+            <div class="row" id="fRow">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Title</label>
+                    <input  nz-input placeholder="Title" name="title" formControlName="searchValue" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Start Date</label>
+                    <nz-date-picker nzPlaceHolder='yyyy-MM-dd' formControlName="searchStartDate" ></nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>End Date</label>
+                    <nz-date-picker nzPlaceHolder='yyyy-MM-dd' formControlName="searchEndDate" ></nz-date-picker>
+                </div>
+               
+               
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 searchFields" >
+                    <button class="btn1" (click)="getAllData()" nzType="primary" nz-button ><i nz-icon nzType="search" nzTheme="outline"></i><b> Search</b></button>&nbsp;
+                    <button class="btn2" (click)="resetSearchFields()" nzType="primary" nz-button ><i nz-icon nzType="redo" nzTheme="outline"></i><b> Reset</b></button>
+                       </div>
+
+            </div>
+        </form>
+    </nz-collapse-panel>
+</nz-collapse>
+</div>
+
+
+<!-- ---------------------------- No Of Records ------------------------------------------ -->
+
+<div class="card" id="grid">
+    <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label class="rec">No. of Records : {{records}}</label>
+        </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="btn"  (click)="AddRow('addMilestone')" nzType="primary"  nz-button ><i nz-icon nzType="plus" nzTheme="outline"></i><b> Add</b></button>
+        </div>
+      </div>
+      <div class="card-body" id="gridBody">
+
+        <!-- --------------------------- Milestones Table ------------------------------- -->
+
+ <nz-table  #nzTable  [nzData]="tableData" class="tablescroll" [nzPaginationPosition] nzShowSizeChanger
+                    nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+                    [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+                    (nzPageSizeChange)="onPageSizeChange($event)">
+                    <thead (nzSortChange)="sort($event)" nzSingleSort>
+                        <tr>
+                            <th [nzWidth]="'20px'">#</th>
+                            <th [nzWidth]="'45px'">Title</th>
+                            <th [nzWidth]="'15px'">Start Date</th>
+                            <th [nzWidth]="'15px'">End Date</th>
+                            <th [nzWidth]="'20px'">Duration (Days)</th>
+                            <th [nzWidth]="'15px'">Deliverables</th>
+                            <th [nzWidth]="'15px'">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of nzTable.data ; let i=index">
+                            <tr class="popUp">
+                                <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                                <td><span class="s1" *ngIf="item.Type==='D'">
+                                        <i nz-icon nzType="cluster" nzTheme="twotone"></i></span>
+                                    <span class="s1"  *ngIf="item.Type==='T'"><i nz-icon
+                                            nzType="reconciliation" nzTheme="twotone"></i></span>
+                                    <span class="s1"  *ngIf="item.Type==='M'"> <i nz-icon
+                                            nzType="flag" nzTheme="twotone"
+                                            [nzTwotoneColor]="'#f81229'"></i></span>{{ item.Name }}</td>
+                                <td>{{ item.StartDate | date:'MMM d, yyyy'}}</td>
+                                <td>{{ item.EndDate | date:'MMM d, yyyy' }}</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.Duration }}</td>
+                               <td [nzExpand]="expandSet.has(item.Id)"
+                                    (nzExpandChange)="onExpandChange(item.Id, $event)"></td>
+                                <td>
+                                    <a  class="icon" (click)="AddRow(item)"><i nz-icon nzType="edit" nzTheme="outline"></i>&nbsp;</a>&nbsp;
+                                    <a class="icon"> <i  nz-icon nzType="delete" nzTheme="outline" nz-popconfirm
+                                            nzPopconfirmTitle="Sure to delete?"
+                                            (nzOnConfirm)="deleteRow(item.Id)"></i></a>
+
+                                </td>
+                            </tr>
+                            <tr [nzExpand]="expandSet.has(item.Id)">
+
+                              
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <h4 class="dTitle">Deliverables</h4>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        
+                                        <button  class="delAdd" nzType="primary"  nz-button
+                                            (click)="AddInnerTable(item.Id,'addDeliverable')"><i nz-icon nzType="plus" nzTheme="outline"></i>Add</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+
+<!-- --------------------------------------- Deliverables Table ------------------------------------ -->
+
+                                <nz-table #nzTable class="innerTable" [nzData]="item.child" nzTableLayout="fixed"
+                                    [nzShowPagination]="false">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Status (%)</th>
+                                            <th>Updated By</th>
+                                            <th>Updated Date</th>
+
+                                            <th>Action</th>
+                                        </tr>
+
+
+                                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let data1 of nzTable.data">
+                            <tr class="popUp">
+
+                                <td> <span class="s1">
+                                        <i nz-icon nzType="cluster" nzTheme="outline"></i></span>{{ data1.Name }}</td>
+                                <td nzEllipsis nz-tooltip [nzTitle]=" data1.Description">{{ data1.Description }}</td>
+                                <td>&nbsp;&nbsp;{{[data1.Status] }}</td>
+                                <td>{{ data1.CreatedBy }}</td>
+                                <td>{{ data1.CreatedDate | date:'MMM d, yyyy'}}</td>
+                                <td>
+                                    <i nz-icon nzType="edit" nzTheme="outline" (click)="AddInnerTable(data1,'editDeliverable')" ></i>&nbsp;
+                                    <i class="icon" nz-icon nzType="delete" nzTheme="outline" nz-popconfirm
+                                        nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data1.Id)"></i>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </nz-table>
+                <br>
+
+                </tr>
+                </ng-container>
+                </tbody>
+                </nz-table>
+
+
+    </div>
+    </div>
+
+
+
+<nz-modal [(nzVisible)]="addDeliverablePopup" nzWidth="50%" nzHeight="50% " [nzFooter]="modalFooter" [nzTitle]="modalTitle"
+    (nzOnCancel)="cancelDeliverableAddOrEdit()" (nzOnSubmit)="addOrEditDeliverable()">
+
+    <!------------------------------------------- Add Or Edit Deliverable--------------------------------------->
+    <form [formGroup]="addDevForm" class="popUp">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              
+                    <label>Deliverable Title<span class="mandatory">*</span></label>
+                       <nz-input-group>
+                        <input formControlName="addDeltitle" maxlength="51" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.addDevForm.get('addDeltitle').errors?.required && this.addDevForm.get('addDeltitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.addDevForm.get('addDeltitle').errors?.maxlength && this.addDevForm.get('addDeltitle').invalid">
+                            <span class="text-danger">Only 50 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.addDevForm.get('addDeltitle').errors?.pattern && this.addDevForm.get('addDeltitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+                  
+                
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                
+                    <label>Status (%)</label>
+                    <nz-input-group>
+                        <input formControlName="addDelStatus" nz-input placeholder="Enter Status">
+                        <div
+                            *ngIf="this.addDevForm.get('addDelStatus').errors?.required && this.addDevForm.get('addDelStatus').touched">
+                            <span class="text-danger">Status is Required</span></div>
+                    </nz-input-group>
+               
+            </div>
+        </div>
+        <div class="row">
+            
+            <div *ngIf="title === 'Save' " class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                
+                    <label>Attachment</label>
+                    <nz-input-group>
+                    <nz-upload
+                    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    [nzHeaders]="{ authorization: 'authorization-text' }"
+                    (nzChange)="changeListener($event)"
+                    >
+                    <button  nzBlock id="attach" nz-button><i nz-icon nzType="upload"></i>Click to Upload</button>
+                 </nz-upload>
+                 </nz-input-group>
+                
+            </div>
+            <div *ngIf="title === 'Update'" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+             
+                    
+                <label class="popUp">Attachment</label>
+                <nz-input-group>
+                    <input formControlName="attachment" nz-input placeholder="Enter File Name">
+                    <div
+                    *ngIf="this.addDevForm.get('attachment').errors?.required && this.addDevForm.get('attachment').touched">
+                    <span class="text-danger"></span></div>
+                </nz-input-group>
+        
+        
+       
+    </div>
+
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+             
+                    <label>Description</label>
+                    <textarea nz-input maxlength="256" formControlName="desc" placeholder="Enter Description" nzAutosize></textarea>
+                   
+                    <div *ngIf="this.addDevForm.get('desc').errors?.required && this.addDevForm.get('desc').touched">
+                        <span class="text-danger">Description Is Required</span></div>
+                    <div *ngIf="this.addDevForm.get('desc').errors?.maxlength && this.addDevForm.get('desc').invalid">
+                        <span class="text-danger">Only 255 Characters are allowed</span>
+                    </div>
+                
+            </div>
+        </div>
+        <ng-template #modalFooter>
+            <button nz-button class="cancelBtn"  nzType="primary" (click)="cancelDeliverableAddOrEdit()"><i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+            <button nz-button class="saveBtn"
+            [disabled] = "btnDisabled" nzType="primary"  (click)="addOrEditDeliverable()"><i nz-icon nzType="save" nzTheme="outline"></i>{{title}}</button>
+           
+        </ng-template>
+    </form>
+
+
+</nz-modal>
+
+<nz-modal [(nzVisible)]="addMilestonePopup" nzWidth="50%" nzHeight="50%" [nzTitle]="modalTitle" [nzFooter]="modalFooter2"
+    (nzOnCancel)="cancelMilestoneAddOrEdit()">
+    <!-- -----------------------------------------------Add Or Edit Milestones------------------------------------------------------------------------------- -->
+    <form [formGroup]="addForm" (ngSubmit)="addOrEditMilestone()">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+             
+                    <label class="popUp"> Title <span class="mandatory">*</span></label>
+                    <nz-input-group>
+                        <input class="popUp" formControlName="addMileTitle" maxlength="51" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.addForm.get('addMileTitle').errors?.required && this.addForm.get('addMileTitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.addForm.get('addMileTitle').errors?.maxlength && this.addForm.get('addMileTitle').invalid">
+                            <span class="text-danger">Only 50 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.addForm.get('addMileTitle').errors?.pattern && this.addForm.get('addMileTitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+            
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              
+                    <label class="popUp">Start Date</label>
+                   
+                    <nz-date-picker name="startDate" [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartdateChange($event)"
+formControlName="MilestoneStartDate" [nzFormat]="'MM-dd-yyyy'"  >
+</nz-date-picker>
+                  
+                    <div *ngIf="this.addForm.get('MilestoneStartDate').errors?.required && this.addForm.get('MilestoneStartDate').touched">
+                        <span class="text-danger">Start Date is Required</span></div>
+                
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                
+                    <label class="popUp">End Date</label>
+                   
+                    <nz-date-picker name="endDate"  formControlName="MilestoneEndDate" [nzFormat]="'MM-dd-yyyy'"
+                    [nzDisabledDate]="disabledEndDate" >
+                  </nz-date-picker>
+                   
+                    <div *ngIf="this.addForm.get('MilestoneEndDate').errors?.required && this.addForm.get('MilestoneEndDate').touched">
+                        <span class="text-danger">End Date is Required</span></div>
+              
+            </div>
+        </div>
+        <ng-template #modalFooter2>
+            <button nz-button  class="cancelBtn" nzType="primary" (click)="cancelMilestoneAddOrEdit()"><i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+            <button nz-button nzType="primary" [disabled] = "btnDisabled" class="save"  (click)="addOrEditMilestone()"><i nz-icon nzType="save" nzTheme="outline"></i>{{title}}</button>
+            
+        </ng-template>
+    </form>
+</nz-modal>
+
+
+
+<!-- <nz-modal [(nzVisible)]="editMilestonePopup" nzWidth="50%" nzHeight="50%" nzTitle="Edit Milestone" [nzFooter]="modalFooter3"
+    (nzOnCancel)="cancelMilestoneEdit()">
+    -----------------------------------------------Edit Milestones------------------------------------------------------------------------------
+    <form [formGroup]="editmileForm" (ngSubmit)="editMilestone()">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              
+                    <label class="popUp"> Title<span class="mandatory">*</span> </label>
+                    <nz-input-group>
+                        <input class="popUp" formControlName="editMilestoneTitle" maxlength="51" nz-input placeholder="Enter Title">
+                        <div
+                            *ngIf="this.editmileForm.get('editMilestoneTitle').errors?.required && this.editmileForm.get('editMilestoneTitle').touched">
+                            <span class="text-danger">Title Is Required</span></div>
+                        <div
+                            *ngIf="this.editmileForm.get('editMilestoneTitle').errors?.maxlength && this.editmileForm.get('editMilestoneTitle').invalid">
+                            <span class="text-danger">Only 50 Characters are allowed</span>
+                        </div>
+                        <div
+                            *ngIf="this.editmileForm.get('editMilestoneTitle').errors?.pattern && this.editmileForm.get('editMilestoneTitle').invalid">
+                            <span class="text-danger">Only Characters Are Allowed</span></div>
+                    </nz-input-group>
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            
+                    <label class="popUp">Start Date</label>
+                    
+                    <nz-date-picker name="startDate" 
+                    formControlName="editMilestoneStartDate" [nzFormat]="'MM-dd-yyyy'" [nzDisabledDate]="disabledStartDate1" (ngModelChange)="onStartdateChange($event)">
+                    </nz-date-picker>
+   
+                    <div
+                        *ngIf="this.editmileForm.get('editMilestoneStartDate').errors?.required && this.editmileForm.get('editMilestoneStartDate').touched">
+                        <span class="text-danger">Start Date Is Required</span></div>
+                
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              
+                    <label class="popUp">End Date</label>
+                    
+                    <nz-date-picker name="endDate" [nzDisabledDate]="disabledEndDate" formControlName="editMilestoneEndDate" [nzFormat]="'MM-dd-yyyy'"
+                    >
+                  </nz-date-picker>
+                   
+                        <div
+                            *ngIf="this.editmileForm.get('editMilestoneEndDate').errors?.required && this.editmileForm.get('editMilestoneEndDate').touched">
+                            <span class="text-danger">End Date Is Required</span></div>
+                    
+              
+            </div>
+        </div>
+        <ng-template #modalFooter3>
+            <button nz-button class="cancelBtn" nzType="primary" (click)="cancelMilestoneEdit()"><i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+            <button nz-button class="saveBtn" nzType="primary"  (click)="editMilestone()"><i nz-icon nzType="edit" nzTheme="outline"></i>Update</button>
+                    
+        </ng-template>
+    </form>
+
+</nz-modal> -->
+

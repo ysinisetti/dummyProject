@@ -1,0 +1,61 @@
+<div class="width">
+	<div class="one"></div>
+	<div class="two">
+
+		<mat-card class="example-card" *ngFor="let option of data| slice: lowValue : highValue">
+			<!-- | slice: lowValue : highValue" -->
+
+			<div><button mat-raised-button
+					[ngStyle]="{'background-color':option.status === 0 ? 'rgb(23, 23, 161)' : option.status ===  1 ? 'green' : '  rgba(255, 64, 64, 0.836)' }"
+					style="float:right;color:white;padding: 0px;line-height: 16px;" >{{option.status === 0 ? '  Requested' : option.status ===  1 ? 'Approved' : 'Rejected'}}</button>
+			</div>
+			<!-- <span matBadge="4" matBadgeColor="warn">Look at these notifications!</span> -->
+
+
+
+
+			<p class="headers">
+
+				<mat-card-header>
+					<div mat-card-avatar class="example-header-image"></div>
+					<mat-card-title>{{option.FirstName}}&nbsp; {{option.LastName}}
+					</mat-card-title>
+					<mat-card-subtitle>{{option.role}}<p>posted-on:{{option.postedOn}}</p>
+					</mat-card-subtitle>
+
+				</mat-card-header>
+				<mat-card-content>
+					<p><b>{{option.title}}</b></p>
+				</mat-card-content>
+				<mat-card-content>
+					<p>{{option.post}}</p>
+				</mat-card-content>
+			</p>
+			<div class="buttons">
+				<div class="like">
+					<button mat-button (click)="like()">
+						<mat-icon>thumb_up</mat-icon>
+						<span>Like</span>
+					</button></div>
+				<div class="disLike">
+					<button mat-button (click)="disLike()">
+						<mat-icon>thumb_down</mat-icon>
+						<span>Dislike</span>
+					</button></div>
+				<div class="space"></div>
+				<div class="edit"> <button mat-raised-button color="primary" (click)="edit(option.pid,option)"
+						matTooltip="Do u want to edit post"
+						aria-label="Button that displays a tooltip when focused or hovered over">Edit</button></div>
+				<div class="delete"><button mat-raised-button color="warn" (click)="delete(option.pid)"
+						matTooltip="Do u want to delete post"
+						aria-label="Button that displays a tooltip when focused or hovered over"
+						class="spaces">Delete</button>
+				</div>
+			</div>
+		</mat-card>
+		<!-- <mat-paginator [length]="length" [pageSizeOptions]="[2,5,10]" (page)="pageEvent = getPaginatorData($event)">
+	</mat-paginator> -->
+		<mat-paginator [length]="length" [pageSize]="pageSize" (page)="getPaginatorData($event)">
+		</mat-paginator>
+	</div>
+</div>

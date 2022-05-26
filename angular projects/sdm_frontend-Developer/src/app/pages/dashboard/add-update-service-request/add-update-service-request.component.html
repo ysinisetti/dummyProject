@@ -1,0 +1,204 @@
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+  <li><a (click)="gotoHome()">Home</a></li>
+  <li><a (click)="details()">{{ProjectName}}</a></li>
+  <li routerLink="/dashboard/serviceMgmt">Service Request</li>
+  </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+  <li class="btn2">Customer Name :<b class="cName">{{customerName}}</b></li>
+  </div>
+  </ul>
+  <div class="card">
+  <div class="card-header">
+  <h5>
+  <b class="mr-3"> {{title}}</b>
+  </h5>
+  </div>
+  <div class="card-body">
+  <form [formGroup]="addUpdateSRIssueForm">
+  <div class="row">
+  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Ticket Id</label>
+  <input nz-input placeholder="Ticket Id" formControlName='ticktId' />
+  <div *ngIf="this.addUpdateSRIssueForm.get('ticktId').errors?.pattern && this.addUpdateSRIssueForm.get('ticktId').invalid">
+  <span class="text-danger">Only Numbers Are Allowed</span></div>
+  </div>
+  <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+  <label nzFor="name">Title <span class="validationtest">*</span> </label>
+  <input nz-input placeholder="Title" formControlName='title' maxlength="71"/>
+  <div *ngIf="this.addUpdateSRIssueForm.get('title').errors?.required && this.addUpdateSRIssueForm.get('title').touched">
+  <span class="text-danger">Title Is Required</span></div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('title').errors?.maxlength && this.addUpdateSRIssueForm.get('title').invalid">
+  <span class="text-danger">Only 70 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('title').errors?.pattern && this.addUpdateSRIssueForm.get('title').invalid">
+  <span class="text-danger">Only Characters Are Allowed</span></div>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Issue Type</label>
+  <nz-select nzAllowClear nzPlaceHolder="Issue Type" formControlName='issueType'>
+  <nz-option *ngFor="let option of issueType" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Estimated Time (hrs.)</label>
+  <input nz-input placeholder="Estimated Time" formControlName='estimatedTime' />
+  <div *ngIf="this.addUpdateSRIssueForm.get('estimatedTime').errors?.pattern && this.addUpdateSRIssueForm.get('estimatedTime').invalid">
+  <span class="text-danger">Enter only numbers</span></div>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Estimated By</label>
+  <nz-select nzAllowClear nzPlaceHolder="Estimated By" formControlName='estimatedBy' >
+  <nz-option *ngFor="let option of listOfResources" [nzValue]="option.value" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Status</label>
+  <nz-select nzAllowClear nzPlaceHolder="Status" formControlName='status'>
+  <nz-option *ngFor="let option of status" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Percentage Complete</label>
+  <input nz-input placeholder="Percentage Complete" formControlName='percentageComplete' maxlength="3"/>
+  <div *ngIf="this.addUpdateSRIssueForm.get('percentageComplete').errors?.maxlength && this.addUpdateSRIssueForm.get('percentageComplete').invalid">
+  <span class="text-danger">Only 3 Digits are allowed</span>
+  </div>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Priority</label>
+  <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName='priority'>
+  <nz-option *ngFor="let option of priorityDropDown" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Severity</label>
+  <nz-select nzAllowClear nzPlaceHolder="Severity" formControlName='severity'>
+  <nz-option *ngFor="let option of severity" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Bucket</label>
+  <nz-select nzAllowClear nzPlaceHolder="Bucket" formControlName='bucket'>
+  <nz-option *ngFor="let option of bucket" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Category</label>
+  <nz-select nzAllowClear nzPlaceHolder="Category" formControlName='category'>
+  <nz-option *ngFor="let option of category" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+  </nz-option>
+  </nz-select>
+  </div>
+  </div>
+  <div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label nzFor="name">Components</label>
+  <input nz-input placeholder="Components" formControlName='components' maxlength="101"/>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label nzFor="name">Environments</label>
+  <nz-select nzAllowClear nzPlaceHolder="Environments" formControlName="environments">
+    <nz-option *ngFor="let option of environment" [nzValue]="option.Value" [nzLabel]="option.Label">
+    </nz-option>
+  </nz-select>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label nzFor="name">Affected Versions</label>
+  <input nz-input placeholder="Affected Versions" formControlName='affectedVersions' maxlength="51"/>
+  <div *ngIf="this.addUpdateSRIssueForm.get('affectedVersions').errors?.maxlength && this.addUpdateSRIssueForm.get('affectedVersions').invalid">
+  <span class="text-danger">Only 50 digits are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('affectedVersions').errors?.pattern && this.addUpdateSRIssueForm.get('affectedVersions').invalid">
+  <span class="text-danger">Only Numbers Are Allowed</span></div>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label nzFor="name">Labels</label>
+  <input nz-input placeholder="Labels" formControlName='labels' maxlength="51"/>
+  <div *ngIf="this.addUpdateSRIssueForm.get('labels').errors?.maxlength && this.addUpdateSRIssueForm.get('labels').invalid">
+  <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('labels').errors?.pattern && this.addUpdateSRIssueForm.get('labels').invalid">
+  <span class="text-danger">Only Characters Are Allowed</span></div>
+  </div>
+  <div *ngIf="enable" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <label nzFor="name">References</label>
+  <input nz-input placeholder="References" formControlName='references' />
+  <div *ngIf="this.addUpdateSRIssueForm.get('references').errors?.maxlength && this.addUpdateSRIssueForm.get('references').invalid">
+  <span class="text-danger">Only 50 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('references').errors?.pattern && this.addUpdateSRIssueForm.get('references').invalid">
+  <span class="text-danger">Only Characters Are Allowed</span></div>
+  </div>
+  </div>
+  <div class="row">
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Assigned To</label>
+  <nz-select [nzSize]="size" nzMode="tags" nzPlaceHolder="Choose Assigned Persons" name="sDate" formControlName="assignedTo">
+  <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+  </nz-select>
+  <div *ngIf="this.addUpdateSRIssueForm.get('assignedTo').errors?.maxlength && this.addUpdateSRIssueForm.get('assignedTo').invalid">
+  <span class="text-danger">Only 25 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('assignedTo').errors?.pattern && this.addUpdateSRIssueForm.get('assignedTo').invalid">
+  <span class="text-danger">Only Characters Are Allowed</span></div>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Approved By</label>
+  <nz-select nzAllowClear nzPlaceHolder="Approved By" formControlName='approvedBy'>
+  <nz-option *ngFor="let option of listOfResources" [nzValue]="option.value" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select>
+  <div *ngIf="this.addUpdateSRIssueForm.get('approvedBy').errors?.maxlength && this.addUpdateSRIssueForm.get('approvedBy').invalid">
+  <span class="text-danger">Only 25 Characters are allowed</span>
+  </div>
+  <div *ngIf="this.addUpdateSRIssueForm.get('approvedBy').errors?.pattern && this.addUpdateSRIssueForm.get('approvedBy').invalid">
+  <span class="text-danger">Only Characters Are Allowed</span></div>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Created Date</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName='createdDate' nzFormat="yyyy-MM-dd"></nz-date-picker>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Assigned Date</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName='assignedDate' nzFormat="yyyy-MM-dd"></nz-date-picker>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Approve Date</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName='approveDate' nzFormat="yyyy-MM-dd"></nz-date-picker>
+  </div>
+  <div *ngIf="enable" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+  <label>Target Date</label>
+  <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName='targetDate' nzFormat="yyyy-MM-dd"></nz-date-picker>
+  </div>
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <label>Description</label>
+  <textarea nz-input placeholder="Please enter description" formControlName='description'
+  nzAutosize maxlength="256"></textarea>
+  </div>
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <label>Root Cause Analysis</label>
+  <textarea nz-input placeholder="Please enter Root Cause Analysis"
+  formControlName='rootCauseAnalysis' nzAutosize maxlength="256"></textarea>
+  </div>
+  <div *ngIf="enable" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <label>Resolution</label>
+  <textarea nz-input placeholder="Please enter resolution" formControlName='resolution'
+  nzAutosize maxlength="256"></textarea>
+  </div><br>
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+  <button class="btn" type="submit" nz-button nzType="primary" (click)='saveRupdate()' ><i nz-icon
+  nzType="{{icon}}" nzTheme="outline"></i>{{btnLabel}}</button>&nbsp;
+  <button class="btn1" nz-button nzType="primary" (click)="resetIssue()"><i nz-icon nzType="sync"
+  nzTheme="outline"></i>Reset</button>
+  </div>
+  </div>
+  </form>
+  </div>
+  </div>

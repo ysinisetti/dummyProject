@@ -1,0 +1,62 @@
+   .sidenav {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: rgb(49, 116, 179);
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    }
+    
+    /* Sidebar links */
+    .sidenav a {
+    display: block;
+    color:rgb(150, 207, 44);
+    padding: 16px;
+    text-decoration: mediumseagreen;
+    }
+    
+    /* Active/current link */
+    .sidenav a.add {
+    background-color: #4CAF50;
+    color: white;
+    }
+    
+    /* Links on mouse-over */
+    .sidenav a:hover:not(.add) {
+    background-color: #555;
+    color: white;
+    }
+    
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+    div.content {
+    background-color: rgb(130, 178, 206);   
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+    font-family: verdana;
+    font-size: 20px;
+    text-align: center ;
+    }
+    
+    /* On screens that are less than 700px wide, make the sidebar into a topbar */
+    @media screen and (max-width: 700px) {
+    .sidenav {
+    width: 100%;
+    height: auto;
+    position: relative;
+    }
+    .sidenav a {float: left;}
+    div.content {margin-left: 0;}
+    }
+    
+    /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+    @media screen and (max-width: 400px) {
+    .sidenav a {
+    text-align: center;
+    float: none;
+    } 
+   
+
+    }
+   

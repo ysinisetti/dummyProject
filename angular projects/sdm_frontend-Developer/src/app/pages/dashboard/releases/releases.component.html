@@ -1,0 +1,263 @@
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="gotoHome()">Home</a></li>
+            <li><a (click)="details()">{{ProjectName}}</a></li>
+            <li>Releases</li>
+        </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+        Customer Name : <b class="cName">{{customerName}}</b>
+    </div>
+  </div>
+  <!-- Releases Search -->
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false" >
+      <form [formGroup]="searchForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Version</label><br>
+            <input nz-input placeholder="Version" name="searchTask" formControlName="sVersion" />
+          </div>
+
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Release Start Date</label><br>
+            <nz-date-picker nzPlaceHolder='yyyy-mm-dd' name="searchTask" formControlName="sDate">
+            </nz-date-picker>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Release End Date</label><br>
+            <nz-date-picker nzPlaceHolder='yyyy-mm-dd' name="searchTask" formControlName="sEDate">
+            </nz-date-picker>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Status</label><br>
+            <nz-select nzAllowClear nzPlaceHolder="Choose Status" name="searchTask" formControlName="sStatus">
+              <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+         </nz-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"></div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="btn" (click)="getAllRelease()" nz-button nzType="primary"><i nz-icon
+                nzType="search"></i>Search</button>
+            <button class="btn" (click)="resetSearch()" nz-button nzType="primary"><i nz-icon
+                nzType="redo"></i>Reset</button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<!-- Releases Grid -->
+        <div class="card" id="grid">
+          <div class="row">
+              <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                <label class="rec">No. of Records : {{records}}</label>
+              </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+              </div>
+            </div>
+            <div class="card-body" id="gridBody">
+        <nz-table #basicTable [nzData]="allResoursesDetails" nzTableLayout="fixed" [nzPaginationPosition]
+          nzShowSizeChanger nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+          [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+          (nzPageSizeChange)="onPageSizeChange($event)">
+        <thead>
+          <tr>
+            <th *ngFor="let column of listOfColumns"
+                 [nzWidth]="column.width">
+            {{ column.name }}
+             </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of allResoursesDetails ,let i=index">
+            <td>{{pageSize *(pageNum-1)+i+1}}</td>
+            <td>R-{{ data.Version }}</td>
+            <td nzEllipsis nzTooltipTitle="{{data.Description}}" nz-tooltip>{{ data.Description }}</td>
+            <td [ngStyle]="{'color':getColor(data.Status)}"> {{data.Status}}</td>
+            <td>{{data.ReleaseStartDate | date: 'MMM d, yyyy'}}</td>
+            <td>{{data.ReleaseEndDate | date: 'MMM d, yyyy'}}</td>
+            <td>{{data.ActualReleaseDate | date: 'MMM d, yyyy'}}</td>
+            <td nzEllipsis nzTooltipTitle="details" class="color" nz-tooltip (click)="showTasks(data.Id)">
+              {{ data.noOfTasks }} </td>
+            <td>
+              <i nz-icon nzType="edit" nzTheme="outline" (click)="editRow(data)"> </i>&nbsp;&nbsp;
+              <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.Id)">
+                <i nz-icon nzTheme="outline" nzType="delete"></i>&nbsp;&nbsp;</a>
+            </td>
+            </tr>
+        </tbody>
+        </nz-table>
+      </div>
+    </div>
+<!-- List of tasks details -->
+    <nz-modal nzWidth="55%" nzHeight="50%" [(nzVisible)]="tasksListVisible" nzTitle="List Of Tasks"
+     (nzOnCancel)="taskCancel()" [nzFooter]="Footertask">
+   <br>
+   <div class="row">
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+      <label><b>Pending Count : </b>{{pendcount}}</label>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+      <label><b>Total Count : </b>{{Totlcount}}</label>
+     </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+      <label><b>Completed Count : </b>{{completeCount}} </label>
+     </div>
+    </div>
+      <nz-table #basicTable [nzData]="releaseTasks" nzTableLayout="fixed"
+     [nzFrontPagination]="false"  >
+      <thead >
+        <tr>                         
+            <th   nzWidth=3%>#</th>
+            <th   nzWidth=12%>Name</th>
+            <th   nzWidth=15%>Status</th>
+            <th   nzWidth=26%>Description</th>
+        </tr>
+      </thead>      
+      <tbody>
+        <tr *ngFor="let data of releaseTasks, let i=index ">
+          <td>{{i+1}}</td>
+          <td>{{data.Name}}</td>
+          <td>{{data.Status}}</td>
+          <td>{{ data.Description }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+     <ng-template #Footertask>
+        <nz-form-control>
+          <button nz-button nzType="primary" class="cancel" (click)="taskCancel()"><i nz-icon nzType="close"
+              nzTheme="outline"></i>Cancel</button>
+        </nz-form-control>
+      </ng-template>
+</nz-modal>
+
+<!-- POPUP FOR ADD Release -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="addVisible" nzTitle="Add Releases" (nzOnCancel)="cancelAddorEdit()"
+  [nzFooter]="modalFooter">
+  <form [formGroup]="addReleaseForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Version <span class="validationtest">*</span></label>
+        <input nz-input nzLabel="Version" placeholder="Version Number " formControlName="version" maxlength="11" />
+        <div *ngIf="this.addReleaseForm.get('version').errors?.required && this.addReleaseForm.get('version').touched">
+          <span class="text-danger">Version Is Required</span></div>
+        <div *ngIf="this.addReleaseForm.get('version').errors?.maxlength && this.addReleaseForm.get('version').invalid">
+          <span class="text-danger">Enter only 10 digits</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label><br>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+        </nz-select>
+        <div *ngIf="this.addReleaseForm.get('status').errors?.pattern && this.addReleaseForm.get('status').invalid">
+          <span class="text-danger">Only 50 Characters are Allowed</span></div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Start Date</label>
+        <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+        (ngModelChange)="onStartChange($event)" formControlName="startDate" nzPlaceHolder='yyyy-mm-dd'></nz-date-picker>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label id="label" nz-col [nzSpan]="6">End Date</label>
+        <nz-date-picker name="endDate" [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy" 
+     placeholder="End Date" formControlName="endDate" nzPlaceHolder='yyyy-mm-dd'></nz-date-picker>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Assigned Task</label>
+        <nz-select  [nzSize]="size" nzMode="tags"  nzPlaceHolder="Please select" formControlName="taskName">
+          <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.Name" [nzValue]="option.Id"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label><br>
+        <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....' formControlName="description"
+          maxlength="256" nzAutosize></textarea>
+        <div
+          *ngIf="this.addReleaseForm.get('description').errors?.maxlength && this.addReleaseForm.get('description').invalid">
+          <span class="text-danger">Only 255 Characters are allowed</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" class="cancel" (click)="cancelAddorEdit()"><i nz-icon nzType="close"
+          nzTheme="outline"></i>Cancel</button>
+      <button type="submit" nz-button nzType="primary" class="save" (click)="saveRelease()"><i nz-icon nzType="save"
+          nzTheme="outline"></i>Save</button>
+    </ng-template>
+  </form>
+</nz-modal>
+
+<!-- POPUP FOR EDIT Release -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="editVisible" nzTitle="Edit Releases" (nzOnCancel)="cancelAddorEdit()"
+  [nzFooter]="Footer1">
+  <form [formGroup]="editReleaseForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Version <span class="validationtest">*</span></label>
+        <input nz-input nzLabel="Version" placeholder="Version Number " formControlName="version" maxlength="11" />
+        <div
+          *ngIf="this.editReleaseForm.get('version').errors?.maxlength && this.editReleaseForm.get('version').invalid">
+          <span class="text-danger">Only 10 Digits are allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Status</label><br>
+        <nz-select nzAllowClear nzPlaceHolder="Choose Status" formControlName="status">
+          <nz-option *ngFor="let options of status" [nzValue]="options.Value" [nzLabel]="options.Label"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Start Date</label>
+        <nz-date-picker [nzDisabledDate]="disabledStartDateedit" nzFormat="MM-dd-yyyy" name="startDate"
+        (ngModelChange)="onStartChange($event)"      formControlName="startDate" nzPlaceHolder='mm-dd-yy'></nz-date-picker>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>End Date</label>
+        <nz-date-picker [nzDisabledDate]="disabledStartDateedit" nzFormat="MM-dd-yyyy" placeholder="End Date"
+        name="endDate" formControlName="releaseDate" nzPlaceHolder='mm-dd-yy'></nz-date-picker>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <label>Assigned Task </label>
+      <nz-select  [nzSize]="size" nzMode="tags"  nzPlaceHolder="Please select" formControlName="taskName">
+        <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.Name" [nzValue]="option.Id"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Description</label><br>
+        <textarea nz-input nzLabel="Description" PlaceHolder='Write something on me .....' formControlName="description"
+          maxlength="256" nzAutosize></textarea>
+        <div
+          *ngIf="this.editReleaseForm.get('description').errors?.maxlength && this.editReleaseForm.get('description').invalid">
+          <span class="text-danger">Only 255 Characters are allowed</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #Footer1>
+      <nz-form-control>
+        <button nz-button nzType="primary" class="cancel" (click)="cancelAddorEdit()"><i nz-icon nzType="close"
+            nzTheme="outline"></i>Cancel</button>
+        <button type="submit" nz-button nzType="primary" class="edit" (click)="updateRelease()"><i nz-icon nzType="edit"
+            nzTheme="outline"></i>Update</button>
+      </nz-form-control>
+    </ng-template>
+  </form>
+</nz-modal>

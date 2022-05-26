@@ -1,0 +1,186 @@
+<!-- Bread Crum -->
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="dashboard()">Home</a></li>
+            <li><a (click)="statustracker()">Status Tracker</a></li>
+            <li>Status Report</li>
+        </ul>
+    </div>
+</div>
+<br>
+<!-- Table -->
+<div class="card" id="grid">
+    <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+            <label class="rec">No. of Records :{{records}}</label>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+        </div>
+    </div>
+    <div class="card-body" id="gridBody">
+        <nz-table #nzTable [nzData]="listOfData" class="tableHeader" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+            (nzPageSizeChange)="onPageSizeChange($event)">
+            <thead>
+                <tr>
+                    <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+                        {{ column.name }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of nzTable.data; let I = index">
+                    <tr>
+                        <td>{{pageSize *(pageNum-1)+I+1}}</td>
+                        <td>{{item.startTime}} </td>
+                        <td>{{item.endTime}} </td>
+                        <td>{{ item.searchDate | date:'MMM d, yyyy'}}</td>
+                        <td>{{item.Title}} </td>
+                        <td>{{activity[item.ActivityType]}}</td>
+                        <td>
+                            <i [class.icon-disabled]="item.ActivityType==='Course'||item.ActivityType==='Meeting'" (click)="Editreport(item)" nz-icon nzType="edit"></i>&nbsp;
+                            <i [class.icon-disabled]="item.ActivityType==='Course'||item.ActivityType==='Meeting'" nz-icon class="icon" nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(item.Id)"></i>
+
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+<!--------------- Add Popup--------------->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="Addpopup" nzTitle="Add StatusReport" (nzOnCancel)="Cancel()" [nzFooter]="modalFooter">
+    <form [formGroup]="myForm">
+        <div formArrayName="times" *ngFor="let time of myForm.controls.times?.value; let i = index; trackBy:trackByFn">
+            <div [formGroupName]="i">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label>Start Time<span class="validationtest">*</span></label><br>
+                        <nz-time-picker formControlName="sTime" [nzMinuteStep]="15" [nzDefaultOpenValue]="defaultOpenValue" (ngModelChange)="onSelectTime($event,i)" nzFormat="HH:mm"></nz-time-picker>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label>End Time<span class="validationtest">*</span></label><br>
+                        <nz-time-picker formControlName="eTime" [nzDefaultOpenValue]="defaultOpenValue" (ngModelChange)="onSelectTime($event,i)" [nzMinuteStep]="15" nzFormat="HH:mm"></nz-time-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label>Title<span class="validationtest">*</span></label>
+                        <input nz-input placeholder="Title" maxlength="50" name="sTitle" formControlName="title" />
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label>Activity Type<span class="validationtest">*</span></label>
+                        <nz-select nzAllowClear nzPlaceHolder="Activity Type" (ngModelChange)="activityDropDown1($event, i)" formControlName="activityType">
+                            <nz-option *ngFor="let option of activityTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label>Status Type</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Status Type" (ngModelChange)="statusDropDown1($event, i)" formControlName="sType">
+                            <nz-option *ngFor="let option of statusTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label>Description</label>
+                        <textarea nz-input formControlName="description" maxlength="255" placeholder="Enter Description" nzAutosize></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                        <button [disabled]=" myForm.controls['times'].length > 1+i" nz-button nzType="primary" (click)="addGroup()">
+                            <i nz-icon nzType="plus-circle" nzTheme="fill" ></i> Add New</button>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 addarray">
+                        <button *ngIf="myForm.controls['times'].length > 1" nz-button nzType="primary" (click)="removeGroup(i)">
+                            <i nz-icon nzType="minus-circle" nzTheme="fill" ></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </form>
+    <ng-template #modalFooter>
+        <button nz-button class="Cancel" (click)="Cancel()"> <i nz-icon nzType="close"  nzTheme="outline"></i>Cancel</button>
+        <button nz-button class="save" [disabled]="btnDisabled" nzType="primary" (click)="Save()"> <i nz-icon nzType="save"></i>Save</button>
+    </ng-template>
+</nz-modal>
+<!------------ Edit Popup------------>
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="Editpopup" nzTitle="Edit StatusReport" (nzOnCancel)="Editcancel()" [nzFooter]="modalFooter1">
+    <form [formGroup]="editForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Start Time<span class="validationtest">*</span></label><br>
+                <nz-time-picker formControlName="sTime" [nzDefaultOpenValue]="defaultOpenValue" nzFormat="HH:mm"></nz-time-picker>
+                <div *ngIf="this.editForm.get('sTime').errors?.required && this.editForm.get('sTime').touched">
+                    <span class="text-danger">Start Time Required</span></div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>End Time<span class="validationtest">*</span></label><br>
+                <nz-time-picker formControlName="eTime" [nzDefaultOpenValue]="defaultOpenValue" nzFormat="HH:mm"></nz-time-picker>
+                <div *ngIf="this.editForm.get('eTime').errors?.required && this.editForm.get('eTime').touched">
+                    <span class="text-danger">End Time Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <nz-input-group>
+                    <label>Title<span class="validationtest">*</span></label>
+                    <input nz-input placeholder="Title" name="sTitle" maxlength="50" formControlName="title" />
+                    <div *ngIf="this.editForm.get('title').errors?.required && this.editForm.get('title').touched">
+                        <span class="text-danger">Title Is Required</span></div>
+                    <div *ngIf="this.editForm.get('title').errors?.maxlength && this.editForm.get('title').invalid">
+                        <span class="text-danger">Only 50 Characters are allowed</span>
+                    </div>
+                    <div *ngIf="this.editForm.get('title').errors?.pattern && this.editForm.get('title').invalid">
+                        <span class="text-danger">Only Characters Are Allowed</span></div>
+                </nz-input-group>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Activity Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Activity Type" formControlName="activityType">
+                    <nz-option *ngFor="let option of activityTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.editForm.get('activityType').errors?.required && this.editForm.get('activityType').touched">
+                    <span class="text-danger">Title Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Status Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Status Type" formControlName="sType">
+                    <nz-option *ngFor="let option of statusTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.editForm.get('sType').errors?.required && this.editForm.get('sType').touched">
+                    <span class="text-danger">Status Type Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-input-group>
+                    <label>Description</label>
+                    <textarea nz-input formControlName="description" maxlength="255" placeholder="Enter Description" nzAutosize></textarea>
+                    <div *ngIf="this.editForm.get('description').errors?.maxlength && this.editForm.get('description').invalid">
+                        <span class="text-danger">Only 255 Characters are allowed</span>
+                    </div>
+                </nz-input-group>
+            </div>
+        </div>
+    </form>
+    <ng-template #modalFooter1>
+        <button nz-button class="cancel" (click)="Editcancel()"> <i nz-icon nzType="close"  nzTheme="outline"></i>Cancel</button>
+        <button nz-button nzType="primary" class="save" (click)="EditSave()"> <i nz-icon nzType="edit"></i>Update</button>
+    </ng-template>
+</nz-modal>

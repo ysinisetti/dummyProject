@@ -1,0 +1,33 @@
+<!-- <ngx-datatable-column name="link" [width]="200" [sortable]="false" >
+        <ng-template  ngx-datatable-cell-template>
+            <a class="font" href="{{loggedIn.link}}" target="_blank">{{loggedIn.link}}</a>
+        </ng-template>
+
+    </ngx-datatable-column> -->
+<!-- <p *ngIf="loggedIn">
+    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+        <div style="padding-left:35px;">
+            <div><strong>please refer the given link </strong></div>
+            <a class="font" href="{{row.link}}" target="_blank">{{row.link}}</a>
+        </div>
+    </ng-template>
+</p> -->
+
+
+<div style="padding-left:35px;">
+    <div>
+        <form [formGroup]="createPost">
+            <mat-form-field appearance="outline">
+                <mat-label for="userName"> Name </mat-label>
+                <input matInput id="userName" autocomplete="off" type="text" placeholder="Search"
+                    formControlName='name'>
+            </mat-form-field>
+        </form>
+        <button mat-raised-button color="primary" (click)="update()" matTooltip="Do u want to submit post"
+            aria-label="Button that displays a tooltip when focused or hovered over">update</button>
+    </div>
+    <div><strong>please refer the given link </strong><a class="font" href="{{row.link}}"
+            target="_blank">{{row.link}}</a>
+    </div>
+
+</div>

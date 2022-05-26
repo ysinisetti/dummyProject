@@ -1,0 +1,54 @@
+
+  .update {
+    margin-top: 39px;
+    float: right;
+    margin-right: 1px;
+    margin-bottom: -3px;
+  }
+
+  @media (min-width: 300px) and (max-width: 500px) {
+    .update {
+    width: 100%;
+    float: right;
+    margin-right: 1px;
+    }
+  
+      .add {
+        width: 90%;
+        float: right;
+        margin-right: 15px;
+        }
+    }
+  @media (min-width: 501px) and (max-width: 767px) {
+    .update {
+      width: 100%;
+      float: right;
+      margin-right: 1px;
+      }
+     
+        .add {
+          width: 94%;
+          float: right;
+          margin-right: 16px;
+          }
+      }
+      .cancel {
+        font-weight: bold;
+        margin-top: 29px;
+        margin-bottom: 5px;
+        width: 100px;
+        color: black !important;
+        background-color: #f0f0f0 !important;
+        border: white !important;
+      }
+  .save{
+  font-weight: bold;
+  width: 100px;
+  }
+
+
+
+
+
+
+

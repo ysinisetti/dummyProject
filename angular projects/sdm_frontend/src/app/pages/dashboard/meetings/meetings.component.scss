@@ -1,0 +1,54 @@
+ul.breadcrumb {
+  padding: 1px 10px;
+  list-style: none;
+  background-color: #eee;
+  margin-bottom: 0px;
+  margin-top: -22px;
+  margin-left: -23px;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+  content: '/\00a0';
+}
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+.cust {
+  font-size: 18px !important;
+  position: absolute;
+  right: 0;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 10px;
+  position: absolute;
+  right: 130px;
+  width: 100px;
+}
+.btn1 {
+  float: right;
+  margin-top: 10px;
+  width: 100px;
+}
+.add {
+  width: 100px;
+  float: right;
+  // position: absolute;
+  // top: 0;
+  // right: 7px;
+}
+.ant-picker {
+  width: 100%;
+}

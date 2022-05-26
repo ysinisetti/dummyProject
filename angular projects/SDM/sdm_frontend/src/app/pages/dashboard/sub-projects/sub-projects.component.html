@@ -1,0 +1,312 @@
+<nz-breadcrumb>
+    <div>
+      <a (click)="details()">
+        <p class="title">{{ProjectName}} <span class="arrow"></span> </p>
+      </a>
+    </div>
+    <nz-breadcrumb-item>
+      <p class="bread">&nbsp;Project-View</p>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <div class="card">
+    <nz-page-header class="site-page-header" nzTitle="Project-View" style="padding-bottom: 0px;">
+    </nz-page-header>
+    <div class="card-body" style="padding-top: 0px;">
+      <div class="row">
+        <div class="col-4">
+          <label nzRequired nzFor="Name">Customer Name :&nbsp; {{cusName}}</label>&nbsp;
+  
+        </div>
+        <div class="col-4">
+          <label>Project Name :&nbsp;{{proName}}</label>&nbsp;
+  
+        </div>
+        <div class="col-4" style="padding-left: 180px;">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="Search Here" />
+            <!-- <input type="text"  (input)="onSearch($event.target.value)" nz-input placeholder="Search Here" /> -->
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" (click)="search1()" nzSearch><i nz-icon nzType="search"></i></button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 justify-content-end" style="padding-left: 92%;margin-bottom: 11px; margin-top: -9px;">
+          <button nz-button (click)="showGlobalAdd()" nzType="primary"><i nz-icon nzType="plus"
+              nzTheme="outline"></i>Add</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nz-table #editRowTable [nzData]="tableData" [nzPaginationPosition] nzTableLayout="fixed">
+            <thead>
+              <tr>
+                <th nzWidth="30%">TITLE</th>
+                <th nzWidth="10%">TYPE</th>
+                <th nzWidth="10%">START DATE</th>
+                <th nzWidth="10%">END DATE</th>
+                <th nzWidth="10%">DURATION <br>(Days)</th>
+                <th nzWidth="22%">ASSIGNED TO</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let data of tableData">
+                <ng-container *ngFor="let item of mapOfExpandedData[data.Id]">
+                  <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+  
+                    <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="item.child.length!==0"
+                      [(nzExpand)]="item.expand" (nzExpandChange)="collapse(mapOfExpandedData[data.Id], item, $event)">
+                      <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='S'">
+                        <i nz-icon nzType="folder" nzTheme="fill"></i></span>
+                      <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='D'">
+                        <i nz-icon nzType="cluster" nzTheme="outline"></i></span>
+                      <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='T'"><i nz-icon nzType="reconciliation"
+                          nzTheme="twotone"></i></span>
+                      <span style="padding: 0px 5px 0px 0px;" *ngIf="item.Type==='M'"> <i nz-icon nzType="flag"
+                          nzTheme="twotone" [nzTwotoneColor]="'#f81229'"></i></span>
+                      {{ item.Name }}
+  
+                    </td>
+                    <td>{{ type[item.Type] }}</td>
+                    <td>{{ item.StartDate | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{ item.EndDate | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{ item.Duration }} </td>
+                    <td nzEllipsis nzTooltipTitle="{{item.AssignedTo}}" nz-tooltip>{{ item.AssignedTo }}</td>
+                    <td>
+                      <i nz-icon nzType="edit" nzTheme="twotone" (click)="editRow(item)"></i>&nbsp;
+                      <i nz-icon nzType="delete" nzTheme="twotone" nz-popconfirm nzPopconfirmTitle="Sure to delete?"
+                        (nzOnConfirm)="deleteRow(item.Id)"></i>&nbsp;
+                      <i nz-icon *ngIf="item.Type==='S' || item.Type==='M'" (click)="showModalMiddle(item)" nzType="plus-circle"
+                        nzTheme="twotone"></i>
+                    </td>
+  
+                  </tr>
+  
+                </ng-container>
+              </ng-container>
+  
+            </tbody>
+          </nz-table>
+          <br>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-------------------------------edit modal-------------------------------------->
+  <nz-modal nzWidth="60%" [(nzVisible)]="isVisible1" nzTitle="Edit a modal" (nzOnCancel)="UpdateCancel()">
+  
+    <form [formGroup]="taskEditForm" (ngSubmit)="Update()">
+      <nz-tabset>
+        <nz-tab nzTitle="Details">
+  
+          <div nz-row>
+            <div nz-col nzSpan="9">
+              <nz-form-item>
+                <nz-form-label id="label" nz-col [nzSpan]="6">Type</nz-form-label>
+                <div>
+                  <nz-select id="ttitle" style="width: 215px;" formControlName="type">
+                    <nz-option *ngFor="let type of dropdownType"  [nzValue]="type.value" [nzLabel]="type.label">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </nz-form-item>
+            </div>
+  
+            <div nz-col nzSpan="9">
+              <nz-form-item>
+                <nz-form-label id="label1"   nzFor="title" nz-col [nzSpan]="5"> Title </nz-form-label>
+                <nz-form-control nzErrorTip="Please Input Name Here!">
+                  <nz-input-group>
+                    <input nz-input id="etitle" name="title" placeholder="Title" formControlName="title" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+  
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-label id="label2" nz-col [nzSpan]="6">Duration: </nz-form-label>
+                <nz-form-control [nzSpan]="4" nzErrorTip="Please write something here!">
+                  <input nz-input  id="dtitle" placeholder="Duration" formControlName="duration" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+  
+  
+          <div nz-row>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label id="label4" nz-col [nzSpan]="6">Start Date</nz-form-label>
+                <nz-form-control nzErrorTip="Please Input The Start Date!">
+                  <nz-date-picker nzPlaceHolder='Start Date' id="datitle" nzFormat="MM-dd-yyyy" formControlName='sDate2'>
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+  
+  
+            </div>
+  
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label id="label5" nz-col [nzSpan]="6">End Date</nz-form-label>
+                <nz-form-control nzErrorTip="Please Input The End Date!">
+                  <nz-date-picker nzPlaceHolder='End Date'  id="datitle1"  nzFormat="MM-dd-yyyy" formControlName='eDate2'>
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+  
+  
+          <div nz-row>
+            <div nz-col>
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="4" class="des">Description</nz-form-label>
+                <nz-form-control [nzSpan]="20" nzErrorTip="Please write something here!">
+                  <textarea nz-input rows="3" cols="57" formControlName="description" placeholder="write something"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+  
+        </nz-tab>
+  
+        <nz-tab nzTitle="Resource">
+  
+          <nz-form-item>
+            <nz-form-label id="label6" nz-col > Assinged To </nz-form-label>
+            <!-- <nz-form-control nzErrorTip="Please Input Name Here!">
+              <nz-input-group>
+                <input nz-input placeholder="Assigned To" formControlName="assignedTo" />
+              </nz-input-group>
+            </nz-form-control> -->
+            <nz-select [nzSize]="size" nzMode="tags" [(ngModel)]="editResources" nzPlaceHolder="Please select Resources" formControlName="assignedTo">
+              <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </nz-tab>
+
+        <nz-tab nzTitle="Dependencies">
+  
+        </nz-tab>
+      </nz-tabset>
+  
+    </form>
+  
+    <div *nzModalFooter>
+      <button nz-button nzType="primary" [disabled]="!taskEditForm.valid" (click)="Update()"> <i nz-icon
+          nzType="edit"></i>Update</button>
+      <button nz-button nzType="primary" (click)="UpdateCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+    </div>
+  
+  </nz-modal>
+  
+  <!----------------add modal------------------------>
+  <nz-modal nzWidth="60%" nzWrapClassName="vertical-center-modal" [(nzVisible)]="isVisibleMiddle"
+    nzTitle="New Task/MileStone" (nzOnCancel)="handleCancelMiddle()" (nzOnOk)="handleOkMiddle()">
+    <div class="row">
+      <div nz-col [nzSpan]="5">
+        <nz-select name="categoryType" [(ngModel)]="newRecordType" (ngModelChange)="validateForm.reset()"
+          nzPlaceHolder="Choose The Category here">
+  
+          <nz-option *ngIf="!enableDeliverable" nzValue="Task" nzLabel="Task"></nz-option>
+          <nz-option *ngIf="!enableDeliverable" nzValue="Milestone" nzLabel="Milestone"></nz-option>
+          <nz-option *ngIf="!enableDeliverable && !enableSubject" nzValue="SubProject" nzLabel="SubProject"></nz-option>
+          <nz-option *ngIf="enableDeliverable" nzValue="Deliverable" nzLabel="Deliverable"></nz-option>
+  
+        </nz-select>
+      </div>
+    </div><br>
+  
+    <form *ngIf="newRecordType" nz-form [formGroup]="validateForm" (ngSubmit)="handleOkMiddle()">
+      <h5>{{newRecordType}}</h5>
+  
+      <nz-tabset>
+        <nz-tab nzTitle="Details">
+  
+          <div nz-row>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label id="label7" nz-col [nzSpan]="6">Title </nz-form-label>
+                <nz-form-control nzErrorTip="Please Input Name Here!">
+                  <nz-input-group>
+                    <input id="label7t" formControlName="taskName" nz-input placeholder="Name" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+  
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nz-col [nzSpan]="6">Start Date</nz-form-label>
+                <nz-form-control nzErrorTip="Please Input The Start Date!">
+                  <nz-date-picker   id="label8" [nzDisabledDate]="disabledStartDate" nzFormat="MM-dd-yyyy" name="startDate"
+                    (ngModelChange)="onStartChange($event)" (nzOnOpenChange)="handleStartOpenChange($event)"
+                    formControlName="StartDate1"></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+  
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label  nz-col [nzSpan]="6">End Date</nz-form-label>
+                <nz-form-control nzErrorTip="Please Input The End Date!">
+                  <nz-date-picker  id="label9" [nzDisabledDate]="disabledEndDate" nzFormat="MM-dd-yyyy"
+                    (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)"
+                    [nzOpen]="endOpen" name="endDate" placeholder="End Date" [(ngModel)]="endate"
+                    formControlName="EndDate1"></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+  
+          <div nz-row>
+            <div nz-col >
+              <nz-form-item>
+                <nz-form-label [nzSpan]="4">Description</nz-form-label>
+                <nz-form-control [nzSpan]="22" nzErrorTip="Please write something here!">
+                  <textarea formControlName="desc" nz-input rows="3" cols="48" placeholder="write something here ..."></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-tab>
+  
+        <nz-tab nzTitle="Resource">
+  
+          <nz-form-item>
+            <nz-form-label id="label10" nz-col > Assigned To </nz-form-label>
+            <nz-select nzMode="tags" nzPlaceHolder="Please select Resources" class="sel" formControlName="taskAssingedTo">
+              <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+            </nz-select>
+            <!-- <nz-form-control nzErrorTip="Please Input Name Here!">
+              <nz-input-group>
+                <input style="width: 40%;" formControlName="taskAssingedTo" nz-input placeholder=" Resource Name" />
+              </nz-input-group>
+            </nz-form-control> -->
+          </nz-form-item>
+        </nz-tab>
+  
+        <nz-tab nzTitle="Dependencies">
+  
+  
+        </nz-tab>
+      </nz-tabset>
+    </form>
+  
+    <div *nzModalFooter>
+      <button nz-button nzType="primary" [disabled]="!validateForm.valid" (click)="handleOkMiddle()"> <i nz-icon nzType="save"></i> Save</button>
+      <button nz-button nzType="primary" (click)="handleCancelMiddle()">  <i nz-icon nzType="close"></i>Cancel</button>
+    </div>
+  
+  </nz-modal>

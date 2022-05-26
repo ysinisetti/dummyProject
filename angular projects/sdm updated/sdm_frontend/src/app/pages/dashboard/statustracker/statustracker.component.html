@@ -1,0 +1,766 @@
+<ul class="breadcrumb">
+    <li><a href="/allProjects">Home</a></li>
+    <!-- <li><a href="/dashboard/projectDetails">{{pName}}</a></li> -->
+    <li>Status Tracker</li>
+</ul>
+
+
+<nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+        <form [formGroup]="dateForm">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Project Name</label>
+                        <input formControlName="projName" nz-input placeholder="Project Name">
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Activity Type</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Activity Type"
+                             formControlName="activityType">
+                            <nz-option *ngFor="let option of activityTypeDropDown" [nzValue]="option.Value"
+                                [nzLabel]="option.Label">
+                            </nz-option>
+                        </nz-select>
+
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Start Date</label>
+                    <nz-date-picker [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='Start Date' formControlName='sDate'>
+                    </nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>End Date</label>
+                    <nz-date-picker [nzFormat]="'MM-dd-yyyy'" nzPlaceHolder='End Date' formControlName='eDate'>
+                    </nz-date-picker>
+                </div>
+
+
+            </div>
+            <div class=row>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"> -->
+                    <button class="btn1" (click)="getReport()" nz-button nzType="primary"><i nz-icon
+                            nzType="search"></i>Search</button>&nbsp;
+                    <!-- </div>
+                <div> -->
+                    <button class="btn1" (click)="reset()" nz-button nzType="primary"><i nz-icon
+                            nzType="redo"></i>Reset</button>
+                </div>
+            </div>
+            <!-- </div>
+        </form> -->
+        </form>
+
+    </nz-collapse-panel>
+</nz-collapse>
+<br>
+
+<div class="card">
+    <!-- <div class="row"> -->
+    <div class="card-body">
+        <div class="col-12">
+            <div class="row">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <label class="projectname" >Project Name: {{pName}}</label><br>
+                        <label class="projectname" >Customer Name: {{cName}}</label>
+                    </div> -->
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <p class="record"><b>No. of Records : {{records}}</b></p>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <button class="btn" (click)="addRow()" nz-button nzType="primary"><i nz-icon
+                            nzType="plus"></i>Add</button>
+                </div>
+            </div>
+            <!-- </div> -->
+            <br>
+            <!-- <br> -->
+
+            <nz-table [nzData]="listOfData" class="tableHeader" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+            nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+            [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+            (nzPageSizeChange)="onPageSizeChange($event)">
+
+                <thead>
+                    <tr>
+                        <th nzWidth="10%">Date</th>
+                        <th nzWidth="13%">Activity Type</th>
+                        <th nzWidth="15%">Project Name</th>
+                        <th nzWidth="18%">Duration</th>
+                        <th nzWidth="18%">Attachment</th>
+                        <th nzWidth="15%">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let data of listOfData ">
+                        <tr>
+                            <td>{{[data.ModifiedDate | date:'MM-dd-yyyy'] }}</td>
+                            <td>{{ data.ActivityType }}</td>
+                            <td>{{[data.ProjectName] }}</td>
+                            <td>{{ data.DurationHr }}Hrs{{ data.DurationMin }}Mins </td>
+                            <td>{{ data.FileName }}</td>
+                            <td>
+                                <i nz-icon nzType="edit" (click)="editRow(data)" nzTheme="twotone"></i>&nbsp;
+                                <i nz-icon nzType="delete" nzTheme="twotone" nz-popconfirm
+                                    nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data)"></i>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+    <!-- </div> -->
+
+
+
+
+    <!-- Add status  -->
+    <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="isVisible" nzTitle="Add" (nzOnCancel)="Cancel()"
+        [nzFooter]="modalFooter">
+        <form [formGroup]="myForm" (ngSubmit)="Save()">
+            <div class="row" style="margin-right: -360px">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                </div>
+                <!-- &nbsp;&nbsp; -->
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <i nz-icon nzType="plus-circle-o" style="color:#0275d8;" nzTheme="twotone" (click)="addGroup()"></i>
+                </div>
+            </div>
+
+
+
+            <div formArrayName="times"
+                *ngFor="let time of myForm.controls.times?.value; let i = index; trackBy:trackByFn">
+                <div [formGroupName]="i">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Date</label>
+                            <nz-date-picker nzPlaceHolder="Select Current Date" formControlName="sDate">
+                            </nz-date-picker>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <!-- <nz-form-item>
+                                <label>Duration (Hrs)</label>
+                                <nz-select nzAllowClear nzPlaceHolder="Hrs" formControlName="durationStart">
+                                    <nz-option class="duration" *ngFor="let option of durationDropdown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item> -->
+                            <nz-form-item>
+                                <label>Resource Type</label>
+                                <nz-select class="resource" nzAllowClear nzPlaceHolder="Select Type"
+                                    formControlName="resourceType">
+                                    <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value"
+                                        [nzLabel]="option.Label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Duration (Hrs)</label>
+                                <nz-select nzAllowClear nzPlaceHolder="Hrs" formControlName="durationStart">
+                                    <nz-option class="duration" *ngFor="let option of durationDropdown"
+                                        [nzValue]="option.Value" [nzLabel]="option.Label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Duration (Mins)</label>
+                                <nz-select nzAllowClear nzPlaceHolder="Mins" formControlName="durationEnd">
+                                    <nz-option class="duration" *ngFor="let option of durationEndTym"
+                                        [nzValue]="option.Value" [nzLabel]="option.Label">
+                                    </nz-option>
+
+                                </nz-select>
+                            </nz-form-item>
+
+                            <!-- <nz-form-item>
+                                <label>Resource Type</label>
+                                <nz-select class="resource" nzAllowClear nzPlaceHolder="Select Type" formControlName="resourceType">
+                                    <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Activity Type</label>
+                                <nz-select nzAllowClear nzPlaceHolder="Activity Type"
+                                    (ngModelChange)="activityDropDown1($event, i)" formControlName="activityType">
+                                    <nz-option *ngFor="let option of activityTypeDropDown" [nzValue]="option.Value"
+                                        [nzLabel]="option.Label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Attachment</label>
+                            <input type="file" formControlName="attachment" nz-input placeholder="upload">
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Project' || activityDropData[i] === 'Support'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Project Name</label>
+                                <input formControlName="projName" nz-input placeholder="Project Name">
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Sub Task</label>
+                                <input formControlName="sTask" nz-input placeholder="Sub Task">
+
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Enablement'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Category</label>
+                            <nz-form-item>
+                                <input formControlName="category" nz-input placeholder="category">
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Topic</label>
+                            <nz-form-item>
+                                <input formControlName="topic" nz-input placeholder="Topic">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Enablement'">
+
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Requestor</label>
+                            <nz-form-item>
+                                <input formControlName="requestor" nz-input placeholder="requestor">
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="activityDropData[i] === 'Training'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Category</label>
+                            <nz-form-item>
+                                <input formControlName="category" nz-input placeholder="Category">
+
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Topic</label>
+                            <nz-form-item>
+                                <input formControlName="topic" nz-input placeholder="Topic">
+
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Training'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Trainer</label>
+                            <nz-form-item>
+                                <input formControlName="trainer" nz-input placeholder="Trainer">
+
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="row"
+                        *ngIf="activityDropData[i] === 'Blog' || activityDropData[i] === 'Documentation' || activityDropData[i] === 'Code Review'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Project Related</label>
+                            <nz-form-item>
+                                <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                                    formControlName="blogType">
+                                    <label nz-radio nzValue="yes">Yes</label>
+                                    <label nz-radio nzValue="no">No</label>
+                                </nz-radio-group>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row"
+                        *ngIf="activityDropData[i] === 'Blog' activityDropData[i] === 'Documentation' || activityDropData[i] === 'Code Review'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Project Name</label>
+                                <input formControlName="projName" nz-input placeholder="Project Name">
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Requestor</label>
+                                <input formControlName="requestor" nz-input placeholder="requestor">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row"
+                        *ngIf="activityDropData[i] === 'Blog' activityDropData[i] === 'Documentation' || activityDropData[i] === 'Code Review'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <nz-form-item *ngIf="no">
+                                <label>Requestor</label>
+                                <input formControlName="requestor" nz-input placeholder="requestor">
+                            </nz-form-item>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="row" *ngIf="activityDropData[i] === 'Meeting'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Project Related</label>
+                            <nz-form-item>
+                                <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                                    formControlName="blogType">
+                                    <label nz-radio nzValue="yes">Yes</label>
+                                    <label nz-radio nzValue="no">No</label>
+                                </nz-radio-group>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"> -->
+                    <div class="row" *ngIf="activityDropData[i] === 'Meeting'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Project Name</label>
+                                <input formControlName="projName" nz-input placeholder="Project Name">
+                            </nz-form-item>
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Organizer</label>
+                                <input formControlName="organizer" nz-input placeholder="organizer">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Meeting'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="no">
+                                <label>Organizer</label>
+                                <input formControlName="organizer" nz-input placeholder="organizer">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+
+
+
+                    <div class="row" *ngIf="activityDropData[i] === 'Webinar'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label>Project Related</label>
+                            <nz-form-item>
+                                <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                                    formControlName="blogType">
+                                    <label nz-radio nzValue="yes">Yes</label>
+                                    <label nz-radio nzValue="no">No</label>
+                                </nz-radio-group>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"> -->
+                    <div class="row" *ngIf="activityDropData[i] === 'Webinar'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Project Name</label>
+                                <input formControlName="projName" nz-input placeholder="Project Name">
+                            </nz-form-item>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Topic Name</label>
+                                <input formControlName="topicName" nz-input placeholder="Topic Name">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Webinar'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="yes">
+                                <label>Requestor</label>
+                                <input formControlName="requestor" nz-input placeholder="requestor">
+                            </nz-form-item>
+                            <!-- </nz-form-item> -->
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="activityDropData[i] === 'Webinar'">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="no">
+                                <label>Topic Name</label>
+                                <input formControlName="topicName" nz-input placeholder="Topic Name">
+                            </nz-form-item>
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <nz-form-item *ngIf="no">
+                                <label>Requestor</label>
+                                <input formControlName="requestor" nz-input placeholder="requestor">
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+
+
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <nz-form-item>
+                                <label>Description</label>
+                                <!-- <nz-form-control nzErrorTip="Please write something here!"> -->
+                                <textarea nz-input formControlName="description" placeholder="Enter Description"
+                                    nzAutosize></textarea>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-right: -360px">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <i nz-icon nzType="minus-circle-o" style="color:#0275d8 ;" class="dynamic-delete-button"
+                                (click)="removeGroup(i)"></i>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+        </form>
+        <ng-template #modalFooter>
+            <button nz-button nzType="primary" (click)="Save()"> <i nz-icon nzType="save"></i>Save</button>
+            <button nz-button nzType="primary" (click)="Cancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+        </ng-template>
+    </nz-modal>
+
+    <nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="editVisible" nzTitle="Edit Status Report"
+        (nzOnCancel)="updateCancel()" [nzFooter]="modalFooter1">
+        <!-- <div class="card"> -->
+        <!-- <div class="card-body"> -->
+        <!-- <div class="row"></div> -->
+        <form nz-form [formGroup]="editStatusForm">
+            <!-- <div class="row"> -->
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Date</label>
+                    <nz-date-picker nzPlaceHolder="Select Current Date" formControlName="sDate">
+                    </nz-date-picker>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Resource Type</label>
+                        <nz-select class="resource" nzAllowClear nzPlaceHolder="Select Type"
+                            formControlName="resourceType">
+                            <nz-option *ngFor="let option of resourceTypeDropDown" [nzValue]="option.Value"
+                                [nzLabel]="option.Label">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-item>
+
+                    <!-- <nz-form-item>
+                        <label>Duration (Hrs)</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Hrs" formControlName="durationStart">
+                            <nz-option class="duration" *ngFor="let option of durationDropdown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                            </nz-option>
+
+                        </nz-select>
+                    </nz-form-item> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Duration (Hrs)</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Hrs" formControlName="durationStart">
+                            <nz-option class="duration" *ngFor="let option of durationDropdown" [nzValue]="option.Value"
+                                [nzLabel]="option.Label">
+                            </nz-option>
+
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Duration (Mins)</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Mins" formControlName="durationEnd">
+                            <nz-option class="duration" *ngFor="let option of durationEndTym" [nzValue]="option.Value"
+                                [nzLabel]="option.Label">
+                            </nz-option>
+
+                        </nz-select>
+                    </nz-form-item>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Activity Type</label>
+                        <nz-select nzAllowClear nzPlaceHolder="Activity Type" (ngModelChange)="activityDropDown($event)"
+                            formControlName="activityType">
+                            <nz-option *ngFor="let option of activityTypeDropDown" [nzValue]="option.Value"
+                                [nzLabel]="option.Label">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Attachment</label>
+                    <input type="file" formControlName="attachment" nz-input placeholder="upload">
+                </div>
+            </div>
+            <div class="row" *ngIf="activityProject">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Project Name</label>
+                        <input formControlName="projName" nz-input placeholder="Project Name">
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Sub Task</label>
+                        <input formControlName="sTask" nz-input placeholder="Sub Task">
+
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf="activityEnablement">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Category</label>
+                    <nz-form-item>
+                        <input formControlName="category" nz-input placeholder="category">
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Topic</label>
+                    <nz-form-item>
+                        <input formControlName="topic" nz-input placeholder="Topic">
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf="activityEnablement">
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Requestor</label>
+                    <nz-form-item>
+                        <input formControlName="requestor" nz-input placeholder="requestor">
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div class="row" *ngIf=activityTraining>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Category</label>
+                    <nz-form-item>
+                        <input formControlName="category" nz-input placeholder="Category">
+
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Topic</label>
+                    <nz-form-item>
+                        <input formControlName="topic" nz-input placeholder="Topic">
+
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf=activityTraining>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Trainer</label>
+                    <nz-form-item>
+                        <input formControlName="trainer" nz-input placeholder="Trainer">
+
+                    </nz-form-item>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="row" *ngIf=activityBlog>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Project Related</label>
+                    <!-- <nz-select nzAllowClear nzPlaceHolder="project related" (ngModelChange)="projectRelated($event)" formControlName="activityType">
+                        <nz-option *ngFor="let option of projectDrop" [nzValue]="option.Value" [nzLabel]="option.Label">
+                        </nz-option>
+                    </nz-select> -->
+                    <nz-form-item>
+                        <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                            formControlName="blogType">
+                            <label nz-radio nzValue="yes">Yes</label>
+                            <label nz-radio nzValue="no">No</label>
+                        </nz-radio-group>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf=activityBlog>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Project Name</label>
+                        <input formControlName="projName" nz-input placeholder="Project Name">
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Requestor</label>
+                        <input formControlName="requestor" nz-input placeholder="requestor">
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf=activityBlog>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                    <nz-form-item *ngIf="no">
+                        <label>Requestor</label>
+                        <input formControlName="requestor" nz-input placeholder="requestor">
+                    </nz-form-item>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+            <div class="row" *ngIf=activitymeeting>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Project Related</label>
+                    <nz-form-item>
+                        <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                            formControlName="blogType">
+                            <label nz-radio nzValue="yes">Yes</label>
+                            <label nz-radio nzValue="no">No</label>
+                        </nz-radio-group>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"> -->
+            <div class="row" *ngIf=activitymeeting>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Project Name</label>
+                        <input formControlName="projName" nz-input placeholder="Project Name">
+                    </nz-form-item>
+
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Organizer</label>
+                        <input formControlName="organizer" nz-input placeholder="organizer">
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf=activitymeeting>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="no">
+                        <label>Organizer</label>
+                        <input formControlName="organizer" nz-input placeholder="organizer">
+                    </nz-form-item>
+                </div>
+            </div>
+            <!-- </div> -->
+
+
+
+            <div class="row" *ngIf=activityWebinar>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label>Project Related</label>
+                    <nz-form-item>
+                        <nz-radio-group [(ngModel)]="radioValue" name="radio" (ngModelChange)='typeSelected()'
+                            formControlName="blogType">
+                            <label nz-radio nzValue="yes">Yes</label>
+                            <label nz-radio nzValue="no">No</label>
+                        </nz-radio-group>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12"> -->
+            <div class="row" *ngIf=activityWebinar>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Project Name</label>
+                        <input formControlName="projName" nz-input placeholder="Project Name">
+                    </nz-form-item>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Topic Name</label>
+                        <input formControlName="topicName" nz-input placeholder="Topic Name">
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row" *ngIf=activityWebinar>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="yes">
+                        <label>Requestor</label>
+                        <input formControlName="requestor" nz-input placeholder="requestor">
+                    </nz-form-item>
+                    <!-- </nz-form-item> -->
+                </div>
+            </div>
+            <div class="row" *ngIf=activityWebinar>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="no">
+                        <label>Topic Name</label>
+                        <input formControlName="topicName" nz-input placeholder="Topic Name">
+                    </nz-form-item>
+
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <nz-form-item *ngIf="no">
+                        <label>Requestor</label>
+                        <input formControlName="requestor" nz-input placeholder="requestor">
+                    </nz-form-item>
+                </div>
+            </div>
+            <!-- </div> -->
+
+
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <nz-form-item>
+                        <label>Description</label>
+                        <!-- <nz-form-control nzErrorTip="Please write something here!"> -->
+                        <textarea nz-input formControlName="description" placeholder="Enter Description"
+                            nzAutosize></textarea>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!-- </div> -->
+        </form>
+        <!-- </div> -->
+        <!-- </div> -->
+
+        <ng-template #modalFooter1>
+            <button nz-button nzType="primary" (click)="Update()"> <i nz-icon nzType="edit"></i>Update</button>
+            <button nz-button nzType="primary" (click)="updateCancel()"> <i nz-icon nzType="close"></i>Cancel</button>
+        </ng-template>
+    </nz-modal>

@@ -1,0 +1,155 @@
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li><a (click)="details()">{{ProjectName}}</a></li>
+    <li>Issues</li>
+  </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <li class="btn2">Customer Name : <b class="cName">{{customerName}}</b></li>
+  </div>
+</ul> 
+<div class="card">
+  <div class="card-header">
+    <h5>
+      <strong class="mr-3">Add Issue</strong>
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addIssueForm">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+          <label nzFor="name"> Title <span class="validationtest">*</span></label>
+          <input nz-input placeholder="Title" formControlName="title" maxlength="71" />
+          <div *ngIf="this.addIssueForm.get('title').errors?.required && this.addIssueForm.get('title').touched">
+            <span class="text-danger">Title Is Required</span></div>
+          <div *ngIf="this.addIssueForm.get('title').errors?.maxlength && this.addIssueForm.get('title').invalid">
+            <span class="text-danger">Only 70 characters are allowed</span>
+          </div>
+          <div *ngIf="this.addIssueForm.get('title').errors?.pattern && this.addIssueForm.get('title').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Issue Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="Issue Type" formControlName="issueType">
+            <nz-option  *ngFor="let option of issueType" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label nzFor="name">Estimated Time (hrs.)</label>
+          <input nzType="number" nz-input placeholder=" Estimated Time" formControlName="estimatedTime"
+            maxlength="12" />
+          <div
+            *ngIf="this.addIssueForm.get('estimatedTime').errors?.pattern && this.addIssueForm.get('estimatedTime').invalid">
+            <span class="text-danger">Only Digits are allowed</span></div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Status</label>
+          <nz-select  nzAllowClear nzPlaceHolder="Status" formControlName="status">
+            <nz-option *ngFor="let option of status" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Priority</label>
+          <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName="priority">
+            <nz-option *ngFor="let option of priority" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Severity</label>
+          <nz-select nzAllowClear nzPlaceHolder="Severity" formControlName="severity">
+            <nz-option *ngFor="let option of severity" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Bucket</label>
+          <nz-select nzAllowClear nzPlaceHolder="Bucket" formControlName="bucket">
+            <nz-option *ngFor="let option of bucket" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Category</label>
+          <nz-select nzAllowClear nzPlaceHolder="Category" formControlName="category">
+            <nz-option *ngFor="let option of category" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzFor="name">Components</label>
+          <input nz-input placeholder="Components" formControlName="components" maxlength="101" />
+          <div
+            *ngIf="this.addIssueForm.get('components').errors?.maxlength && this.addIssueForm.get('components').invalid">
+            <span class="text-danger">Only 100 Characters are allowed</span>
+          </div>
+          <div
+            *ngIf="this.addIssueForm.get('components').errors?.pattern && this.addIssueForm.get('components').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzFor="name">Environments</label>
+          <nz-select nzAllowClear nzPlaceHolder="Environments" formControlName="environments">
+            <nz-option *ngFor="let option of environment" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+             <div *ngIf="this.addIssueForm.get('environments').errors?.maxlength && this.addIssueForm.get('environments').invalid">
+            <span class="text-danger">Only 25 Characters are allowed</span>
+          </div>
+          <div *ngIf="this.addIssueForm.get('environments').errors?.pattern && this.addIssueForm.get('environments').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzFor="name">Affected Versions</label>
+          <input nz-input placeholder="Affected Versions" formControlName="affectedVersions" maxlength="51" />
+          <div
+            *ngIf="this.addIssueForm.get('affectedVersions').errors?.maxlength && this.addIssueForm.get('affectedVersions').invalid">
+            <span class="text-danger">Only 50 Characters are allowed</span>
+          </div>
+          <div
+            *ngIf="this.addIssueForm.get('affectedVersions').errors?.pattern && this.addIssueForm.get('affectedVersions').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzFor="name">Labels</label>
+          <input nz-input placeholder="Labels" formControlName="labels" maxlength="51" />
+          <div *ngIf="this.addIssueForm.get('labels').errors?.maxlength && this.addIssueForm.get('labels').invalid">
+            <span class="text-danger">Only 50 Characters are allowed</span>
+          </div>
+          <div *ngIf="this.addIssueForm.get('labels').errors?.pattern && this.addIssueForm.get('labels').invalid">
+            <span class="text-danger">Only Characters Are Allowed</span></div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Description</label>
+          <textarea nz-input placeholder="Please enter description" formControlName="description" nzAutosize
+            maxlength="256"></textarea>
+          <div
+            *ngIf="this.addIssueForm.get('description').errors?.maxlength && this.addIssueForm.get('description').invalid">
+            <span class="text-danger">Only 255 Characters are allowed</span>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Root Cause Analysis</label>
+          <textarea nz-input placeholder="Please enter Root Cause Analysis" formControlName="rootCauseAnalysis"
+            nzAutosize maxlength="256"></textarea>
+        </div>
+        <div
+          *ngIf="this.addIssueForm.get('rootCauseAnalysis').errors?.maxlength && this.addIssueForm.get('rootCauseAnalysis').invalid">
+          <span class="text-danger">Only 255 Characters are allowed</span>
+        </div>
+        <br />
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <button class="btn" nz-button nzType="primary" (click)="addIssue()" >
+            <i nz-icon nzType="save" nzTheme="outline"></i>Save</button>&nbsp;
+          <button class="btn1" nz-button nzType="primary" (click)="resetIssue()">
+            <i nz-icon nzType="sync" nzTheme="outline"></i>Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

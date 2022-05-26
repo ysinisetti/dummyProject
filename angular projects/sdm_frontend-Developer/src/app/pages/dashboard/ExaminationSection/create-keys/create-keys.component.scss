@@ -1,0 +1,88 @@
+.reset {
+  margin-top: 15px;
+  float: right;
+  margin-right: 109px;
+  margin-bottom: -1px;
+}
+.search {
+  margin-top: 15px;
+  float: right;
+  margin-right: -207px;
+  margin-bottom: -5px;
+}
+.keys {
+  margin-top: 41px;
+  float: right;
+}
+.report{
+  margin-top: 38px;
+  float: right;
+}
+  @media (min-width: 300px) and (max-width: 500px) {
+      .customer {
+      margin-top: -3px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -2px;
+    }
+    .add {
+      width: 90%;
+      float: right;
+      margin-right: 15px;
+      }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px;
+      margin-bottom: -1px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px;
+      margin-bottom: -5px;
+    }
+    }
+  @media (min-width: 501px) and (max-width: 767px) {
+    .customer {
+    margin-top: -3px;
+    text-align: left;
+      font-size: 14px;
+    margin-left: -2px;
+  }
+  .add {
+    width: 94%;
+    float: right;
+    margin-right: 16px;
+    }
+    .reset {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 2px;
+    }
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      float: right;
+      margin-right: 1px;
+    }
+}
+.cancel {
+  font-weight: bold;
+  margin-top: 29px;
+  margin-bottom: 5px;
+  width: 100px;
+  color: black !important;
+  background-color: #f0f0f0 !important;
+  border: white !important;
+}
+  .save{
+  font-weight: bold;
+  width: 100px;
+  }
+
+
+

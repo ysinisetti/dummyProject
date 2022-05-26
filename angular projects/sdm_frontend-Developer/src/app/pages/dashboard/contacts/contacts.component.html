@@ -1,0 +1,448 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <ul class="breadcrumb">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li><a (click)="gotoAccounts()">Accounts</a></li>
+      <li>Contacts</li>
+    </ul>
+  </div>
+</div>
+<!-- Contacts Search -->
+<div class="card">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+      <form [formGroup]="searchForm">
+        <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Name</label>
+            <input nz-input nzLabel="Name" placeholder="Name" formControlName="searchName" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Area Specialization</label>
+            <input nz-input nzLabel="Area Specialization" placeholder="Area Specialization" formControlName="searchSpecialization" />
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Contact Status</label>
+            <nz-select nzAllowClear nzPlaceHolder="Select Status" formControlName="searchStatus">
+            <nz-option *ngFor="let options of contactStatus" [nzValue]="options.value" [nzLabel]="options.label">
+            </nz-option>
+            </nz-select>
+            </div>
+      
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="btn" (click)="getAllContacts()" nz-button nzType="primary">
+              <i nz-icon nzType="search"></i>Search
+            </button>
+            <button class="btn" (click)="cancel()" nz-button nzType="primary">
+              <i nz-icon nzType="redo"></i>Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+<div class="card" id="grid">
+  <div class="row">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+      <label class="rec">No. of Records : {{ records }}</label>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+      <button class="add" (click)="addContact()" nz-button nzType="primary">
+        <i nz-icon nzType="plus"></i>Add
+      </button>
+    </div>
+  </div>
+  <div class="card-body" id="gridBody">
+    <nz-table #record [nzData]="contactTableData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger
+      nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize"
+      [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)">
+      <thead>
+        <tr>
+          <th nzWidth="6%">#</th>
+          <th nzWidth="18%">Name</th>
+          <th nzWidth="18%">Title</th>
+          <th nzWidth="20%">Area Specialization</th>
+          <th nzWidth="15%">Contact No.</th>
+          <th nzWidth="12%">Status</th>
+          <th nzWidth="14%">Email</th>
+          <th nzWidth="16%">Remarks</th>
+          <th nzWidth="10%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of contactTableData; let i = index">
+          <td>{{i+1}}</td>
+          <td>{{data.firstName}}</td>
+          <td nzEllipsis nzTooltipTitle="{{data.title}}" nz-tooltip>{{data.title}}</td>
+          <td>{{data.areaSpecialization}}</td>
+          <td>{{data.cellPhone}}</td>
+          <td>{{Contactstatus[data.contactStatus]}}</td>
+          <td nzEllipsis nzTooltipTitle="{{data.email1}}" nz-tooltip>{{data.email1}}</td>
+          <td>{{data.comments}}</td>
+          <td style="text-align: center">
+            <i nz-icon (click)="editContact(data)" nzType="edit" nzTheme="outline"> </i>&nbsp;
+            <i nz-icon (click)="deleteContact(data)" nzType="delete" nzTheme="outline"> </i>&nbsp;
+            <i nz-icon nzType="linkedin" nzTheme="outline"> </i>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+<!-- ADD A NEW PROJECT -->
+
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="addModel" nzTitle="Add Contact" (nzOnCancel)="cancel()"
+  [nzFooter]="addFooter">
+  <form [formGroup]="addContactForm">
+    <div class="row">
+     
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>First Name <span class="validationtest"> *</span></label>
+        <input nz-input nzLabel="First Name" placeholder="First Name" formControlName="fName" maxlength="31" />
+        <div *ngIf="this.addContactForm.get('fName').errors?.required && this.addContactForm.get('fName').touched">
+          <span class="text-danger">First Name Is Required</span></div>
+        <div *ngIf="this.addContactForm.get('fName').errors?.maxlength && this.addContactForm.get('fName').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('fName').errors?.pattern && this.addContactForm.get('fName').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Last Name <span class="validationtest"> *</span></label>
+        <input nz-input nzLabel="Last Name" placeholder="Last Name" formControlName="lName" maxlength="31" />
+        <div *ngIf="this.addContactForm.get('lName').errors?.required && this.addContactForm.get('lName').touched">
+          <span class="text-danger">Last Name Is Required</span></div>
+        <div *ngIf="this.addContactForm.get('lName').errors?.maxlength && this.addContactForm.get('lName').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('lName').errors?.pattern && this.addContactForm.get('lName').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Middle Name</label>
+        <input nz-input nzLabel="Middle Name" placeholder="Middle Name" formControlName="mName" maxlength="31" />
+        <div *ngIf="this.addContactForm.get('mName').errors?.maxlength && this.addContactForm.get('mName').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('mName').errors?.pattern && this.addContactForm.get('mName').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+     
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Alias Name</label>
+        <input nz-input nzLabel="Alisa Name" placeholder="Alias Name" formControlName="aName" maxlength="21" />
+        <div *ngIf="this.addContactForm.get('aName').errors?.maxlength && this.addContactForm.get('aName').invalid">
+          <span class="text-danger">Only 20 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('aName').errors?.pattern && this.addContactForm.get('aName').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Title </label>
+        <input nz-input nzLabel="Title" placeholder="Title" formControlName="title" maxlength="41" />
+        <div *ngIf="this.addContactForm.get('title').errors?.maxlength && this.addContactForm.get('title').invalid">
+          <span class="text-danger">Only 40 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('title').errors?.pattern && this.addContactForm.get('title').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Contact Status</label>
+        <nz-select nzAllowClear nzPlaceHolder="Select Status" formControlName="cStatus">
+        <nz-option *ngFor="let options of contactStatus" [nzValue]="options.value" [nzLabel]="options.label">
+        </nz-option>
+        </nz-select>
+        </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Salutation</label>
+        <input nz-input nzLabel="Salutation" placeholder="Salutation" formControlName="salutation" maxlength="6" />
+        <div
+          *ngIf="this.addContactForm.get('salutation').errors?.maxlength && this.addContactForm.get('salutation').invalid">
+          <span class="text-danger">Only 5 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('salutation').errors?.pattern && this.addContactForm.get('salutation').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Primary Address Id</label>
+        <input nz-input nzLabel="Primary Address ID" placeholder="Primary Address ID" formControlName="pAddressid"
+          maxlength="11" />
+        <div
+          *ngIf="this.addContactForm.get('pAddressid').errors?.maxlength && this.addContactForm.get('pAddressid').invalid">
+          <span class="text-danger">Only 10 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('pAddressid').errors?.pattern && this.addContactForm.get('pAddressid').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Secondary Address Id</label>
+        <input nz-input nzLabel="Secondary Address Id" placeholder="Secondary Address Id" formControlName="sAddressid"
+          maxlength="11" />
+        <div
+          *ngIf="this.addContactForm.get('sAddressid').errors?.maxlength && this.addContactForm.get('sAddressid').invalid">
+          <span class="text-danger">Only 10 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('sAddressid').errors?.pattern && this.addContactForm.get('sAddressid').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Gender</label>
+        <nz-select nzAllowClear nzPlaceHolder="Select Gender" formControlName="gender">
+        <nz-option *ngFor="let options of contactGender" [nzValue]="options.value" [nzLabel]="options.label">
+        </nz-option>
+        </nz-select>
+        </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Date Of Birth</label>
+        <nz-date-picker nzPlaceHolder="Date Of Birth" name="Date Of Birth" formControlName="dob">
+        </nz-date-picker>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Date Of Admission</label>
+        <nz-date-picker nzPlaceHolder="Date Of Admission" name="Date Of Admission" formControlName="doa">
+        </nz-date-picker>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Lead Source</label>
+        <input nz-input nzLabel="Lead Source" placeholder="Lead source" formControlName="leadScore" maxlength="51" />
+        <div
+          *ngIf="this.addContactForm.get('leadScore').errors?.maxlength && this.addContactForm.get('leadScore').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('leadScore').errors?.pattern && this.addContactForm.get('leadScore').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Area Specialization</label>
+        <input nz-input nzLabel="Area Specialization" placeholder="Area Specialization"
+          formControlName="areaSpecialization" maxlength="41" />
+        <div
+          *ngIf="this.addContactForm.get('areaSpecialization').errors?.maxlength && this.addContactForm.get('areaSpecialization').invalid">
+          <span class="text-danger">Only 40 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('areaSpecialization').errors?.pattern && this.addContactForm.get('areaSpecialization').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Home Phone</label>
+        <input nz-input nzLabel="Home Phone" placeholder="Home Phone" formControlName="homePhone" maxlength="26" />
+        <div
+          *ngIf="this.addContactForm.get('homePhone').errors?.maxlength && this.addContactForm.get('homePhone').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('homePhone').errors?.pattern && this.addContactForm.get('homePhone').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Office Phone</label>
+        <input nz-input nzLabel="Office Phone" placeholder="office Phone" formControlName="officePhone"
+          maxlength="26" />
+        <div
+          *ngIf="this.addContactForm.get('officePhone').errors?.maxlength && this.addContactForm.get('officePhone').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('officePhone').errors?.pattern && this.addContactForm.get('officePhone').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Cell Phone</label>
+        <input nz-input nzLabel="Cell Phone" placeholder="Cell Phone" formControlName="cellPhone" maxlength="26" />
+        <div
+          *ngIf="this.addContactForm.get('cellPhone').errors?.maxlength && this.addContactForm.get('cellPhone').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('cellPhone').errors?.pattern && this.addContactForm.get('cellPhone').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Email 1</label>
+        <input nz-input nzLabel="Email 1" placeholder="Email 1" formControlName="email1" maxlength="51" />
+        <div *ngIf="this.addContactForm.get('email1').errors?.maxlength && this.addContactForm.get('email1').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Email 2</label>
+        <input nz-input nzLabel="Email 2" placeholder="Email 2" formControlName="email2" maxlength="51" />
+        <div *ngIf="this.addContactForm.get('email2').errors?.maxlength && this.addContactForm.get('email2').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>RefferedBy</label>
+        <input nz-input nzLabel="RefferedBy" placeholder="RefferedBy" formControlName="refferedBy" maxlength="31" />
+        <div
+          *ngIf="this.addContactForm.get('refferedBy').errors?.maxlength && this.addContactForm.get('refferedBy').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.addContactForm.get('refferedBy').errors?.pattern && this.addContactForm.get('refferedBy').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Comments</label>
+        <input nz-input nzLabel="Comments" placeholder="Comments" formControlName="comments" maxlength="256" />
+        <div
+          *ngIf="this.addContactForm.get('comments').errors?.maxlength && this.addContactForm.get('comments').invalid">
+          <span class="text-danger">Only 255 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('comments').errors?.pattern && this.addContactForm.get('comments').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Don`t Send Email</label>
+        <input nz-input nzLabel="Don`t Send Email" placeholder="Don`t Send Email" formControlName="dsemail"
+          maxlength="50" />
+        <div *ngIf="this.addContactForm.get('dsemail').errors?.maxlength && this.addContactForm.get('dsemail').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+        <div
+        *ngIf="this.addContactForm.get('dsemail').errors?.pattern && this.addContactForm.get('dsemail').invalid">
+        <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>LinkedIn</label>
+        <input nz-input nzLabel="LinkedIn" placeholder="LinkedIn" formControlName="linkedIn" maxlength="201" />
+        <div
+          *ngIf="this.addContactForm.get('linkedIn').errors?.maxlength && this.addContactForm.get('linkedIn').invalid">
+          <span class="text-danger">Only 200 Characters Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('linkedIn').errors?.pattern && this.addContactForm.get('linkedIn').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Account Employee Id</label>
+        <input nz-input nzLabel="Account Employee Id" placeholder="Account Employee Id" formControlName="AccEmpId"
+          maxlength="31" />
+        <div
+          *ngIf="this.addContactForm.get('AccEmpId').errors?.maxlength && this.addContactForm.get('AccEmpId').invalid">
+          <span class="text-danger">Only 30 Numbers Are Allowed</span>
+        </div>
+        <div *ngIf="this.addContactForm.get('AccEmpId').errors?.pattern && this.addContactForm.get('AccEmpId').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+    </div>
+
+    <ng-template #addFooter>
+      <button nz-button class="cancel" (click)="cancel()">
+        <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+      </button>
+      <button type="submit" nz-button class="save" nzType="primary" (click)="saveContact()">
+        <i nz-icon nzType="save" nzTheme="outline"></i>Save
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>
+
+<!-- POPUP FOR EDIT PROJECTS -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="editModel" nzTitle="Edit Contact" (nzOnCancel)="cancel()"
+  [nzFooter]="editFooter">
+  <form [formGroup]="editContactForm">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>First Name <span class="validationtest"> *</span></label>
+        <input nz-input nzLabel="First Name" placeholder="First Name" formControlName="editFName" maxlength="31" />
+        <div *ngIf="this.editContactForm.get('editFName').errors?.required && this.editContactForm.get('editFName').touched">
+          <span class="text-danger">First Name Is Required</span></div>
+        
+        <div
+          *ngIf="this.editContactForm.get('editFName').errors?.maxlength && this.editContactForm.get('editFName').invalid">
+          <span class="text-danger">Only 30 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editFName').errors?.pattern && this.editContactForm.get('editFName').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Title</label>
+        <input nz-input nzLabel="Title" placeholder="Title" formControlName="editTitle" maxlength="41" />
+      
+        <div
+          *ngIf="this.editContactForm.get('editTitle').errors?.maxlength && this.editContactForm.get('editTitle').invalid">
+          <span class="text-danger">Only 40 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editTitle').errors?.pattern && this.editContactForm.get('editTitle').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+  
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Area Specialization</label>
+        <input nz-input nzLabel="Area Specialization" placeholder="Area Specialization"
+          formControlName="editAreaSpecialization" maxlength="41" />
+        <div
+          *ngIf="this.editContactForm.get('editAreaSpecialization').errors?.maxlength && this.editContactForm.get('editAreaSpecialization').invalid">
+          <span class="text-danger">Only 40 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editAreaSpecialization').errors?.pattern && this.editContactForm.get('editAreaSpecialization').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Cell Phone</label>
+        <input nz-input nzLabel="Cell Phone" placeholder="Cell Phone" formControlName="editCellPhone" maxlength="26" />
+        <div
+          *ngIf="this.editContactForm.get('editCellPhone').errors?.maxlength && this.editContactForm.get('editCellPhone').invalid">
+          <span class="text-danger">Only 25 Numbers Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editCellPhone').errors?.pattern && this.editContactForm.get('editCellPhone').invalid">
+          <span class="text-danger">Only Numbers Are Allowed</span></div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Contact Status</label>
+        <input nz-input nzLabel="Contact Status" placeholder="Contact Status" formControlName="editCStatus"
+          maxlength="2" />
+        <div
+          *ngIf="this.editContactForm.get('editCStatus').errors?.maxlength && this.editContactForm.get('editCStatus').invalid">
+          <span class="text-danger">Only 1 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editCStatus').errors?.pattern && this.editContactForm.get('editCStatus').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Email 1</label>
+        <input nz-input nzLabel="Email 1" placeholder="Email 1" formControlName="editEmail1" maxlength="51" />
+        <div
+          *ngIf="this.editContactForm.get('editEmail1').errors?.maxlength && this.editContactForm.get('editEmail1').invalid">
+          <span class="text-danger">Only 50 Characters Are Allowed</span>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Comments</label>
+        <input nz-input nzLabel="Comments" placeholder="Comments" formControlName="editComments" maxlength="256" />
+        <div
+          *ngIf="this.editContactForm.get('editComments').errors?.maxlength && this.editContactForm.get('editComments').invalid">
+          <span class="text-danger">Only 250 Characters Are Allowed</span>
+        </div>
+        <div
+          *ngIf="this.editContactForm.get('editComments').errors?.pattern && this.editContactForm.get('editComments').invalid">
+          <span class="text-danger">Only Characters Are Allowed</span></div>
+      </div>
+
+
+    </div>
+    <ng-template #editFooter>
+      <button nz-button class="cancel" (click)="cancel()">
+        <i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+      <button type="submit" class="save" nz-button nzType="primary" (click)="updateContact()">
+        <i nz-icon nzType="edit" nzTheme="outline"> </i>Edit
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>

@@ -1,0 +1,94 @@
+<html>
+  <head>
+    
+  
+    </head>
+    
+  <body style = "background: url(../../assets/image/pic5.jpeg);background-repeat: no-repeat; text-align: center; background-size: cover;height:1000px">
+     <h1> Registration Form</h1>
+<form [formGroup] = 'tagsgroup'>
+  <table style="text-align: center;">
+    <tr>
+      <td><b>Enter Name</b> </td> 
+      <td>  :</td>
+       <td>  <input type="text" formControlName = 'name' ></td> 
+    </tr><br>
+    <tr>  
+       <td> <b> Enter Email</b> </td>
+       <td>  :</td>
+        <td>   <input type="email" formControlName = 'email'></td>
+       </tr><br>
+    <tr>
+      <td> <b> Type Password</b> </td> 
+       <td> :</td>  
+        <td> <input type="password" formControlName = 'password' ></td>
+       </tr><br>
+    
+       <tr>
+        <td> <b> PhoneNumber</b> </td> 
+        <td>  :</td>  
+         <td> <input type="tel" formControlName = 'phone'></td> 
+        </tr><br>
+    
+      <tr>
+        <td> <b> Date of Birth</b></td> 
+         <td> :</td>  
+          <td> <input type="date" formControlName = 'birth'></td>
+         </tr><br>
+         <tr>
+          <td><b> Select city</b> </td> 
+           <td> :</td>  
+           <td> <select formControlName = 'city'>
+              <option  >VIZAG</option> 
+              <option>CHODAVARAM</option> 
+              <option>PADERUH</option> 
+              <option>HYDERABAD</option> 
+              <option>TAMARACHERUVU</option> 
+            </select></td> 
+          </tr>
+          <br>
+        
+          <tr>
+            <td><b>  Salary Range</b> </td> 
+             <td> :</td> 
+             <td>   <input type="range" formControlName = 'salary'></td>
+             </tr><br>
+    
+             <tr> 
+              <td><b> Choose File</b> </td>  
+              <td> :</td> 
+              <td>  <input type="file" formControlName = 'file' style ="color: transparent;margin-left: 100px"></td>
+             </tr><br>
+    
+             <tr> 
+              <td><b> Choose Colour</b> </td> 
+              <td>  :</td> 
+              <td>  <input type="color" formControlName = 'color'></td>
+             </tr><br>
+    
+    <tr>
+      <td> <b> Select Gender</b> </td> 
+       <td> :</td> 
+       <td>   <input type="radio" name = 'Name' formControlName = 'gender' value="MALE" >MALE <br>
+                  <input type="radio" name = 'Name' formControlName = 'gender' value="FEMALE">FEMALE</td> 
+                </tr><br>
+    
+    
+     
+       
+          
+     <tr>
+       <td><b> Skills </b> </td> 
+        <td> :</td>  
+        <td>  <input type="checkbox" name = 'Name' value="HTML" formControlName = 'skill' >  HTML<br>
+                 <input type="checkbox" name = 'Name' value="CSS" formControlName = 'skill' >CSS<br>
+                 <input type="checkbox" name = 'Name' value="JS" formControlName = 'skill'>JS<br>
+                 <input type="checkbox" name = 'Name' value="PHP" formControlName = 'skill'>PHP</td>
+                 </tr><br>
+                <tr><td rowspan="3"> <button (click)='getData()' style ="background-color:rgb(212, 119, 235);border: 4px;" >Register</button></td> </tr>
+        
+     
+    </table>
+</form>
+</body>
+</html>

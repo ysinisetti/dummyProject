@@ -1,0 +1,74 @@
+// .imgWidth{
+//   width:60%;
+// }
+// // .buttons{
+// //   margin-left:800px;
+// // }
+// .buttonHeight{
+//       height: 65px;
+//      margin-left:50px;
+// }
+// .roleName
+// {
+//    margin-top: -20px;
+//    margin-left: -24px;
+//    font-size: 12px;
+// }
+// .rolebuttons{
+//   margin-left:200px;
+// }
+// .iconSize{
+//   margin-left:50px;
+// }
+// .iconSizes{
+//   margin-left:50px;
+// }
+// .button{
+//   margin-left:700px;
+// }
+// .iconAlign{
+//   padding-bottom: 10px;
+// }
+
+.width{
+  display: flex;
+  width:100%;
+ 
+}
+.one {
+  flex: 1 1 0;
+  padding-top:10px;
+}
+.two {
+  flex:7 1 0;
+}
+.three{
+  flex:3 1 0;
+}
+.logo{
+  flex:1 1 0;
+  padding-top:3px;
+}
+.roleName{
+  margin-top: -21px;
+   margin-left: -24px;
+   font-size: 12px;
+}
+.buttonHeight{
+        height: 65px;     
+  }
+  
+.buttonHeight:hover{
+        
+  background-color: rgba(73, 73, 69, 0.96);
+  color: rgb(239, 243, 243);
+}
+.buttonHeight:active{
+  background-color: rgba(73, 73, 69, 0.96);
+}
+// .buttonHeight:active {
+//   color: yellow;
+// }
+//  .buttonHeight:visited {
+//   color: red;
+// }

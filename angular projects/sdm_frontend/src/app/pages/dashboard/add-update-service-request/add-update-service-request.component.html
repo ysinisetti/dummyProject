@@ -1,0 +1,359 @@
+<!-- <a class="home" routerLink="/dashboard/allProjects">Home /</a>
+<div class="proName" (click)="backNavigate()" style="cursor: pointer;">{{ProjectName}} /</div>
+<p class="comName">{{title}}</p> -->
+
+
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12">
+    <li><a (click)="gotoHome()">Home</a></li>
+    <li><a (click)="details()">{{ProjectName}}</a></li>
+    <li>Service Request</li>
+  </div>
+  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+    <li class="btn2">Customer Name :<b class="cName">{{customerName}}</b></li>
+  </div>
+</ul>
+<div class="card">
+  <div class="card-header">
+    <h5>
+      <strong class="mr-3"> {{title}}</strong>
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addUpdateSRIssueForm">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label>Ticket Id</label>
+          <input nz-input placeholder="Ticket Id" formControlName='ticktId' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.ticktId.touched && addIssueForm.controls.ticktId.invalid && addIssueForm.controls.ticktId.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Title</label>
+          <input nz-input placeholder="Title" formControlName='title' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.title.touched && addIssueForm.controls.title.invalid && addIssueForm.controls.title.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+        <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+  <label>Date Of Birth</label>
+  <nz-date-picker nzPlaceHolder='Date Of Birth' formControlName='date'></nz-date-picker>
+  <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.date.touched && addIssueForm.controls.date.invalid && addIssueForm.controls.date.errors.required">
+  Please select date
+  </span>
+  </div>
+  </div> -->
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Issue Type</label>
+          <nz-select nzAllowClear nzPlaceHolder="Issue Type" formControlName='issueType'>
+            <nz-option *ngFor="let option of issueType" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.issueType.touched && addIssueForm.controls.issueType.invalid && addIssueForm.controls.issueType.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Estimated Time</label>
+          <input nz-input placeholder="Estimated Time" formControlName='estimatedTime' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.estimatedTime.touched && addIssueForm.controls.estimatedTime.invalid && addIssueForm.controls.estimatedTime.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Estimated By</label>
+          <nz-select nzAllowClear nzPlaceHolder="Estimated By" formControlName='estimatedBy'>
+            <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.issueType.touched && addIssueForm.controls.issueType.invalid && addIssueForm.controls.issueType.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Status</label>
+          <nz-select nzAllowClear nzPlaceHolder="Status" formControlName='status'>
+            <nz-option *ngFor="let option of status" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.status.touched && addIssueForm.controls.status.invalid && addIssueForm.controls.status.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Percentage Complete</label>
+          <input nz-input placeholder="Percentage Complete" formControlName='percentageComplete' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.percentageComplete.touched && addIssueForm.controls.percentageComplete.invalid && addIssueForm.controls.percentageComplete.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Priority</label>
+          <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName='priority'>
+            <nz-option *ngFor="let option of priority" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.priority.touched && addIssueForm.controls.priority.invalid && addIssueForm.controls.priority.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Severity</label>
+          <nz-select nzAllowClear nzPlaceHolder="Severity" formControlName='severity'>
+            <nz-option *ngFor="let option of severity" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.severity.touched && addIssueForm.controls.severity.invalid && addIssueForm.controls.severity.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Bucket</label>
+          <nz-select nzAllowClear nzPlaceHolder="Bucket" formControlName='bucket'>
+            <nz-option *ngFor="let option of bucket" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.bucket.touched && addIssueForm.controls.bucket.invalid && addIssueForm.controls.bucket.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label>Category</label>
+          <nz-select nzAllowClear nzPlaceHolder="Category" formControlName='category'>
+            <nz-option *ngFor="let option of category" [nzValue]="option.optionKey" [nzLabel]="option.optionValue">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.Category.touched && addIssueForm.controls.Category.invalid && addIssueForm.controls.Category.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Components</label>
+          <input nz-input placeholder="Components" formControlName='components' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.components.touched && addIssueForm.controls.components.invalid && addIssueForm.controls.components.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Environments</label>
+          <input nz-input placeholder="Environments" formControlName='environments' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.environments.touched && addIssueForm.controls.environments.invalid && addIssueForm.controls.environments.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Affected Versions</label>
+          <input nz-input placeholder="Affected Versions" formControlName='affectedVersions' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.affectedVersions.touched && addIssueForm.controls.affectedVersions.invalid && addIssueForm.controls.affectedVersions.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">Labels</label>
+          <input nz-input placeholder="Labels" formControlName='labels' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.labels.touched && addIssueForm.controls.labels.invalid && addIssueForm.controls.labels.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label nzRequired nzFor="name">References</label>
+          <input nz-input placeholder="References" formControlName='references' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.references.touched && addIssueForm.controls.references.invalid && addIssueForm.controls.references.errors.required">
+  Please enter title
+  </span>
+  </div> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Created By</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Created By" formControlName='createdBy'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <input nz-input placeholder="Created By" formControlName='createdBy' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.createdBy.touched && addIssueForm.controls.createdBy.invalid && addIssueForm.controls.createdBy.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Assigned To</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Assigned To" formControlName='assignedTo'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <input nz-input placeholder="Assigned To" formControlName='assignedTo' />
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.assignedTo.touched && addIssueForm.controls.assignedTo.invalid && addIssueForm.controls.assignedTo.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Approved By</label>
+          <nz-select nzAllowClear nzPlaceHolder="Deployed By" formControlName='approvedBy'>
+            <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+            </nz-option>
+          </nz-select>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.deployedBY.touched && addIssueForm.controls.deployedBY.invalid && addIssueForm.controls.deployedBY.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Created Date</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Created Date" formControlName='createdDate'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <nz-date-picker nzPlaceHolder='Created Date' formControlName='createdDate'></nz-date-picker>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.createdDate.touched && addIssueForm.controls.createdDate.invalid && addIssueForm.controls.createdDate.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Assigned Date</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Assigned Date" formControlName='assignedDate'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <nz-date-picker nzPlaceHolder='Assigned Date' formControlName='assignedDate'></nz-date-picker>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.assignedDate.touched && addIssueForm.controls.assignedDate.invalid && addIssueForm.controls.assignedDate.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Approve Date</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Approve Date" formControlName='approveDate'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <nz-date-picker nzPlaceHolder='Approve Date' formControlName='approveDate'></nz-date-picker>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.deployedDate.touched && addIssueForm.controls.deployedDate.invalid && addIssueForm.controls.deployedDate.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+          <label>Target Date</label>
+          <!-- <nz-select nzAllowClear nzPlaceHolder="Target Date" formControlName='targetDate'>
+  <nz-option *ngFor="let option of dropDownList" [nzValue]="option" [nzLabel]="option.label">
+  </nz-option>
+  </nz-select> -->
+          <nz-date-picker nzPlaceHolder='Target Date' formControlName='targetDate'></nz-date-picker>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.targetDate.touched && addIssueForm.controls.targetDate.invalid && addIssueForm.controls.targetDate.errors.required">
+  Please select status
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Description</label>
+          <textarea nz-input placeholder="Please enter description" formControlName='description' nzAutosize></textarea>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.description.touched && addIssueForm.controls.description.invalid && addIssueForm.controls.description.errors.required">
+  Please enter data
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Root Cause Analysis</label>
+          <textarea nz-input placeholder="Please enter Root Cause Analysis" formControlName='rootCauseAnalysis'
+            nzAutosize></textarea>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.rootCauseAnalysis.touched && addIssueForm.controls.rootCauseAnalysis.invalid && addIssueForm.controls.rootCauseAnalysis.errors.required">
+  Please enter data
+  </span>
+  </div> -->
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Resolution</label>
+          <textarea nz-input placeholder="Please enter resolution" formControlName='resolution' nzAutosize></textarea>
+          <!-- <div>
+  <span class="validationtest"
+  *ngIf="addIssueForm.controls.resolution.touched && addIssueForm.controls.resolution.invalid && addIssueForm.controls.resolution.errors.required">
+  Please enter data
+  </span>
+  </div> -->
+        </div><br>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <button class="btn" type="submit" nz-button nzType="primary" (click)='saveRupdate()'><i nz-icon nzType="save"
+              nzTheme="outline"></i>{{btnLabel}}</button>&nbsp;
+          <button class="btn1" nz-button nzType="primary" (click)="resetIssue()"><i nz-icon nzType="sync"
+              nzTheme="outline"></i>Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,566 @@
+<!-- Breadcrumb -->
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li><a (click)="details()">{{ProjectName}}</a></li>
+          <li>My Meetings</li>
+      </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+      Customer Name : <b class="cName">{{CustomerName}}</b>
+  </div>
+</div>
+<!-- Meetings search -->
+<div class="card">
+<nz-collapse nzAccordion>
+  <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+    <form [formGroup]="searchForm">
+      <div class="row" >
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label class="coll">Subject</label>
+          <input nz-input placeholder="Subject" formControlName="subject" />
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label class="coll">Start Date</label>
+          <nz-date-picker nzPlaceHolder='yyyy-mm-dd' formControlName="startDate"></nz-date-picker>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label class="coll">Organizer</label>
+          <input nz-input placeholder="Organizer" formControlName="organizer" />
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <label class="coll">Status</label>
+          <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="status">
+            <nz-option *ngFor="let option of status" [nzLabel]="option.Label" [nzValue]="option.Value">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          <button class="reset" nz-button nzType="primary" (click)='formReset()'><i nz-icon
+            nzType="redo"></i>Reset</button>
+          <button class="search" nz-button nzType="primary" (click)='getTableDataBySearch()'><i nz-icon
+            nzType="search"></i>Search</button>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+</div>
+  <div class="card" id="grid">
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+        <label class="rec">No. of Records : {{records}}</label>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+        <button class="add" (click)="addMeeting()" nz-button nzType="primary">
+          <i nz-icon nzType="plus"></i>Add</button>
+      </div>
+    </div> 
+    <!-- Meetings Table -->
+      <div class="card-body" id="gridBody">
+        <nz-table #sortTable [nzData]="tableData" [nzPaginationPosition] nzShowSizeChanger
+          nzShowPagination [nzTotal]="totalPages" [nzPageSize]="10" [nzPageIndex]="1" [nzFrontPagination]="false"
+          (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Start Time</th>             
+              <th>Organizer</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tableData">
+              <td>
+                {{ data.subject }}
+              </td>
+              <td>{{ data.startDate | date:'MMM d, yyyy' }}</td>
+              <td>{{ data.startTime }}</td>
+              <td nzEllipsis nzTooltipTitle="{{data.organizerId}}" nz-tooltip>{{ data.organizerId }}</td>
+              <td>
+                <nz-badge nzStatus="success" *ngIf="data.status==='completed'"></nz-badge>
+                <nz-badge nzStatus="error" *ngIf="data.status==='cancelled'"></nz-badge>
+                <nz-badge nzStatus="processing" *ngIf="data.status==='active'"></nz-badge>{{data.status}}
+              </td>
+              <td>
+                <span>
+                  <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" class="more" >
+                    <i nz-icon nzType="more" nzTheme="outline"> </i>
+                  </a>
+                  <nz-dropdown-menu #menu="nzDropdownMenu">
+                    <ul nz-menu>
+                      <li nz-menu-item (click)="edit(data,'edit')" *ngIf="data.status==='active'">
+                        <i nz-icon nzType="edit" nzTheme="outline"> </i>Edit Meeting
+                      </li>
+                      <li nz-menu-item (click)="edit(data, 'copy')" *ngIf=" data.status==='completed' ">
+                        <i nz-icon nzType="copy" nzTheme="outline"> </i>Copy Meeting
+                      </li>
+                      <li nz-menu-item (click)="update(data, 'Forward')"  *ngIf="data.status==='completed'">
+                        <i nz-icon nzType="forward" nzTheme="outline"> </i>Forward Meeting
+                      </li>
+                      <li nz-menu-item (click)="cancel(data)"  *ngIf="data.status==='active'">
+                        <i nz-icon nzType="close-circle" nzTheme="outline"> </i>Cancel Meeting
+                      </li>
+                      <li nz-menu-item (click)="update(data, 'update')" *ngIf="data.status==='completed' ">
+                        <i nz-icon nzType="upload" nzTheme="outline"> </i>Update Meeting
+                      </li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+
+<!------------------------------------------------ CreateMeeting -------------------------------------------------------->
+<nz-modal [(nzVisible)]="createVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  [nzWidth]="'50%'" (nzOnCancel)="CreateCancel()" [nzBodyStyle]="{ height: 'auto' }">
+  <ng-template #modalTitle>
+    {{addEditDialogHeader}}
+  </ng-template>
+  <ng-template #modalContent>
+    <form [formGroup]="addEditMeetingForm">
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Subject</label>
+          <input type="text" name="name" nz-input formControlName="subject" placeholder="Subject" />
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.subject.touched && addEditMeetingForm.controls.subject.invalid && addEditMeetingForm.controls.subject.errors.required">
+              Please enter Subject
+            </span>
+          </div>
+          <div
+            *ngIf="this.addEditMeetingForm.get('subject').errors?.maxlength && this.addEditMeetingForm.get('subject').invalid">
+            <span class="text-danger">Only 60 Characters Are Allowed</span>
+          </div>
+          <div
+            *ngIf="this.addEditMeetingForm.get('subject').errors?.pattern && this.addEditMeetingForm.get('subject').invalid">
+            <span class="text-danger">Only Alphabets Are Allowed</span></div>
+        </div>      
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Attendees</label>
+          <nz-select name="attendee" nzMode="tags" nzPlaceHolder="Select the Attendees" formControlName="attendees">
+            <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.resourceName" [nzValue]="option.resourceName">
+            </nz-option>
+          </nz-select>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.attendees.touched && addEditMeetingForm.controls.attendees.invalid && addEditMeetingForm.controls.attendees.errors.required">
+              Please enter attendees
+            </span>
+          </div>
+          <div
+            *ngIf="this.addEditMeetingForm.get('attendees').errors?.pattern && this.addEditMeetingForm.get('attendees').invalid">
+            <span class="text-danger">Only Alphabets Are Allowed</span></div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Conference Type</label>
+              <nz-radio-group name="ctype" formControlName="conferenceType">
+                <label nz-radio class="radio" nzValue="p">Physical</label>
+                <label nz-radio class="radio" nzValue="a">Audio</label>
+                <label nz-radio class="radio" nzValue="v">Video</label>
+                <label nz-radio class="radio" nzValue="w">Web</label>
+              </nz-radio-group>           
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>Location</label>
+          <input type="text" name="name" placeHolder="Ex:https://us04web.zoom.us/" nz-input formControlName="location"  />
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.location.touched && addEditMeetingForm.controls.location.invalid && addEditMeetingForm.controls.location.errors.required">
+              Please enter location
+            </span>
+          </div>
+          <div
+            *ngIf="this.addEditMeetingForm.get('location').errors?.maxlength && this.addEditMeetingForm.get('location').invalid">
+            <span class="text-danger">Only 60 characters are allowed</span>
+          </div>
+          <div
+            *ngIf="this.addEditMeetingForm.get('location').errors?.pattern && this.addEditMeetingForm.get('location').invalid">
+            <span class="text-danger">Only Alphabets Are Allowed</span></div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>TimeZone</label>
+          <nz-select class="timeZone"nzPlaceHolder="Enter Time Zone" nzAllowClear formControlName="timezone">
+            <nz-option *ngFor="let option of timeZoneList" [nzValue]="option.Value" [nzLabel]="option.Label">
+            </nz-option>
+          </nz-select>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.timezone.touched && addEditMeetingForm.controls.timezone.invalid && addEditMeetingForm.controls.timezone.errors.required">
+              Please select timezone
+            </span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 upload">
+          <label>Attachment</label>
+          <nz-upload
+          nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          [nzHeaders]="{ authorization: 'authorization-text' }"
+          (nzChange)="changeListener($event)">
+          <button nz-button class="button"><i nz-icon nzType="upload"></i>Click to Upload</button>
+          <p class="ant-upload-hint">
+            Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+          </p>
+        </nz-upload>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>Start Date</label>
+          <nz-date-picker name="startDate"  nzPlaceHolder='yyyy-mm-dd' [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartChange($event)"
+            formControlName="startDate" [nzFormat]="'MM-dd-yyyy'" class="start">
+          </nz-date-picker>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.startDate.touched && addEditMeetingForm.controls.startDate.invalid && addEditMeetingForm.controls.startDate.errors.required">
+              Please select start date
+            </span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>Start Time</label>
+          <nz-time-picker nzPlaceHolder="hh:mm" [nzDefaultOpenValue]="defaultOpenValue"  formControlName="startTime" [nzMinuteStep]=15 [nzUse12Hours]="true" nzFormat="h:mm a">
+          </nz-time-picker>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.startDate.touched && addEditMeetingForm.controls.startDate.invalid && addEditMeetingForm.controls.startDate.errors.required">
+              Please select start date
+            </span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>End Date</label>
+          <nz-date-picker name="endDate"  nzPlaceHolder='yyyy-mm-dd' [nzDisabledDate]="disabledEndDate" formControlName="endDate" [nzFormat]="'MM-dd-yyyy'"
+            class="end">
+          </nz-date-picker>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.startDate.touched && addEditMeetingForm.controls.startDate.invalid && addEditMeetingForm.controls.startDate.errors.required">
+              Please select start date
+            </span>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label>End Time</label>
+          <nz-time-picker nzPlaceHolder="hh:mm"  [nzDefaultOpenValue]="defaultOpenValue"  formControlName="endTime" [nzMinuteStep]=15 [nzUse12Hours]="true" nzFormat="h:mm a"></nz-time-picker>
+          <div>
+            <span class="validationtest"
+              *ngIf="addEditMeetingForm.controls.startDate.touched && addEditMeetingForm.controls.startDate.invalid && addEditMeetingForm.controls.startDate.errors.required">
+              Please select start date
+            </span>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card" id="agenda">
+            <div class="card-header">
+              <h3>
+                <strong>Agenda</strong>
+              </h3>
+              <button nz-button nzType="primary" class="addEditForm" (click)="addQuantity()">
+                <i nz-icon nzType="plus-circle" nzTheme="fill"></i></button>
+            </div>
+            <div class="card-body">
+              <div formArrayName="quantities">               
+                <div *ngFor="let quantity of quantities().controls; let i = index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+                  <h5>Agenda {{i+1}}</h5>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12">
+             <button class="minus" *ngIf="quantities().controls.length > 1" nz-button nzType="primary" (click)="removeQuantity(i)">
+                    <i nz-icon nzType="minus-circle" nzTheme="fill"></i></button>
+                </div>                
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <nz-form-item>
+                      <nz-form-control nzErrorTip="Please enter title">
+                        <input type="text" nz-input formControlName="title" placeholder="Title" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <nz-form-item>
+                      <nz-form-control nzErrorTip="Please select duration">
+                        <nz-select nzPlaceHolder="Duration in Minutes" formControlName="duration">
+                          <nz-option *ngFor="let time of duration" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <nz-form-item>
+                      <nz-form-control nzErrorTip="Please Select Value">
+                        <nz-select nzPlaceHolder="Assign To" formControlName="assignedTo">
+                          <nz-option *ngFor="let time of assignTo" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <nz-form-item>
+                      <nz-form-control nzErrorTip="Please Select Value">
+                        <input type="text" nz-input formControlName="description" placeholder="Description" />
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>      
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button class="cancel" nzType="primary"
+    (click)="CreateCancel()">
+      <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+    </button>
+    <button *ngIf="addBtn === true" class="save" nz-button nzType="primary" (click)="createsubmitData('add')">
+      <i nz-icon nzType="save" nzTheme="outline"></i>Save
+    </button>
+    <button *ngIf="editBtn === true" class="save" nz-button nzType="primary" (click)="createsubmitData('edit')">
+      <i nz-icon nzType="edit" nzTheme="outline"></i>Update
+    </button>  
+  </ng-template>
+</nz-modal>
+
+<!-- ******************************************update and forward******************* -->
+<nz-modal [(nzVisible)]="updateVisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1" [nzFooter]="modalFooter1"
+  [nzWidth]="'50%'" (nzOnCancel)="UpdateCancel()" [nzBodyStyle]="{ height: 'auto' }">
+  <ng-template #modalTitle1>
+    {{addEditDialogHeader}}
+  </ng-template>
+  <ng-template #modalContent1>
+    <form [formGroup]="updateForwardMeetingForm">
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label>{{updateForward}}</label>          
+          <nz-select *ngIf="forwardBtn === true" name="attendee" nzMode="tags" nzPlaceHolder="Select the Attendees" formControlName="attendees">
+            <nz-option *ngFor="let option of listOfOption1" [nzLabel]="option.resourceName" [nzValue]="option.resourceName">
+            </nz-option>
+          </nz-select>
+          <nz-select *ngIf="updateBtn === true" nzDisabled name="attendee" nzMode="tags" nzPlaceHolder="Select the Attendees" formControlName="attendees1">
+            <nz-option *ngFor="let option of listOfOption1" [nzLabel]="option.resourceName" [nzValue]="option.resourceName">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label><b>Subject</b>: {{subject1}}</label>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="forwardBtn === true" >
+          <label><b>Attendees</b>: {{attendpatch}}</label>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+          <label><b>Location</b>: {{location}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+          <label><b>Conference</b>: {{conferenceType[conferencetype]}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"  >
+          <label><b>Time Zone</b>: {{myTimeZone}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+          <label><b>Start Time</b>: {{starttime}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label><b>End Time</b>: {{endtime}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label><b>Start Date</b>: {{startDate1 | date:'MM-dd-yyyy'}}</label>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <label><b>End Date</b>: {{enddate | date:'MM-dd-yyyy'}}</label>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="forwardBtn === true">
+          <div class="card" id="agenda">
+            <div class="card-header">
+              <h3>
+                <strong>Agenda</strong>
+              </h3>
+            </div>
+            <div class="card-body">
+              <div formArrayName="quantities">
+                <div *ngFor="let quantity of agendas().controls; let i = index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+                      <h5>Agenda {{i+1}}</h5>
+                    </div>  
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please enter title">
+                          <input type="text" nz-input formControlName="title" placeholder="Title" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please select duration">
+                          <nz-select nzPlaceHolder="Duration" formControlName="duration">
+                            <nz-option *ngFor="let time of duration" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <nz-select nzPlaceHolder="Assign To" formControlName="assignedTo">
+                            <nz-option *ngFor="let time of assignTo" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <input type="text" nz-input formControlName="description" placeholder="Description" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3>
+                <strong>Meeting Points</strong>
+              </h3>
+              <button  *ngIf="updateBtn === true" nz-button nzType="primary" class="addEditForm" (click)="addMeetingMinute()">
+                <i nz-icon nzType="plus-circle" nzTheme="fill"></i></button>
+            </div>
+            <div class="card-body">
+              <div formArrayName="meetingminutes">
+                <div *ngFor="let quantity of meetingMinute().controls; let i = index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+                      <h5>Meeting Points {{i+1}}</h5>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12" *ngIf="updateBtn === true">
+                      <button  *ngIf="meetingMinute().controls.length > 1"  nz-button nzType="primary" (click)="removeMeetingMinute(i)">
+                        <i nz-icon nzType="minus-circle" nzTheme="fill"
+                         ></i></button>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please enter title">
+                          <input type="text" nz-input formControlName="title" placeholder="Title" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <nz-select nzPlaceHolder="Speakers" formControlName="assignedTo">
+                            <nz-option *ngFor="let time of assignTo" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <input type="text" nz-input formControlName="description" placeholder="Description" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3>
+                <strong>Action Items</strong>
+              </h3>
+              <button  *ngIf="updateBtn === true" nz-button nzType="primary" class="addEditForm" (click)="addActionItem()">
+                <i nz-icon nzType="plus-circle" nzTheme="fill"></i></button>
+            </div>
+            <div class="card-body">
+              <div formArrayName="actionitems">
+                <div *ngFor="let quantity of actionItem().controls; let i = index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-12">
+                      <h5>Action Items {{i+1}}</h5>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-12" *ngIf="updateBtn === true">
+                      <button  *ngIf="actionItem().controls.length > 1" nz-button nzType="primary" (click)="removeActionItem(i)">
+                        <i nz-icon nzType="minus-circle" nzTheme="fill"
+                         ></i></button>
+                    </div>
+  
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please enter title">
+                          <input type="text" nz-input formControlName="title" placeholder="Title" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <nz-select nzPlaceHolder="Assign To" formControlName="assignedTo">
+                            <nz-option *ngFor="let time of assignTo" [nzLabel]="time.Label" [nzValue]="time.Value"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <nz-form-item>
+                        <nz-form-control nzErrorTip="Please Select Value">
+                          <input type="text" nz-input formControlName="description" placeholder="Description" />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter1>
+    <button nz-button class="cancel"  (click)="UpdateCancel()">
+      <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+    </button>
+   <button *ngIf="updateBtn === true"  class="save" nz-button nzType="primary" (click)="updatesubmitData('update')">
+      <i nz-icon nzType="edit" nzTheme="outline"></i>Update
+    </button>
+    <button *ngIf="forwardBtn === true" class="save" nz-button nzType="primary" (click)="updatesubmitData('forward')">
+      <i nz-icon nzType="forward" nzTheme="outline"></i>Forward
+    </button>
+  </ng-template>
+</nz-modal>
+
+<!------------------------------------------------- Cancel a meeting ------------------------------------------------->
+<nz-modal [(nzVisible)]="cancelvisible" [nzTitle]="modalTitle4" [nzContent]="modalContent4" [nzFooter]="modalFooter4"
+  [nzWidth]="'920px'" (nzOnCancel)="Cancelcancel()" [nzBodyStyle]="{ height: '450px' }">
+  <ng-template #modalTitle4>
+    Confirm Cancel
+  </ng-template>
+  <ng-template #modalContent4>
+    Are you sure you want to cancel this meeting
+  </ng-template>
+  <ng-template #modalFooter4>
+    <button nz-button nzType="primary" (click)="CancelOk(data)">Cancel Meeting</button>
+    <button nz-button nzType="primary" (click)="Cancelcancel()">
+      <i nz-icon nzType="close" nzTheme="outline"></i>Cancel
+    </button>
+  </ng-template>
+</nz-modal>

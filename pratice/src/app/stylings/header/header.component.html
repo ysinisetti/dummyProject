@@ -1,0 +1,113 @@
+<!-- <mat-toolbar>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="30">
+        <div  fxLayout="row"  class="imgWidth">
+            <a href="https://hubble.miraclesoft.com/" target=_blank><img
+                    src="https://hubble.miraclesoft.com/assets/miracle-logo-dark.png" style=" height: 50px;
+                    "></a>
+        </div>
+      
+        <div fxFlexOffset="200" ></div>
+        <div  >
+            <div *ngIf="role=='User' && isLogin" class="buttons" fxLayout="row" fxLayoutAlign="space-between center"  >
+                
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="home()">Home</button>
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="createPost()">Create Post</button>
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="myPosts()">My posts</button>
+
+                <button class="rolebuttons" class="iconSizes" mat-icon-button [matMenuTriggerFor]="menu"
+                    aria-label="Example icon-button with a menu">
+
+                    <mat-icon> person</mat-icon>
+                    <p class="roleName"> welcome {{roleName}}</p>
+                </button>
+                <mat-menu #menu="matMenu">
+
+                    <button (click)="editProfile()" mat-menu-item>
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Profile</span>
+                    </button>
+                    <button (click)="logOut()" mat-menu-item>
+                        <mat-icon>exit_to_app</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+
+            </div>
+            <div *ngIf="role=='Admin' && isLogin" class="button">
+
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="home()">Home</button>
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="rejected()">Rejected</button>
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="approved()">Approved</button>
+                <button class="rolebuttons" class="buttonHeight" mat-button (click)="requested()">Requests</button>
+
+                <button class="rolebuttons" class="iconSize" mat-icon-button [matMenuTriggerFor]="menu"
+                    aria-label="Example icon-button with a menu">
+                    <mat-icon>person</mat-icon>
+                    <p class="roleName"> welcome {{roleName}}</p>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <button (click)="editProfile()" mat-menu-item>
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Profile</span>
+                    </button>
+                    <button (click)="logOut()" mat-menu-item>
+                        <mat-icon>exit_to_app</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+    </div>
+</mat-toolbar> -->
+<mat-toolbar>
+    <div class="width">
+        <div   class="one">
+            <a href="https://hubble.miraclesoft.com/" target=_blank><img
+                    src="https://hubble.miraclesoft.com/assets/miracle-logo-dark.png" style=" height: 40px;
+                    "></a>
+        </div>
+        <div  class="two"></div>
+        <div  class="three" fxLayoutAlign="end"> 
+            <div *ngIf="role=='User' && isLogin"  >
+                
+                <button class="buttonHeight" mat-button (click)="home()">Home</button>
+                <button class="buttonHeight" mat-button (click)="createPost()">Create Post</button>
+                <button class="buttonHeight" mat-button (click)="myPosts()">My posts</button>
+
+            </div>
+            <div *ngIf="role=='Admin' && isLogin" class="button">
+
+                <button  class="buttonHeight" mat-button (click)="home()">Home</button>
+                <button  class="buttonHeight" mat-button (click)="requested()">Requests</button>
+                <button  class="buttonHeight" mat-button (click)="rejected()">Rejected</button>
+                <button  class="buttonHeight" mat-button (click)="approved()">Approved</button>           
+                <button  class="buttonHeight" mat-button (click)="alerts()">Alerts</button>
+ 
+            </div>
+        </div>
+        <div  class="logo" fxLayoutAlign="center">
+            <button class="rolebuttons"  mat-icon-button [matMenuTriggerFor]="menu"
+                    aria-label="Example icon-button with a menu">
+                    <mat-icon> person</mat-icon>
+                    <p class="roleName" fxLayoutAlign="center" > welcome {{roleName}}</p>
+                </button>
+                <mat-menu #menu="matMenu" >
+                    <button *ngIf="role=='User' && isLogin" (click)="editProfile()" mat-menu-item>
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Profile</span>
+                    </button>
+
+                    <button *ngIf="role=='User' && isLogin" (click)="changePassword()" mat-menu-item>
+                        <mat-icon>edit</mat-icon>
+                        <span>Change Password</span>
+                    </button>
+                    <button (click)="logOut()" mat-menu-item>
+                        <mat-icon>exit_to_app</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+
+        </div>
+    </div>
+</mat-toolbar>

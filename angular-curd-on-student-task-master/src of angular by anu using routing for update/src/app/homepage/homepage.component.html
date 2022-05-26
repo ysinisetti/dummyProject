@@ -1,0 +1,42 @@
+<div class=" navbar" id="navbar-position">
+
+        <a style="font: 2em icon;"> Details of the student </a> 
+        <!-- <br> -->
+    <a href="createpage">Create a student detail</a>
+</div>
+
+    
+
+<div class="row main list">
+    <div class="col-md-12">
+        <table class=" table table-hover" style="table-layout: inherit;" cellspacing="15">
+            <thead>
+                <tr>
+                    <th><b>Id</b></th>
+                    <th><b>College code</b></th>
+                    <th><b>College Name</b></th>
+                    <th><b>Email</b></th>
+                    <th><b>Name</b></th>
+                    <th><b>Phone number</b></th>
+                    <th><b>Edit</b></th>
+                    <th><b>Delete</b></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let option of GridData">
+                    <td>{{option.id}}</td>
+                    <td>{{option.colcode}}</td>
+                    <td>{{option.colname}}</td>
+                    <td>{{option.email}}</td>
+                    <td>{{option.name}}</td>
+                    <td>{{option.phno}}</td>
+                    <td class="text-center"><button class="btn btn-primary btn-xs" (click)="updated(option.id)"> Edit</button></td>
+                    <td class="text-center"><button class="btn btn-danger btn-xs" (click)="deleteuser(option.id)"><span
+                                class="glyphicon glyphicon-remove"></span> Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

@@ -1,0 +1,185 @@
+::ng-deep .ant-picker {
+  width: 100%;
+}
+nz-select {
+  width: 100%;
+}
+.btn {
+  margin-top: 39px;
+  width: 100px;
+  float: right;
+}
+@media (min-width: 501px) and (max-width: 767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .btn {
+    width: 100%;
+    float: right;
+  }
+}
+.inputs {
+  width: 200px;
+}
+.drops {
+  width: 20px;
+}
+.page {
+  box-sizing: border-box;
+  margin: -149px;
+  padding: 11px;
+  color: #595c97;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 23.5715;
+  list-style: none;
+  font-feature-settings: 'tnum';
+  margin-inline-start: auto;
+}
+
+.add {
+  padding-left: 89.5%;
+  margin-bottom: -12px;
+  margin-top: 10px;
+  width: 60px;
+}
+
+.type {
+  margin-left: -50px;
+}
+.actions {
+  margin-right: 150px;
+}
+button {
+  // float: left;
+  width: 90px;
+}
+.card-body {
+  background-color: white;
+}
+h6 {
+  margin-top: -50px;
+}
+.adj {
+  width: 250px;
+  margin-left: 10px;
+}
+.txt {
+  // width:800px;
+  margin-left: 10px;
+}
+thead {
+  background-color: rgb(255, 255, 255);
+}
+.ant-table-thead > tr > th {
+  color: #999ca0 !important;
+  font-weight: bold !important;
+  text-align: left;
+  background: #ffff !important;
+  border-bottom: 1px solid #e4e9f0;
+  transition: background 0.3s ease;
+}
+th {
+  font-family: 'Open Sans', sans-serif;
+  font-size: smaller;
+  font-weight: 100;
+}
+// .search {
+// // float: right;
+// margin-left: 980px;
+// width: 200px;
+// margin-bottom: 10px;
+// margin-top: -55px;
+// }
+nz-modal {
+  height: 900px;
+}
+.cancel {
+  // margin-top: -60px;
+  margin-left: 25px;
+}
+
+.table {
+  margin-top: -5px;
+}
+.site-page-header {
+  margin-bottom: -30px;
+}
+#cardheading {
+  height: 50px;
+}
+.emend {
+  width: 200px;
+  margin-left: 10px;
+}
+.search {
+  width: 250px;
+  margin-left: 920px;
+  margin-top: -25px;
+  // margin-top: 20px;
+  // padding-left: 40%;
+  // // width: 95%;
+  // margin-bottom: 20px;
+  // width: 45%;
+}
+
+.title {
+  width: 200px;
+  margin-left: 20px;
+}
+
+.status1 {
+  width: 130px;
+  //margin-left: 20px;
+}
+
+.stdt {
+  margin-left: 20px;
+  width: 250px;
+}
+
+.Start {
+  width: 250px;
+  margin-left: 20px;
+  margin-top: -35px;
+}
+
+.End {
+  width: 250px;
+  margin-left: 20px;
+  margin-top: -35px;
+}
+
+.endy {
+  margin-left: -117px;
+}
+
+.title1 {
+  //text-align: center;
+  //font-weight: bold;
+  font-size: 16px;
+  color: rgb(65, 84, 138);
+  // float:right;
+  margin-left: 65px;
+  //margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 10px;
+}
+.satdt {
+  width: 190px;
+  // margin-left: -1px;
+}
+.etdt1 {
+  margin-left: -60px;
+  margin-top: 5px;
+  //width: 50px;
+}
+.titlee {
+  width: 200px;
+}
+.priority1 {
+  margin-left: -200px;
+}

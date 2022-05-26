@@ -1,0 +1,204 @@
+<!----------- Bread Crum ----------------->
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="proj()">Home</a></li>
+            <li><a (click)="dashboard()">{{ProjectName}}</a></li>
+            <li>Escalation</li>
+        </ul>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+        Customer Name : <b class="cName">{{CustomerName}}</b>
+    </div>
+</div>
+<!------------- Escalation Search ---------------->
+<div class="card">
+    <nz-collapse nzAccordion>
+        <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="searchform">
+                <div class="row" id="fRow" >
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <label>Contact Name</label>
+                    <input nz-input placeholder="Contact Name" formControlName="contactName" />
+                 </div>
+                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                 </div>
+                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12"></div>
+                 <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                   <button class="reset" nz-button nzType="primary" (click)="resetSearchFields()"><i nz-icon
+                     nzType="redo"></i>Reset</button>
+                  <button class="search" nz-button nzType="primary"
+                 (click)="getAllData()"><i nz-icon nzType="search"></i>Search</button>
+                 </div>
+             </div>
+            </form>
+        </nz-collapse-panel>
+    </nz-collapse>
+</div>
+<!----------------- Table ----------------->
+<div class="card" id="grid">
+    <div class="row">       
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+        </div>
+    </div>
+    <div class="card-body" id="gridBody">
+        <nz-table [nzShowPagination]="false"  #editRowTable [nzData]="tableData" nzShowSizeChanger>            
+            <thead>
+                <tr>
+                    <th nzWidth="8%" class="t1">Area</th>
+                    <th nzWidth="10%" class="t2">Level 1</th>
+                    <th nzWidth="10%" class="t3">Level 2</th>
+                    <th nzWidth="10%" class="t4">Level 3</th>
+                    <th nzWidth="10%" class="t5">Level 4</th>
+                    <th nzWidth="10%" class="t7">Level 5</th>
+                    <th nzWidth="6%" class="t8">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of tableData;">
+                    <td class="department"><b>{{ data.department }}</b>
+                    </td>
+                    <td>
+                        <a nzType="primary" (click)="goToNotification(data['Project Team Lead'][0].empid,data.department,1)">
+
+                            {{ data['Project Team Lead'][0].contactid === null ? "Not available" : data['Project Team Lead'][0].contactid }}
+                        </a>
+                    </td>
+                    <td>
+                        <a nzType="primary" (click)="goToNotification(data['Project Manager'][0].empid,data.department,2)">
+                            {{ data['Project Manager'][0].contactid === null ? "Not available" : data['Project Manager'][0].contactid }}
+                        </a>
+                    </td>
+                    <td>
+                        <a nzType="primary" (click)="goToNotification(data['Delivery Manager'][0].empid,data.department,3)">
+                            {{ data['Delivery Manager'][0].contactid === null ? "Not available" : data['Delivery Manager'][0].contactid }}
+                        </a>
+                    </td>                   
+                    <td>
+                    <a nzType="primary" (click)="goToNotification(data['Project Sponser'][0].empid,data.department,4)">
+                     {{ data['Project Sponser'][0].contactid === null ? "Not available" : data['Project Sponser'][0].contactid }}
+                        </a>
+                    </td>
+                    <td>
+                        <a nzType="primary" (click)="goToNotification(data['Executive Level'][0].empid,data.department,5)">
+                   {{ data['Executive Level'][0].contactid === null ? "Not available" : data['Executive Level'][0].contactid }}
+                        </a>
+                    </td>
+                    <td>
+                        <i nz-icon nzType="edit" nzTheme="outline" class="icon" (click)="editRow(data)"></i>
+                        &nbsp;
+                        <a nz-popconfirm class="icon" nzPopconfirmTitle="Sure to delete?"
+                            (nzOnConfirm)="deleteRow(data)">
+                            <i nz-icon nzTheme="outline" nzType="delete"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>        
+<!--------------Model for add and edit a Escalation---------->
+
+<nz-modal nzWidth="50%" nzHeight="70%" [(nzVisible)]="addVisible"  (nzOnCancel)="cancel()" [nzTitle]="modalTitle"
+    [nzFooter]="modalFooterr2">
+    <ng-template #modalTitle>
+        {{addEditdailogheader}}
+      </ng-template>
+    <form [formGroup]="escalationForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">                
+                    <label>Area<span class="validationtest">*</span> </label>
+                     <nz-select nzAllowClear nzPlaceHolder="Area" formControlName="area">
+                        <nz-option *ngFor="let option of Matrix" [nzValue]="option.value" [nzLabel]="option.label">
+                        </nz-option>
+                    </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="escalationForm.controls.area.touched && escalationForm.controls.area.invalid && escalationForm.controls.area.errors.required">
+                            Please select area
+                        </span>
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Project Team Lead <span class="validationtest">*</span></label>
+                <nz-select name="attendee"  nzShowSearch nzPlaceHolder="Select Project Team Lead" formControlName="projectTeamLead">
+                  <nz-option   *ngFor="let option of optionList" [nzLabel]="option.employeeName" [nzValue]="option.id">
+                  </nz-option>
+                </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="escalationForm.controls.projectTeamLead.touched && escalationForm.controls.projectTeamLead.invalid && escalationForm.controls.projectTeamLead.errors.required">
+                            Please select project team lead
+                        </span>
+                    </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">                
+                    <label>Project Manager </label>
+                    <nz-select name="attendee"  nzShowSearch nzPlaceHolder="Select the Project Manager" formControlName="projectManager">
+                        <nz-option *ngFor="let option of optionList" [nzLabel]="option.employeeName" [nzValue]="option.id">
+                        </nz-option>
+                      </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="escalationForm.controls.projectManager.touched && escalationForm.controls.projectManager.invalid && escalationForm.controls.projectManager.errors.required">
+                            Please select project manager
+                        </span>
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Delivery Manager<span class="validationtest">*</span> </label>
+                <nz-select name="attendee"  nzShowSearch nzPlaceHolder="Select Delivery Manager" formControlName="deliveryManager">
+                    <nz-option *ngFor="let option of optionList" [nzLabel]="option.employeeName" [nzValue]="option.id">
+                    </nz-option>
+                  </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="escalationForm.controls.deliveryManager.touched && escalationForm.controls.deliveryManager.invalid && escalationForm.controls.deliveryManager.errors.required">
+                            Please select delivery manager
+                        </span>
+                    </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Project Sponser<span class="validationtest">*</span> </label>
+                <nz-select name="attendee"  nzShowSearch nzPlaceHolder="Select Project Sponser" formControlName="projectSponser">
+                    <nz-option *ngFor="let option of optionList" [nzLabel]="option.employeeName" [nzValue]="option.id">
+                    </nz-option>
+                  </nz-select> 
+                  <div>
+                    <span class="validationtest"
+                        *ngIf="escalationForm.controls.projectSponser.touched && escalationForm.controls.projectSponser.invalid && escalationForm.controls.projectSponser.errors.required">
+                        Please select project sponser
+                    </span>
+                </div>
+             </div>
+      </div>
+        <div class="row">
+     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Executive Level<span class="validationtest">*</span> </label>
+                <nz-select name="attendee"  nzShowSearch nzPlaceHolder="Select the Employee" formControlName="executiveLevel">
+                    <nz-option *ngFor="let option of optionList" [nzLabel]="option.employeeName" [nzValue]="option.id">
+                    </nz-option>
+                  </nz-select>
+                    <div>
+                        <span class="validationtest"
+                            *ngIf="escalationForm.controls.executiveLevel.touched && escalationForm.controls.executiveLevel.invalid && escalationForm.controls.executiveLevel.errors.required">
+                            Please select executive level
+                        </span>
+                    </div>
+            </div>
+        </div>
+        <ng-template #modalFooterr2>
+            <button nz-button class="cancel" nzType="primary" (click)="cancel()"><i nz-icon nzType="close"
+                    nzTheme="outline"></i>Cancel</button>
+            <button nz-button nzType="primary"  *ngIf="addBtn === true"class="save" (click)="addMatrix()"><i nz-icon nzType="save"
+                    nzTheme="outline"></i>Save</button>
+            <button nz-button class="btnu" nzType="primary"  *ngIf="editBtn === true" (click)="editMatrix()"><i nz-icon nzType="edit"
+                        nzTheme="outline"></i>Update</button>
+        </ng-template>
+    </form>
+</nz-modal>

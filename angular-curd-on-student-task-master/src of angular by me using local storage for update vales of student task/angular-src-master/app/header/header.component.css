@@ -1,0 +1,23 @@
+
+.logo {
+    height: 100px;
+    width: auto;
+    padding: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+
+
+
+
+.header{
+    margin-top: -27px; 
+    background-color: rgb(159, 168, 158);
+    height: 50px;
+    width:100%;
+    text-align:left ;
+    padding:20px;
+    position: fixed;
+ }

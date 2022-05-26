@@ -1,0 +1,231 @@
+<!----------- Bread Crum ----------------->
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <ul class="breadcrumb">
+            <li><a (click)="dashboard()">Home</a></li>
+            <li>Status Tracker</li>
+        </ul>
+    </div>
+</div>
+<!------------- Search ---------------->
+<div class="card">
+    <nz-collapse nzAccordion>
+        <nz-collapse-panel [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="searchForm">
+                <div class="row" id="fRow">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>Start Date</label>
+                        <nz-date-picker name="date" nzPlaceHolder="yyyy-mm-dd" formControlName="sDate" [nzFormat]="'MM-dd-yyyy'" class="start">
+                        </nz-date-picker>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <label>End Date</label>
+                        <nz-date-picker name="date" nzPlaceHolder="yyyy-mm-dd" formControlName="eDate" [nzFormat]="'MM-dd-yyyy'" class="start">
+                        </nz-date-picker>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                        <button class="reset" (click)="reset()" nz-button nzType="primary">
+                            <i nz-icon nzType="redo"></i>Reset</button>
+                        <button class="search" (click)="getAllData()" nz-button nzType="primary">
+                      <i nz-icon nzType="search" ></i>Search</button>
+                    </div>
+                </div>
+            </form>
+        </nz-collapse-panel>
+    </nz-collapse>
+</div>
+<!----------------- Table ----------------->
+<div class="card" id="grid">
+    <div class="row">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+            <label class="rec">No. of Records :{{records}}</label>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <button class="add" (click)="addRow()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+        </div>
+    </div>
+    <div class="card-body" id="gridBody">
+        <nz-table #nzTable class="tableHeader" [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false" [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum" (nzPageIndexChange)="onCurrentPageDataChange($event)"
+            (nzPageSizeChange)="onPageSizeChange($event)">
+            <thead>
+                <tr>
+                    <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+                        {{ column.name }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of nzTable.data; let i = index ">
+                    <tr>
+                        <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                        <td>{{item.createdDate | date :'MMM d, yyyy'}} </td>
+                        <td>{{item.statusReportDate | date :'MMM d, yyyy' }} </td>
+                        <td>{{item.title}} </td>
+                        <td>{{status[item.statusReportStatus]}}</td>
+                        <td>
+                            <i nz-icon class="icon" (click)="RowEdit(item)" nzType="edit" nzTheme="outline"></i>&nbsp;&nbsp;
+                            <i nz-icon class="icon" nzType="delete" nzTheme="outline" nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(item.id)"></i> &nbsp;
+                            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 20px;">
+                                <i nz-icon nzType="more" nzTooltipTitle="Details" nz-tooltip nzTheme="outline" (click)="Addreport(item)"> </i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+<!-------------- Add Popup ------------>
+<nz-modal nzWidth="30%" nzHeight="37%" [(nzVisible)]="Addstatus" nzTitle="Add StatusTracker" (nzOnCancel)="Addstatuscancel()" [nzFooter]="modalFooter3">
+    <form [formGroup]="addpopupForm">
+        <label class="addpop"> You are about to add status for the day </label>
+        <div class="row">
+            <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  ">
+                <nz-date-picker formControlName="pDate" [nzFormat]="'MM-dd-yyyy'">
+                </nz-date-picker>
+            </div>
+            <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  ">
+                <button nz-button nzType="primary" class="proceed" (click)="proceed()"> Proceed</button>
+            </div>
+        </div>
+        <br>
+    </form>
+    <ng-template #modalFooter3>
+    </ng-template>
+</nz-modal>
+<nz-modal nzWidth="30%" nzHeight="30%" [(nzVisible)]="goback" nzTitle="To Check Status" (nzOnCancel)="Addbackcancel()" [nzFooter]="modalFooter4">
+    <label class="addpop"> The status already filled on that day.</label>
+    <label><span>If you want to edit<button nz-button nzType="primary" class="go" 
+        (click)="go()"> Go</button>
+    </span> </label>
+    <ng-template #modalFooter4>
+    </ng-template>
+</nz-modal>
+<!------------------------- Add status tracker ------------------------------>
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="Addpopup" nzTitle="Add StatusTracker" (nzOnCancel)="Addcancel()" [nzFooter]="modalFooter1">
+    <form [formGroup]="addForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Created Date</label><br>
+                <nz-date-picker name="startDate" [nzDisabledDate]="disabledStartDate" (ngModelChange)="onStartChange($event)" formControlName="cDate" [nzFormat]="'MM-dd-yyyy'" class="start">
+                </nz-date-picker>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Status Report Date</label><br>
+                <nz-date-picker name="startDate" formControlName="sDate" [nzFormat]="'MM-dd-yyyy'">
+                </nz-date-picker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Title<span class="validationtest">*</span></label>
+                <input nz-input placeholder="Title" maxlength="50" name="sTitle" formControlName="title" />
+                <div *ngIf="this.addForm.get('title').errors?.required && this.addForm.get('title').touched">
+                    <span class="text-danger">Title Is Required</span></div>
+                <div *ngIf="this.addForm.get('title').errors?.maxlength && this.addForm.get('title').invalid">
+                    <span class="text-danger">Only 50 Characters are allowed</span>
+                </div>
+                <div *ngIf="this.addForm.get('title').errors?.pattern && this.addForm.get('title').invalid">
+                    <span class="text-danger">Only Characters Are Allowed</span></div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Status Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Status Type" formControlName="sType">
+                    <nz-option *ngFor="let option of statusTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.addForm.get('sType').errors?.required && this.addForm.get('sType').touched">
+                    <span class="text-danger">Status Type Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Object Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Object Type" formControlName="oType">
+                    <nz-option *ngFor="let option of objectTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.addForm.get('oType').errors?.required && this.addForm.get('oType').touched">
+                    <span class="text-danger">Object Type Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Description</label>
+                <textarea nz-input formControlName="description" maxlength="255" placeholder="Enter Description" nzAutosize></textarea>
+                <div *ngIf="this.addForm.get('description').errors?.maxlength && this.addForm.get('description').invalid">
+                    <span class="text-danger">Only 255 Characters are allowed</span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <ng-template #modalFooter1>
+        <button nz-button class="cancel" (click)="Addcancel()"> <i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+        <button nz-button nzType="primary" [disabled]="btnDisabled" class="save" (click)="AddSave()"> <i nz-icon nzType="save"></i>Save</button>
+    </ng-template>
+</nz-modal>
+<!-- ---------------------Edit status tracker------------------- -->
+<nz-modal nzWidth="50%" nzHeight="50%" [(nzVisible)]="Editpopup" nzTitle="Edit StatusTracker" (nzOnCancel)="Editcancel()" [nzFooter]="modalFooter">
+    <form [formGroup]="editForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Created Date</label><br>
+                <nz-date-picker name="startDate" formControlName="cDate" [nzFormat]="'MM-dd-yyyy'">
+                </nz-date-picker>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Status Report Date</label><br>
+                <nz-date-picker name="startDate" formControlName="sDate" [nzFormat]="'MM-dd-yyyy'">
+                </nz-date-picker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Title<span class="validationtest">*</span></label>
+                <input nz-input placeholder="Title" maxlength="50" name="sTitle" formControlName="title" />
+                <div *ngIf="this.editForm.get('title').errors?.required && this.editForm.get('title').touched">
+                    <span class="text-danger">Title Is Required</span></div>
+                <div *ngIf="this.editForm.get('title').errors?.maxlength && this.editForm.get('title').invalid">
+                    <span class="text-danger">Only 50 Characters are allowed</span>
+                </div>
+                <div *ngIf="this.editForm.get('title').errors?.pattern && this.editForm.get('title').invalid">
+                    <span class="text-danger">Only Characters Are Allowed</span></div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Status Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Status Type" formControlName="sType">
+                    <nz-option *ngFor="let option of statusTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.editForm.get('sType').errors?.required && this.editForm.get('sType').touched">
+                    <span class="text-danger">Status Type Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <label>Object Type<span class="validationtest">*</span></label>
+                <nz-select nzAllowClear nzPlaceHolder="Object Type" formControlName="oType">
+                    <nz-option *ngFor="let option of objectTypeDropDown" [nzValue]="option.Value" [nzLabel]="option.Label">
+                    </nz-option>
+                </nz-select>
+                <div *ngIf="this.editForm.get('oType').errors?.required && this.editForm.get('oType').touched">
+                    <span class="text-danger">Object Type Is Required</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Description</label>
+                <textarea nz-input formControlName="description" maxlength="255" placeholder="Enter Description" nzAutosize></textarea>
+                <div *ngIf="this.editForm.get('description').errors?.maxlength && this.editForm.get('description').invalid">
+                    <span class="text-danger">Only 255 Characters are allowed</span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <ng-template #modalFooter>
+        <button nz-button class="cancel" (click)="Editcancel()"> <i nz-icon nzType="close" nzTheme="outline"></i>Cancel</button>
+        <button nz-button nzType="primary" class="save" (click)="EditSave()"> <i nz-icon nzType="edit"></i>Update</button>
+    </ng-template>
+</nz-modal>

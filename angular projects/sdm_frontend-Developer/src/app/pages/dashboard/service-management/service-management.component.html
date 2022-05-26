@@ -1,0 +1,245 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li><a (click)="details()">{{ProjectName}}</a></li>
+          <li>Service Request</li>
+      </ul>
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 customer">
+      Customer Name : <b class="cName">{{customerName}}</b>
+  </div>
+</div>
+<div class="card" id="car">
+  <div class="card-body">
+    <nz-tabset>
+      <nz-tab nzTitle="Search">
+        <nz-collapse nzAccordion>
+          <nz-collapse-panel class="header" [nzHeader]="header" [nzActive]="false">
+            <form [formGroup]="searchForm">
+              <div class="row" id="fRow">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Title</label>
+                  <input nz-input placeholder="Title" name="sTitle" formControlName="sTitle" />
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Status</label>
+                  <nz-select nzAllowClear nzPlaceHolder="Status" formControlName="sStatus">
+                    <nz-option *ngFor="let option of status" [nzValue]="option.optionKey"
+                      [nzLabel]="option.optionValue">
+                    </nz-option>
+                  </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Priority</label>
+                  <nz-select nzAllowClear nzPlaceHolder="Priority" formControlName="sPriority">
+                    <nz-option *ngFor="let option of priority" [nzValue]="option.optionKey"
+                      [nzLabel]="option.optionValue">
+                    </nz-option>
+                  </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Assigned To</label>
+                  <!-- <input nz-input placeholder="Assigned To" name="sAssignedTo"
+  formControlName="sAssignedTo" /> -->
+
+                  <nz-select nzPlaceHolder="Choose Assigned Persons" name="sDate"
+                    formControlName="sAssignedTo">
+                    <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value">
+                    </nz-option>
+                  </nz-select>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Created By</label>
+                  <!-- <input nz-input placeholder="Requested By" name="sRequestedBy" formControlName="sRequestedBy" /> -->
+                  <nz-select nzPlaceHolder="Choose Created Person"
+                  formControlName="sRequestedBy">
+                  <nz-option *ngFor="let option of listOfResources" [nzLabel]="option.label" [nzValue]="option.value">
+                  </nz-option>
+                </nz-select>
+
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>Start Date</label>
+                  <nz-date-picker nzPlaceHolder="yyyy-mm-dd" name="sStartDate" formControlName="sStartDate">
+                  </nz-date-picker>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                  <label>End Date</label>
+                  <nz-date-picker nzPlaceHolder="yyyy-mm-dd" name="sEndDate" formControlName="sEndDate">
+                  </nz-date-picker>
+                </div>
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"> -->
+                  <button class="btnClass" nz-button nzType="primary" (click)="reset()">
+                    <i nz-icon nzType="redo"></i>Reset
+                  </button>
+                  <button class="btnClass" nz-button nzType="primary" (click)="getBySearch()">
+                    <i nz-icon nzType="search"></i>Search
+                  </button> &nbsp;
+
+
+                <!-- </div> -->
+                <!-- <br /> -->
+              </div>
+            </form>
+          </nz-collapse-panel>
+        </nz-collapse>
+        <br />
+              <div class="card" id="grid">
+                <div class="row">
+                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+                      <label class="rec">No. of Records : {{totalPages}}</label>
+                    </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                      <button class="add" (click)="addScreen()" nz-button nzType="primary"><i nz-icon nzType="plus"></i>Add</button>
+                    </div>
+                  </div>
+                  <div class="card-body" id="gridBody">
+                <nz-table #basicTable class="tablescroll" [nzData]="allSm" nzShowPagination nzTableLayout="fixed"
+                [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+                [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+                (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+                  <thead>
+                    <tr>
+                      <th nzWidth="2%">#</th>
+                      <th nzWidth="4%">Ticket Id</th>
+                      <th nzWidth="6%">Title</th>
+                      <th nzWidth="6%">Status</th>
+                      <th nzWidth="4%">Priority</th>
+                      <th nzWidth="4%">Created By</th>
+                      <th nzWidth="5%">Assigned To</th>
+                      <th nzWidth="5%">Created Date</th>
+                      <th nzWidth="4%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of basicTable.data; let i=index">
+                      <td>{{ pageSize *(pageNum-1)+i+1}}</td>
+                      <td>{{ data.id }}</td>
+                      <!-- <td>{{data.title }}</td> -->
+                      <td nzEllipsis nzTooltipTitle="{{ data.title }}" nz-tooltip>
+                        {{ data.title }}
+                      </td>
+                      <td>{{ tStatus[data.uxStatus] }}</td>
+                      <td>{{ tPriority[data.uxPriority] }}</td>
+                      <td>{{ data.createdBy }}</td>
+                      <td>{{ data.assignedTo }}</td>
+                      <td>{{ data.createdDate |  date: 'MMM d, yyyy'}}</td>
+                      <td>
+                        <i nz-icon nzType="edit" nzTheme="outline" (click)="editSm(data.id)">
+                        </i>&nbsp;&nbsp;
+                        <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)">
+                          <i nz-icon nzTheme="outline" nzType="delete"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </div>
+
+      </nz-tab>
+      <nz-tab nzTitle="Dashboard">
+        <div class="card">
+          <form [formGroup]="pieSearchForm">
+        <h4 >Service Management Dashboard</h4>
+        <div class="row" id="top">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" class="DD" >
+            Filter By Dates
+            <i nz-icon nzType="down"></i>
+          </a></div>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <div class="card" id="card-body">
+              <div class="card-body" >
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <nz-date-picker nzFormat="MM-dd-yyyy" name="startDatePlan"
+              formControlName="startDateBucket" nzPlaceHolder="Created Date"></nz-date-picker>
+              </div><br>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <nz-date-picker nzFormat="MM-dd-yyyy"
+                nzPlaceHolder="Closed Date" formControlName="endDateBucket"></nz-date-picker>
+                </div>
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <button class="btn1" (click)="getBySearch()" nz-button nzType="primary"><i nz-icon nzType="search">Search</i></button>
+                  </div></div></div><br><br>
+          </nz-dropdown-menu></div>
+        </form>
+             <div class="card-body">
+            <div class="row">
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                <nz-card nzTitle='Total Ticket Count grouped by Severity'>
+                   <canvas baseChart height="500" width="500" [data]="pieChartData3" [labels]="pieChartLabel3"
+                    [options]="pieChartOptions3" [plugins]="pieChartPlugins" [chartType]="pieChartType"
+                    [legend]="pieChartLegend"></canvas>
+                </nz-card>
+              </div>
+              <div  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                <nz-card nzTitle='Total Ticket Count grouped by Bucket'>
+                  <canvas baseChart height="500" width="500" [data]="pieChartData" [labels]="pieChartLabel"
+                    [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                    [legend]="pieChartLegend"></canvas>
+                </nz-card>
+              </div>
+              <div  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" >
+                <nz-card nzTitle='Total Ticket Count grouped by Approval'>
+
+                    <canvas baseChart height="500" width="500" [data]="pieChartData5" [labels]="pieChartLabel5"
+                        [chartType]="pieChartType" [options]="pieChartOptions5" [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend"></canvas>
+                </nz-card>
+              </div>
+            </div><br>
+            <div class="row">
+                <div  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <nz-card nzTitle='Total Ticket Count grouped by Status'>
+                     <canvas baseChart height="500" width="500" [data]="pieChartData1" [labels]="pieChartLabel1"
+                        [chartType]="pieChartType" [options]="pieChartOptions1" [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend"></canvas>
+                  </nz-card>
+                </div>
+                <div  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <nz-card nzTitle='Total Ticket Count grouped by Category'>
+                   <canvas baseChart height="500" width="500" [data]="pieChartData4" [labels]="pieChartLabel4"
+                        [options]="pieChartOptions4" [plugins]="pieChartPlugins" [chartType]="pieChartType"
+                        [legend]="pieChartLegend"></canvas>
+                  </nz-card>
+                </div>
+                <div  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                  <nz-card nzTitle='Total Ticket Count grouped by Resolution'>
+                   <canvas baseChart height="500" width="500" [data]="pieChartData6" [labels]="pieChartLabel6"
+                        [chartType]="pieChartType" [options]="pieChartOptions6" [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend"></canvas>
+                  </nz-card>
+                </div>
+              </div><br>
+            <div class="row">
+                <div  class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <nz-card nzTitle='Total Ticket Count grouped by Priority'>
+
+                        <canvas baseChart height="500" width="500" [data]="pieChartData2" [labels]="pieChartLabel2"
+                          [options]="pieChartOptions2" [plugins]="pieChartPlugins" [chartType]="pieChartType"
+                          [legend]="pieChartLegend"></canvas>
+                  </nz-card>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card" id="cad">
+                      <div class="card-body">
+                  <canvas baseChart height="80" width="300" [datasets]="lineChartData" [labels]="lineChartLabels"
+                  [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType">
+                  </canvas>
+                  <strong class="strong">Ticket Status</strong>
+                  </div>
+                  </div>
+                  </div>
+            </div>
+          </div>
+    </nz-tab>
+</nz-tabset>
+</div>
+</div>

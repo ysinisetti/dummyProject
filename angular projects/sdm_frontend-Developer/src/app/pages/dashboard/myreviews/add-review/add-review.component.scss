@@ -1,0 +1,346 @@
+.btn {
+    margin-top: 29px;
+    width: 100px;
+    float: right;
+}
+.customer {
+
+  margin-bottom: -8px;
+}
+.rate1
+{
+  padding-left: 15%;
+}
+.rate2
+{
+  padding-left: 3%;
+}
+.rate3
+{
+  padding-left: 3%;
+}
+.rate4
+{
+  padding-left: 3%;
+}
+.rate5
+{
+  padding-left: 8%;
+}
+@media (min-width:538px) and (max-width:1024px) {
+  .rate1
+  {
+    padding-left: 28%;
+  }
+  .rate2
+  {
+    padding-left: 12%;
+  }
+  .rate3
+  {
+    padding-left: 7%;
+  }
+  .rate4
+  {
+    padding-left: 11%;
+  }
+  .rate5
+  {
+    padding-left: 18%;
+  }
+
+}
+@media (min-width:538px) and (max-width:768px) {
+  .rate1
+  {
+    padding-left: 6%;
+  }
+  .rate2
+  {
+    padding-left: 5%;
+  }
+  .rate3
+  {
+    padding-left: 5%;
+  }
+  .rate4
+  {
+    padding-left: 6%;
+  }
+  .rate5
+  {
+    padding-left: 15%;
+  }
+  .add1{
+    font-weight: bold;
+     background-color:rgb(90, 206, 248);
+     color: #ffffff;
+    float:right;
+    margin-top: 7px;
+    margin-right: 2px;
+    width: 56%;
+    }
+    .reset{
+     float: right;
+     font-weight: bold;
+     width: 54%;
+     margin-top: -32px;
+     }
+
+
+}
+@media (min-width:501px) and (max-width:767px) {
+  .btn {
+    width: 100px;
+    float: right;
+  }
+  .customer {
+    margin-top: 1px;
+    text-align: left;
+      font-size: 14px;
+    margin-left: -10px;
+    margin-bottom: -8px;
+  }
+  .add1{
+    font-weight: bold;
+     background-color:rgb(90, 206, 248);
+     color: #ffffff;
+    float:right;
+    margin-top: 7px;
+    margin-right: 6px;
+    width: 98%;
+    }
+    .reset{
+     float: right;
+     font-weight: bold;
+     width: 98%;
+     margin-top: 7px;
+     }
+
+
+}
+@media (min-width:320px) and (max-width:538px) {
+  .rate1
+{
+  padding-left: 30.5%;
+}
+.rate2
+{
+  padding-left: 30.5%;
+}
+.rate3
+{
+  padding-left: 15%;
+}
+.rate4
+{
+  padding-left: 15%;
+}
+.rate5
+{
+  padding-left: 36%;
+}
+  .btn {
+    width: 100%;
+    float: right;
+  }
+  .customer {
+    margin-top: 1px;
+    text-align: left;
+      font-size: 14px;
+    margin-left: -10px;
+  }
+  .add1{
+    font-weight: bold;
+
+     color: #ffffff;
+    float:right;
+    width: 98%;
+    margin-right: 6px;
+    margin-top: 7px;
+    margin-left: 4px;
+    }
+    .reset{
+     float: right;
+     font-weight: bold;
+     width: 98%;
+     margin-top:7px;
+     ;
+     color: #ffffff;
+     margin-right: 1px;
+     }
+
+}
+@media (min-width:375px) and (max-width:538px) {
+  .rate1
+  {
+    padding-left: 30.5%;
+  }
+  .rate2
+  {
+    padding-left: 30.5%;
+  }
+  .rate3
+  {
+    padding-left: 17%;
+  }
+  .rate4
+  {
+    padding-left: 18%;
+  }
+  .rate5
+  {
+    padding-left: 36%;
+  }
+    .btn {
+      width: 100%;
+      float: right;
+    }
+    .customer {
+      margin-top: 1px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -10px;
+    }
+    .add1{
+      font-weight: bold;
+
+       color: #ffffff;
+      float:right;
+      width: 98%;
+      margin-right: 6px;
+      margin-top: 7px;
+      margin-left: 4px;
+      }
+      .reset{
+       float: right;
+       font-weight: bold;
+       width: 98%;
+       margin-top:7px;
+       ;
+       color: #ffffff;
+       margin-right: 1px;
+       }
+}
+@media (min-width:425px) and (max-width:538px) {
+  .rate1
+  {
+    padding-left: 30.5%;
+  }
+  .rate2
+  {
+    padding-left: 30.5%;
+  }
+  .rate3
+  {
+    padding-left: 19%;
+  }
+  .rate4
+  {
+    padding-left: 19%;
+  }
+  .rate5
+  {
+    padding-left: 34%;
+  }
+    .btn {
+      width: 100%;
+      float: right;
+    }
+    .customer {
+      margin-top: 1px;
+      text-align: left;
+        font-size: 14px;
+      margin-left: -10px;
+    }
+    .add1{
+      font-weight: bold;
+
+       color: #ffffff;
+      float:right;
+      width: 98%;
+      margin-right: 6px;
+      margin-top: 7px;
+      margin-left: 4px;
+      }
+      .reset{
+       float: right;
+       font-weight: bold;
+       width: 98%;
+       margin-top:7px;
+       ;
+       color: #ffffff;
+       margin-right: 1px;
+       }
+}
+
+@media (min-width:1793px) and (max-width:2760px) {
+  .rate1
+{
+  padding-left: 28%;
+}
+.rate2
+{
+  padding-left: 12%;
+}
+.rate3
+{
+  padding-left: 6%;
+}
+.rate4
+{
+  padding-left: 22%;
+}
+.rate5
+{
+  padding-left: 14%;
+}
+
+}
+@media (min-width:1076px) and (max-width:1440px) {
+  .rate1
+  {
+    padding-left: 28%;
+  }
+  .rate2
+  {
+    padding-left: 12%;
+  }
+  .rate3
+  {
+    padding-left: 7%;
+  }
+  .rate4
+  {
+    padding-left: 17%;
+  }
+  .rate5
+  {
+    padding-left: 16%;
+  }
+
+}
+.heading {
+
+font-size: 20px;
+color: rgb(80, 81, 139);
+}
+.mandatory{
+color: #ef4048;
+padding: 3px;
+}
+.add1{
+ font-weight: bold;
+  background-color:rgb(90, 206, 248);
+  color: #ffffff;
+ float:right;
+
+
+ }
+ .reset{
+  float: right;
+  font-weight: bold;
+  margin-right: 7px;
+
+  }
+

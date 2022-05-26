@@ -1,0 +1,38 @@
+.example-card {
+    // max-width: 500px;
+    margin-top:20px;
+    // margin-left:33%;
+    // margin-top:83px;
+  }
+  .toolBar{
+    margin-top:14px;
+    // flex: 1 1 auto;
+    // z-index: 1;
+    // position: fixed;
+    z-index: 1;
+    position: fixed;
+    width:56.3%;
+        // position: relative;
+  }
+  .example-header-image {
+    background-image: url('https://www.w3schools.com/howto/img_avatar.png');
+    background-size: cover;  
+  }
+  .width{
+    display: flex;
+    width:100;
+  }
+  .one {
+    flex: 2 1 0;
+}
+
+.two {
+    flex:6 1 0;
+ 
+}
+.cardSpace{
+  padding-top: 35px;
+}
+.form{
+  width: 60%;
+}

@@ -1,0 +1,63 @@
+<html>
+
+<head>
+  <title>TODO supply a title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+  {{name}}<input type="text" [value]='name'>
+  <input type="text" [(ngModel)]='name'>{{name}}
+  <h1>Registration Form</h1>
+  <form name="f1" method="POST" style="text-align:center">
+    <table>
+      <tr>
+        <td>name:</td>
+        <td><input type="text" name="n" id="n1" required [(ngModel)]='test.name'></td>
+      </tr><br />
+      <tr>
+        <td>username :</td>
+        <td><input type="text" name="un" id="n2" required [(ngModel)]='test.username'></td>
+      </tr><br />
+      <tr>
+        <td>gender :</td>
+        <td>male<input type="radio" name="r" value="male" [(ngModel)]='test.gender'>
+          Fe-male<input type="radio" name="r" value="Female"
+            [(ngModel)]='test.gender'></td>
+      </tr><br />
+      <tr>
+        <td>languages known:</td>
+        <td>Telugu:<input type="checkbox" name="c" value="Telugu" id="n7" [(ngModel)]='test.language1' >
+          English:<input type="checkbox" name="c1" value="English" id="n8"[(ngModel)]='test.language2' >
+          Hindi:<input type="checkbox" name="c2" value=" Hindi" id="n9" [(ngModel)]='test.language3'>
+          Tamil:<input type="checkbox" name="c3" value="Tamil" id="n10" [(ngModel)]='test.language4'></td>
+      </tr><br />
+      <tr>
+        <td>password :</td>
+        <td> <input type="password" name="pw" id="n3" required [(ngModel)]='test.password'></td>
+      </tr><br />
+      <tr>
+        <td>confirm password :</td>
+        <td> <input type="password" name="cpw" id="n4" required [(ngModel)]='test.cpassword'></td>
+      </tr><br />
+      <tr>
+        <td>mobile number :</td>
+        <td> <input type="text" name="mn" id="n5" required [(ngModel)]='test.mobile'></td>
+      </tr><br />
+      <tr><td>Date of Birth :</td> <td><input  type="date" name='date' [(ngModel)]='test.date'></td></tr>
+      <tr><td>upload file:</td> <td><input  type="file" name='file' [(ngModel)]='test.file'></td></tr>
+      <tr>
+        <td>Address :</td>
+        <td><textarea name="ta" id="at" rows="6" cols="20" [(ngModel)]='test.textarea'></textarea></td>
+      </tr>
+      <tr>
+        <td><button (click)='display()'>Click</button></td>
+      </tr>
+    </table>
+  </form>
+
+</body>
+
+</html>

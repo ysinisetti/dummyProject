@@ -1,0 +1,27 @@
+<!-- <div style="height: 100%;">
+    <div style="height:20%;position: fixed; z-index: 1;">
+        <app-header></app-header>
+    </div>
+    <div style="height:70%;  ">
+        <div style="width:78%;float:left;margin-top: 50px;">
+            <router-outlet></router-outlet>
+        </div>
+        <div style="width:22%;float:right;margin-top: 70px;   ">
+          <app-admin-post></app-admin-post>
+        </div>
+    </div>
+</div> -->
+<div class="fix" >
+    <div class="header">
+        <app-header></app-header>
+    </div>
+    <div class="body">
+        <div class="one">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="two"  *ngIf="hide">
+            <!-- *ngIf="hide" -->
+          <app-admin-post></app-admin-post>
+        </div>
+    </div>
+</div>

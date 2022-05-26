@@ -1,0 +1,141 @@
+<div class="row">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+      <ul class="breadcrumb">
+          <li><a (click)="gotoHome()">Home</a></li>
+          <li>Exam Results</li>
+      </ul>
+  </div>
+</div>
+
+<!-- -------------------------------- Search Collapse ---------------------------------- -->
+
+<div *ngIf="!changeView">
+  <div class="card">
+      <nz-collapse nzAccordion>
+          <nz-collapse-panel class="header" nzHeader="Search" [nzActive]="false">
+              <form [formGroup]="resultSearchForm">
+                  <div class="row" id="fRow">
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                          <label>Exam Name</label>
+                          <input nz-input placeholder="Exam Name" name="Exam Name" formControlName="examName" />
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                          <label>Status</label>
+                          <input nz-input placeholder="Status" name="Status" formControlName="Status" />
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                          <label>Submitted Date</label>
+                          <nz-date-picker nzPlaceHolder="Submitted Date" name="cDate" formControlName="SubmittedDate">
+                          </nz-date-picker>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                          <button class="btn" nz-button nzType="primary" (click)="getTable()"><i nz-icon
+                                  nzType="search"></i>Search</button>&nbsp;
+                          <button class="btn" nz-button nzType="primary" (click)="reset()"><i nz-icon
+                                  nzType="redo"></i>Reset</button>
+                      </div>
+                  </div>
+              </form>
+          </nz-collapse-panel>
+      </nz-collapse>
+  </div>
+  <div class="card" id="grid">
+      <div class="row">
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+              <label class="reco">No. of Records : {{record}} </label>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+          </div>
+      </div>
+
+      <!-- ---------------------- Exams List Grid --------------------------------------- -->
+      <div class="card-body" id="gridBody">
+          <nz-table nzShowPagination #basicTable class="tablescroll" [nzData]="tableData" nzTableLayout="fixed"
+              [nzPaginationPosition] nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+              [nzTotal]="totalPages" [nzPageSize]="pageSize" [nzPageIndex]="pageNum"
+              (nzPageIndexChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)">
+              <thead>
+                  <tr>
+                      <th *ngFor="let column of listOfColumns" [nzWidth]="column.width">
+                          {{ column.name }}
+                      </th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+                      <td>{{pageSize *(pageNum-1)+i+1}}</td>
+                      <td>{{data.empId}}</td>
+                      <td>{{data.examName}}</td>
+                      <td>{{data.dateSubmitted | date: 'MMM d, yyyy'}}</td>
+                      <td>{{data.totalQuestions}}</td>
+                      <td>{{data.attemptedQuestions}}</td>
+                      <td>{{data.marks}}</td>
+                      <td>{{data.percentage}}</td>
+                      <td>{{data.examStatus}}</td>
+                      <td>
+                          <i nz-icon nzType="reconciliation" nzTheme="outline"
+                              (click)="uiChange(data.empId,data.examName)"></i>
+
+                      </td>
+                  </tr>
+              </tbody>
+          </nz-table>
+      </div>
+  </div>
+</div>
+<!-- --------------------------------- Individual Exam Review  -------------------------- -->
+<div *ngIf="changeView">
+  <div class="card">
+      <br>
+      <div class="row">
+
+          <div class="card  col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 questions">
+              <h5 class="qut">{{qno}} ) {{question}} </h5>
+              <ul>
+                  <div class="checkbox" *ngFor="let option of options; let i = index">
+                      <label>
+                          <input type="radio" name="option" [checked]="correctAnswer - 1 === i"
+                              (change)="select(opt)">&nbsp;
+                          {{option}}
+                          <br>
+                      </label>
+                  </div>
+              </ul>
+              <br>
+              <br>
+              <div class="row canAns"><b>Candidate Answer : {{answer}} </b></div>
+              <br>
+              <br>
+
+              <div class="row canAns"><b>Explanation : {{Explanation}} </b></div>
+              <br>
+          </div>
+
+          <div class="card  col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 answers">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 radiusBtn">
+
+                  <button class="radio1" (click)="onQuestionChange(i)" [nzSize]="size" [ngClass]="{'questionColor':visitedQuestion,'styleRadius':true }" nzShape="circle"
+                      *ngFor="let id of quizlist; let i=index">{{i+1}}</button>&nbsp;&nbsp;
+              </div>
+          </div>
+      </div>
+      <div class="row" id="fRow">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <button nzEllipsis nzTooltipTitle="Back To Exam Results" nz-tooltip class="backBtn" nz-button
+                  nzType="primary" (click)="uiChange()">Back</button>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12"></div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12"></div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+              <button class="pre" nz-button nzType="primary" *ngIf="currentIndex!== 0"
+                  (click)="previous()">Previous</button>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+              <button class="next" nz-button nzType="primary" (click)="next()" [disabled]="subBTn">Next</button>
+          </div>
+      </div>
+      <br><br>
+  </div>
+
+</div>

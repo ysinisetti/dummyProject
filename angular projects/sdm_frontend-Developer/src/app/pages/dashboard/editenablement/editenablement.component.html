@@ -1,0 +1,114 @@
+<ul class="breadcrumb">
+  <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12" style="margin-left: -23px;">
+      <li><a (click)="gotoHome()">Home</a></li>
+      <li>Enablement Edit</li>
+  </div>
+
+</ul>
+<div class="card" id="fRow">
+  <div class="card-body">
+<nz-tabset>
+  <nz-tab nzTitle="Enablement Edit">
+      <ng-template #titleTemplate>
+          Edit
+      </ng-template>
+      <div class="card">
+          <div class="card-body">
+              <form [formGroup]="editForm">
+                  <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label nzRequired nzFor="name">Course No</label>
+                          <input nz-input placeholder="Course No" formControlName='courseNo' />
+                      </div>
+
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label nzRequired nzFor="name">Title</label>
+
+                          <input nz-input placeholder="Title" formControlName='title' />
+
+
+                          <!-- <div
+                          *ngIf="this.courseForm.get('title').errors?.required && this.courseForm.get('title').touched">
+                          <span class="text-danger">Title Is Required</span></div>
+                      <div
+                          *ngIf="this.courseForm.get('title').errors?.maxlength && this.courseForm.get('title').invalid">
+                          <span class="text-danger">Only 25 Characters are allowed</span>
+                      </div>
+                      <div
+                          *ngIf="this.courseForm.get('title').errors?.pattern && this.courseForm.get('title').invalid">
+                          <span class="text-danger">Only Characters Are Allowed</span></div> -->
+
+
+
+
+
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label>Course Type</label>
+                          <nz-select nzAllowClear nzPlaceHolder="Type" formControlName='type'>
+                              <nz-option *ngFor="let option of courseDownLists" [nzValue]="option.optionKey"
+                                  [nzLabel]="option.optionValue">
+                              </nz-option>
+                          </nz-select>
+                          <!-- <div
+                          *ngIf="this.courseForm.get('type').errors?.required && this.courseForm.get('type').touched">
+                          <span class="text-danger">type Is Required</span></div> -->
+
+
+
+                      </div>
+
+
+
+
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label>Roll Type</label>
+                          <nz-select nzAllowClear nzPlaceHolder="SkillSet" formControlName='skillSet'>
+                              <nz-option *ngFor="let option of skillsetList" [nzValue]="option.optionKey"
+                                  [nzLabel]="option.optionValue">
+                              </nz-option>
+                          </nz-select>
+
+                          <!-- <div
+                          *ngIf="this.courseForm.get('skillSet').errors?.required && this.courseForm.get('skillSet').touched">
+                          <span class="text-danger">skillSet Is Required</span></div> -->
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label nzRequired nzFor="name">Created By</label>
+
+                          <input nz-input placeholder="Created By" formControlName='createdby' />
+                      </div>
+
+
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                          <label>Created Date</label>
+                          <nz-date-picker nzPlaceHolder='Start Date' name="startDate" formControlName="Date">
+                          </nz-date-picker>
+                      </div>
+
+                  </div>
+
+                  <br>
+
+
+
+
+
+
+                  <div style="float: right;">
+                      <button nz-button nzType="primary" (click)="resets()"><i nz-icon
+                          nzType="sync"></i>Reset</button> &nbsp;
+                      <button class="btnss" nz-button nzType="primary" (click)="save()"><i nz-icon
+                              nzType="edit"></i>Update</button>
+
+                  </div>
+
+
+              </form>
+          </div>
+      </div>
+  </nz-tab>
+
+</nz-tabset>
+</div>
+</div>

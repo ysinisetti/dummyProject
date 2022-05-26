@@ -1,0 +1,43 @@
+{ 
+    "countries" : [   
+                       { "id" : 1 , "value" : "India" },
+                       { "id" : 2 , "value" : "USA" } 
+                   ],                            
+    "indStates"      : [ 
+      { "id" : 1 , "value" : "Andaman and Nicobar Islands" },
+      { "id" : 2 , "value" : "Andhra Pradesh " },
+      { "id" : 3 , "value" : "Arunachal Pradesh" },
+      { "id" : 4 , "value" : "Assam" },
+      { "id" : 5 , "value" : "Bihar" },
+      { "id" : 6 , "value" : "Chandigarh " },
+      { "id" : 7 , "value" : "Chattisgarh" },
+      { "id" : 8 , "value" : "Delhi " },
+      { "id" : 9 , "value" : "Goa" },
+      { "id" : 10 , "value" : "Gujarat" },
+      { "id" : 11 , "value" : "Haryana" },
+      { "id" : 12 , "value" : "Himachal Pradesh" },
+      { "id" : 13 , "value" : "Jammu and Kashmir" },
+      { "id" : 14 , "value" : "Jharkhand" },
+      { "id" : 15 , "value" : "Karnataka" },
+      { "id" : 16 , "value" : "Kerala" }
+                   ],
+      "usaStates" : [
+        { "id" : 1 , "value" : "Alabama" },
+        { "id" : 2 , "value" : "Alaska" },
+        { "id" : 3 , "value" : "California" },
+        { "id" : 4 , "value" : "Colorado" },
+        { "id" : 5 , "value" : "Delaware" },
+        { "id" : 6 , "value" : "Florida " },
+        { "id" : 7 , "value" : "Georgia" },
+        { "id" : 8 , "value" : "Indiana" },
+        { "id" : 9 , "value" : "Kansas" },
+        { "id" : 10 , "value" : "Louisiana" },
+        { "id" : 11 , "value" : "Michigan" },
+        { "id" : 12 , "value" : "Mississippi" },
+        { "id" : 13 , "value" : "Nevada" },
+        { "id" : 14 , "value" : "New Jersey" },
+        { "id" : 15 , "value" : "New Mexico" },
+        { "id" : 16 , "value" : "New York" },
+        { "id" : 17 , "value" : "North Carolina" }
+      ]
+  } 
